@@ -18,27 +18,25 @@ class DateCalculator
         if ($referenceDate <= $this->now)
         {
             $since_start = $this->now->diff($referenceDate);
-            dump($since_start->y.' years total');
-            dump($since_start->m.' months total');
-            dump($since_start->d.' day total');
-            dump($since_start->h.' hour total');
-            dump($since_start->i.' min total');
-            dump($since_start->d.' days total');
 
             if ($since_start->y > 0) {
-                return "il y a" . $since_start->y. "année(s)";
+                $since_start->y > 1 ? $plural = "s": $plural = "";
+                return "il y a " . $since_start->y. " année". $plural;
             } else {
                 if ($since_start->m > 0) {
-                    return "il y a" . $since_start->y. "mois";
+                    return "il y a " . $since_start->m. " mois";
                 } else {
                     if ($since_start->d > 0) {
-                        return "il y a" . $since_start->d. "jours";
+                        $since_start->d > 1 ? $plural = "s": $plural = "";
+                        return "il y a " . $since_start->d. " jour" .$plural;
                     } else {
                         if ($since_start->h > 0) {
-                            return "il y a" . $since_start->h. "heures";
+                            $since_start->h > 1 ? $plural = "s": $plural = "";
+                            return "il y a " . $since_start->h. " heure" .$plural;
                         } else {
                             if ($since_start->i > 0) {
-                                return "il y a" . $since_start->i. "minutes";
+                                $since_start->i > 1 ? $plural = "s": $plural = "";
+                                return "il y a " . $since_start->i. " minutes".$plural;
                             }
                             else {
                                 return "A l'instant";

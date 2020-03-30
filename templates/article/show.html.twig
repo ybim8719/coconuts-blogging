@@ -107,7 +107,7 @@
                                 <a class="comment-username" href="{{ path('user_show', {id : comment.author.id}) }}">
                                     {{ comment.author.username }}
                                 </a>
-                                <span class="comment-date">{{ comment.createdAt|date("d-m-Y") }}</span>
+                                <span class="comment-date">{{ date_calculator.convertToAdaptedDuration(comment.createdAt)}}</span>
                             </div>
                             <a class="comment-avatar" href="#">
                                 <img class="coconuts-round-picture rikiki-img"
