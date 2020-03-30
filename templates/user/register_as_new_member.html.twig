@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+    <div class = "coconuts-container">
+        <h1>Devenez un nouveau membre</h1>
+
+        {{ include('user/partial/form.html.twig') }}
+
+        <a href="{{ path('public_home_page') }}">HomePage</a>
+    </div>
+{% endblock %}

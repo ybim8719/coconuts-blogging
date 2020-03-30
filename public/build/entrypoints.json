@@ -1,0 +1,52 @@
+{
+  "entrypoints": {
+    "app": {
+      "js": [
+        "/build/runtime.js",
+        "/build/vendors~app~manageArticleComment~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
+        "/build/vendors~app.js",
+        "/build/app.js"
+      ],
+      "css": [
+        "/build/vendors~app.css",
+        "/build/app.css"
+      ]
+    },
+    "toggleArticleLike": {
+      "js": [
+        "/build/runtime.js",
+        "/build/vendors~app~manageArticleComment~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
+        "/build/vendors~manageArticleComment~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
+        "/build/manageArticleComment~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
+        "/build/toggleArticleLike.js"
+      ]
+    },
+    "toggleArticleBookmark": {
+      "js": [
+        "/build/runtime.js",
+        "/build/vendors~app~manageArticleComment~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
+        "/build/vendors~manageArticleComment~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
+        "/build/manageArticleComment~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
+        "/build/toggleArticleBookmark.js"
+      ]
+    },
+    "toggleWriterFollow": {
+      "js": [
+        "/build/runtime.js",
+        "/build/vendors~app~manageArticleComment~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
+        "/build/vendors~manageArticleComment~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
+        "/build/manageArticleComment~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
+        "/build/toggleWriterFollow.js"
+      ]
+    },
+    "manageArticleComment": {
+      "js": [
+        "/build/runtime.js",
+        "/build/vendors~app~manageArticleComment~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
+        "/build/vendors~manageArticleComment~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
+        "/build/manageArticleComment~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
+        "/build/manageArticleComment.js"
+      ]
+    }
+  }
+}

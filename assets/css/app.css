@@ -1,0 +1,243 @@
+html {
+    height: 100%;
+}
+
+
+body {
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+
+div {
+    padding : 5px;
+}
+
+footer {
+    clear: both;
+    height: 25px;
+    margin-top: -100px;
+    background-color: black;
+    position: absolute; bottom: 0; left: 0; right: 0;
+    color: white;
+}
+
+* {
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+
+/**
+    containers
+ */
+.coconuts-container {
+    margin-top: 20px;
+    padding: 10px;
+    width: calc(100% - 10px);
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.coconuts-article-container {
+    margin-top: 20px;
+    padding: 10px;
+    width: calc(100% - 10px);
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/**
+    Coconuts grid system
+ */
+
+
+/**
+    Coconuts navbar
+ */
+
+
+/**
+ Font awesome icon CSS
+ */
+.fa .fas .far{
+    color: black;
+}
+
+/**
+    Profiles picture rounded + all sizes
+ */
+.coconuts-round-picture {
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.rikiki-img {
+    width : 40px;
+    height: 40px;
+    margin: 5px;
+}
+
+.small-img {
+    width : 100px;
+    height: 100px;
+    margin: 5px;
+}
+
+/**
+XXXXXXXXXX
+ */
+.coconuts-input-article-body {
+    width: 100%;
+    height: 300px;
+    border: 3px solid #cccccc;
+    padding: 5px;
+    font-family: Tahoma, sans-serif;
+    background-position: bottom right;
+    background-repeat: no-repeat;
+}
+
+.coconuts-input-article-title {
+    width: 100%;
+    height: 50px;
+    border: 3px solid #cccccc;
+    padding: 5px;
+    font-family: Tahoma, sans-serif;
+    background-position: bottom right;
+    background-repeat: no-repeat;
+}
+
+.coconuts-input-chapeau {
+    width: 100%;
+    height: 100px;
+    border: 3px solid #cccccc;
+    padding: 5px;
+    font-family: Tahoma, sans-serif;
+    background-position: bottom right;
+    background-repeat: no-repeat;
+}
+
+/**
+    INTERACTIONS WITH AUTHOR/ARTICLE buttons
+ */
+
+.coconuts-follow-button {
+    border-radius: 100px;
+    padding: 10px 30px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.8em;
+    margin: 0 15px;
+}
+
+.follow {
+    background: #76B3FA;
+}
+
+.unfollow {
+    background: #D2D2D2;
+}
+
+/**
+    ARTICLE COMMENTS BLOCK
+ */
+
+.comment{
+    display: flex;
+    margin-top:15px;
+    margin-bottom:15px;
+}
+.comment-body{
+    width : 400px;
+    height : 50px;
+    padding : 10px;
+    margin-left : 15px;
+    margin-right : 15px;
+    background-color: palegreen;
+    font-family: Arial;
+    font-size: 0.8em;
+    box-shadow: 5px 2px 5px black;
+    display: table-cell;
+    vertical-align: middle
+}
+
+.comment-info {
+    width: 100px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    vertical-align: middle
+}
+.comment-avatar{
+    width: 50px;
+
+}
+
+.comment.author-comment{
+    justify-content: flex-end;
+}
+
+.comment.author-comment .info{
+    order: 3;
+}
+
+.comment.author-comment .avatar{
+    order: 2;
+}
+
+.comment.author-comment p{
+    order: 1;
+}
+
+
+
+.comment-username {
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+.comment-date {
+    font-style: italic;
+    font-size: 0.6em;
+    color:slategrey;
+}
+
+#jquery-hidden-comment-block {
+    display: none;
+}
+/**
+    AUTHOR BLOCK
+ */
+
+.coconuts-author-block {
+    border: 2px #1b9448 solid;
+    width: 900px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.coconuts-author-block-header {
+    top: 50px;
+    left: 10px;
+    width: 850px;
+    height: 120px;
+}
+
+.coconuts-author-block-description {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.coconuts-author-body {
+    display:flex;
+    width: 850px;
+}
+
+.coconuts-author-block-activity {
+    display: flex;
+}

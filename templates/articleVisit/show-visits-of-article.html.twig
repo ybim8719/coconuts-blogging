@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Visites enregistrées pour : {{article.title}} {% endblock %}
+
+{% block body %}
+    <div class="coconuts-container">
+        <h1>Visites enregistrées pour : {{article.title}} </h1>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Date</th>
+                <th>IP</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for visit in visits %}
+                <tr>
+                    <td>{{ visit.createAt }}</td>
+                    <td>{{ visit.ip }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="10">Pas de visites trouvées pour cet article</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+
+
+
+

@@ -1,0 +1,33 @@
+
+<div class="coconuts-author-block">
+    <div class="coconuts-author-body">
+        <div class="coconuts-author-block-picture">
+            <img src="{{ vich_uploader_asset(writer) }}" alt="{{ writer.username }}"
+                 class="coconuts-round-picture small-img" />
+        </div>
+        <div class="coconuts-author-block-description">
+            <div>COMPOSE PAR :</div>
+            <div class="coconuts-author-block-follow">
+                <a href = "{{ path('user_show', {'id': writer.id}) }}">{{ writer.username }}</a>
+            </div>
+            <div>{{writer.profileDescription}}</div>
+        </div>
+        <div class ="coconuts-author-block-follow">
+            <a href="javascript:void(0)"
+               class= "coconuts-follow-button
+               {{ isFollowing == false ? 'follow' : 'unfollow' }}"
+            >
+                {{ isFollowing == false ? "S\'abonner" : 'Se désabonner'  }}
+            </a>
+        </div>
+    </div>
+    <div class="coconuts-author-block-footer">
+        <div>Inscrit depuis le : {{writer.createdAt|date("m/d/Y")}}</div>
+        <div class="coconuts-author-block-activity">
+            <div>{{writer.nbOfArticles}} Articles écrits</div>
+            <div>{{writer.nbOfIncomingFollows}} Abonnés</div>
+            <div>{{writer.nbOfSubscribedFollows}} Abonnements</div>
+        </div>
+    </div>
+    <input id="isFollowing" type="hidden" value = "{{ isFollowing == false  ? "0" : "1"}}">
+</div>

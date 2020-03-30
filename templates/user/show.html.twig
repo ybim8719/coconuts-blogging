@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ user.username }} {% endblock %}
+
+{% block body %}
+    <div class ="coconuts-container coconuts-page-body">
+        <h1>Profil de {{ user.username }} </h1>
+        <table class="table table-info">
+            <tbody>
+                <tr>
+                    <th>Inscrit depuis le :</th>
+                    <td>{{user.createdAt|date("m/d/Y")}}</td>
+                </tr>
+                <tr>
+                    <th>Username</th>
+                    <td>
+                        {{ user.username }}      
+                        <img src="{{ vich_uploader_asset(user) }}" alt="{{ user.username }}" 
+                             class="coconuts-round-picture small-img" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>{{ user.email }}</td>
+                </tr>
+                <tr>
+                    <th>Est administrateur</th>
+                    <td>{{ user.isAdmin ? 'Yes' : 'No' }}</td>
+                </tr>
+                <tr>
+                    <th>Description</th>
+                    <td>{{ user.profileDescription }}</td>
+                </tr>
+                <tr>
+                    <th>Abonnements</th>
+                    <td>{{user.nbOfSubscribedFollows}} </td>
+                </tr>
+                <tr>
+                    <th>Abonnés</th>
+                    <td>{{user.nbOfIncomingFollows}}</td>
+                </tr>
+                <tr>
+                    <th>Articles écrits</th>
+                    <td>{{user.nbOfArticles}}</td>
+                </tr>
+                <tr>
+                    <th>Actions</th>
+                    <td>
+                        <button class="coconuts_follow_writer button-block" {% if app.user is null %} disabled
+                        {% else %} data-id ={{app.user.id}} {% endif %}>
+                            Follow
+                        </button>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+
+        {% if user.articles is not null %}
+            <div class= "m-10 pb-20">Liste des articles écrits par cette personne </div>
+            <div class= "row">
+                {% for article in user.articles %}
+                    <div class="card col-4" style="width: 18rem;">
+                        <img class="card-img-top" src ="{{ vich_uploader_asset(article) }}" alt="{{ article.title }}" height="100">
+                        <div class="card-body">
+                            <h5 class="card-title">{{article.title}}</h5>
+                            <p class="card-text">{{article.description|striptags|slice(0, 200)}}</p>
+                            <a href="{{ path('article_show', {'id': article.id})}}" class="btn btn-primary">LIRE</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class= "row">
+            <a href="{{ path('user_index')}}">
+                <input type="button" value="Retour à la liste" />
+            </a>
+               <a href="{{ path('user_edit', {'id': user.id})}}">
+                <input type="button" value="Modifier" />
+            </a>
+        </div>
+    </div>
+{% endblock %}

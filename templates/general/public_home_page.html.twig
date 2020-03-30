@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Bienvenue {% if app.user is not null %} {{app.user.username}} {% endif %}{% endblock %}
+
+{% block body %}
+    <div class = "coconuts-container">
+        Bienvenue dans un Monde d'irrévérence :
+        {% if app.user is not null %}
+            <div class="coconuts-bookmarked-articles-block">
+                Mes articles en marque-page :
+            </div>
+            <br>
+            <div class="coconuts-trending-articles-part">
+                Articles en vogue
+            </div>
+        {% else %}
+            <div class="coconuts-bookmarked-articles-block">
+                <div class="coconuts-trending-articles-principal">
+                    Articles en vogue
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

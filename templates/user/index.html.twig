@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% endblock %}
+
+{% block body %}
+    <div class="coconuts-container">
+        <h1>Users index</h1>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Profile Description</th>
+                    <th>IsAdmin</th>
+                    <th>actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.profileDescription }}</td>
+                    <td>{{ user.isAdmin ? 'Yes' : 'No' }}</td>
+                    <td>
+                        <a href="{{ path('user_show', {'id': user.id}) }}">show</a>
+                        <a href="{{ path('user_edit', {'id': user.id}) }}">edit</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="10">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <a href="{{ path('register_as_new_member') }}">Create new</a>
+    </div>
+{% endblock %}
+
+
+{% block javascripts %}
+     {{ parent() }}
+     {{ encore_entry_script_tags('toggleArticleLike') }}
+{% endblock %}
+
+
+
+

@@ -1,0 +1,159 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Article{% endblock %}
+
+{% block body %}
+    <div class = "coconuts-article-container">
+        <div>
+            <img class = "coconuts-main-article-picture"
+                 src="{{ vich_uploader_asset(article) }}"
+                 alt="{{ article.title }}"
+            />
+        </div>
+        <br>
+        <h1>
+            {{ article.title }}
+        </h1>
+        <h4>
+            <span>{{ article.chapeau }}</span>
+            <i class="{{ hasBookmark ? "fas" : "far" }} fa-bookmark toggle-bookmark-article"></i>
+        </h4>
+        <div class="row">
+            <div class="col-1 ">
+                <i class="far fa-heart"></i>
+                <span class="dynamic-likes-counter-of-article">{{article.nbOfLikes}}</span>
+            </div>
+            <div class="col-1 ">
+                <i class="fas fa-glasses"></i>
+                <span>{{article.nbOfVisits}}</span>
+            </div>
+            <div class="col-1 ">
+                <i class="far fa-comments"></i>
+                <span>{{article.nbOfComments}}</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-1">
+                <img src="{{ vich_uploader_asset(article.user) }}"
+                     alt="{{ article.user.username }}"
+                     class="coconuts-round-picture rikiki-img"
+                />
+            </div>
+            <div class="col-6">
+                <div>
+                    <a href = "{{ path('user_show', {'id': article.user.id}) }}">
+                        Par {{ article.user.username }}
+                    </a>
+                    <a href="javascript:void(0)"
+                       class= "coconuts-follow-button
+                       {{ isFollowing == false ? 'follow' : 'unfollow' }}"
+                    >
+                        {{ isFollowing == false ? "S\'abonner" : 'Se désabonner'  }}
+                    </a>
+                </div>
+                <div>
+                    {{ article.createdAt|date('M-d') }}
+                </div>
+            </div>
+        </div>
+
+        <div>{{ article.description }} </div>
+        <br>
+
+        <div>
+            Vous avez aimé cet article ? Faites-le savoir à son auteur (qui vous aimera d'autant plus fort!)
+            <i class="far fa-heart fa-3x toggle-like-article"></i>
+            <span class="dynamic-likes-counter-of-article">{{article.nbOfLikes}}</span>
+        </div>
+
+        <!-- BLOC AUTEUR -->
+        {{ render(controller(
+            'App\\Controller\\WriterController::displayPartialWriterResumeBlock',
+            { 'idWriter': article.user.id }
+        )) }}
+
+        <input id="visitorId" name="visitorId" type="hidden" value="{{ app.user is null ? "" : app.user.id }}">
+        <input id="hasLiked" name="hasLiked" type="hidden" value="{{ userHasLiked == false ? 0 : 1 }}">
+        <input id="articleId" name="articleId" type="hidden" value="{{ article.id }}">
+        <input id="hasBookmark" name="hasBookmark" type="hidden" value="{{ hasBookmark == false ? 0 : 1 }}">
+        <input id="writerId" name="writerId" type="hidden" value="{{ article.user.id}}">
+        <input id="isFollowing" name="isFollowing" type="hidden" value="{{ isFollowing == false ? 0 : 1}}">
+
+
+
+
+        <div id="comment-list">
+            {% if comments is not empty %}
+                <div>Commentaires : </div>
+                <ul class="coconuts-comment-section">
+                    <li id = "jquery-hidden-comment-block" class="comment" data-id = "">
+                        <div class="comment-info">
+                            <a class="comment-username" href="">
+                            </a>
+                            <span class="comment-date">A l'instant</span>
+                        </div>
+                        <a class="comment-avatar" href="#">
+                            <img class="coconuts-round-picture rikiki-img user-picture"
+                                 src=""
+                                 width="35" alt="Profile Avatar" title=""
+                            />
+                        </a>
+                        <p class="comment-body"></p>
+                        <i class="fas fa-trash-alt"></i>
+                    </li>
+                    {% for comment in comments %}
+                        <li class="comment {{ comment.author.id == article.user.id ? "author-comment" : "user-comment"}}" data-id = "{{ comment.id }}">
+                            <div class="comment-info">
+                                <a class="comment-username" href="{{ path('user_show', {id : comment.author.id}) }}">
+                                    {{ comment.author.username }}
+                                </a>
+                                <span class="comment-date">{{ comment.createdAt|date("d-m-Y") }}</span>
+                            </div>
+                            <a class="comment-avatar" href="#">
+                                <img class="coconuts-round-picture rikiki-img"
+                                     src="{{ vich_uploader_asset(comment.author) }}"
+                                     width="35" alt="Profile Avatar" title="{{ comment.author.username }}"
+                                />
+                            </a>
+                            <p class="comment-body">{{ comment.content }}</p>
+                            {% if app.user is not null %}
+                                {% if app.user.isAdmin or app.user.id == comment.id %}
+                                    <i class="fas fa-trash-alt delete-comment-action" data-id=" {{ comment.id }}"></i>
+                                {% endif %}
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+
+                    {% if app.user is not null  %}
+                        <li class="write-new">
+                            <label for = "send-comment-input"></label>
+                            <input name ="send-comment-input" id="send-comment-input" type="text">
+                            <div>
+                                <button id="send-comment-action">Envoyer</button>
+                            </div>
+                            <img class="coconuts-round-picture rikiki-img" id="visitor-picture"
+                                 src="{{ vich_uploader_asset(app.user) }}" data-href="{{ path('user_show', {id : app.user.id} ) }}"
+                                 width="35" alt="Profile Avatar" title="{{ app.user.username }}"
+                            />
+                        </li>
+                    {% endif %}
+                </ul>
+                {% else %}
+                    <div>Pas de commentaires à ce jour : </div>
+            {% endif %}
+        </div>
+
+        {% if app.user is not null %}
+            {% if app.user.id == article.user.id %}
+                <a href="{{ path('article_edit', {'id': article.id}) }}">Modifier votre article</a>
+            {% endif %}
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('toggleArticleLike') }}
+    {{ encore_entry_script_tags('toggleArticleBookmark') }}
+{% endblock %}
+

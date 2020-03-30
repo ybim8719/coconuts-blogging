@@ -1,0 +1,48 @@
+
+{{ form_start(form, {attr : { novalidate : 'novalidate' }}) }}
+
+<div class="row">
+    <div class = "col-6">
+        {{ form_label(form.username)}}<br>
+        {{ form_widget(form.username, {'attr': {'class': 'coconuts-input-article-title'}})}}
+    </div>
+    <div class = "col-6">
+        {{ form_label(form.password)}}<br>
+        {{ form_widget(form.password, {'attr': {'class': 'coconuts-input-article-title'}})}}
+    </div>
+</div>
+<div class="row">
+</div>
+<div class="row">
+    <div class = "col-6">
+        {{ form_label(form.email)}}<br>
+        {{ form_widget(form.email, {'attr': {'class': 'coconuts-input-article-title'}})}}
+    </div>
+    <div class = "col-6">
+        {{ form_label(form.imageFile)}}<br>
+        {{ form_widget(form.imageFile, {'attr': {'class': 'coconuts-image-article-upload'}})}}
+    </div>
+</div>
+<div class="row">
+    <div class = "col-12">
+        {{ form_label(form.profileDescription)}}<br>
+        {{ form_widget(form.profileDescription, {'attr': {'class': 'coconuts-input-chapeau'}})}}
+    </div>
+</div>
+
+
+<p class="text-center main-actions">
+    <a  class="btn btn-link" href="{{ path('article_index')}}">
+        <i class="fa fa-arrow-left"></i>
+        Retour à l'accueil
+    </a>
+
+    <button type="submit" class="btn btn-primary">
+        <i class="fas fa-save"></i>
+        Publier
+    </button>
+</p>
+
+{{ form_end(form) }}
+
+

@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rédiger un nouvel article : {% endblock %}
+
+{% block body %}
+    <div class="coconuts-container">
+        <h1>Rédiger un nouvel article :</h1>
+        {{ include('article//partials/form.html.twig') }}
+
+
+
+
+        <a href="{{ path('article_index') }}">Retour à la liste</a>
+    </div>
+{% endblock %}

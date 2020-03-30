@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Article index{% endblock %}
+
+{% block body %}
+    <div class = "coconuts-container">
+        <h1>Article index</h1>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Date de Publication</th>
+                    <th>Titre</th>
+                    <th>Chapeau</th>
+                    <th>Contenu (300 char)</th>
+                    <th>Auteur</th>
+                    <th>Likes</th>
+                    <th>Vues</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for article in articles %}
+                <tr>
+                    <td>{{ article.createdAt|date("d-M") }}</td>
+                    <td>{{ article.title }}</td>
+                    <td>{{ article.chapeau }}</td>
+                    <td>{{ article.description|striptags|slice(0, 200) }}</td>
+                    <td>{{ article.user.username }}</td>
+                    <td>{{ article.nbOfLikes }}</td>
+                    <td>{{ article.nbOfComments }}</td>
+                    <td>
+                        <a href="{{ path('article_show', {'id': article.id}) }}">Détail</a>
+                        <a href="{{ path('article_edit', {'id': article.id}) }}">Modifier</a>
+                    </td>
+
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <a href="{{ path('article_create') }}">Create new</a>
+    </div>
+{% endblock %}
