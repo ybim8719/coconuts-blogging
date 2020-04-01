@@ -117,9 +117,14 @@ class User implements UserInterface
     private $isWriter;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\BookMark", mappedBy="users")
+     * @ORM\OneToMany(targetEntity="App\Entity\BookMark", mappedBy="user")
      */
     private $bookMarks;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Channel", mappedBy="users")
+     */
+    private $channels;
 
 
     public function __construct()
@@ -132,6 +137,7 @@ class User implements UserInterface
         $this->publishedComments = new ArrayCollection();
         $this->subscribedFollows = new ArrayCollection();
         $this->bookMarks = new ArrayCollection();
+        $this->channels = new ArrayCollection();
     }
 
 
@@ -328,13 +334,13 @@ class User implements UserInterface
         return $this;
     }
 
-    public function removePublishedLike(UserLike $ye): self
+    public function removePublishedLike(UserLike $like): self
     {
-        if ($this->yes->contains($ye)) {
-            $this->yes->removeElement($ye);
+        if ($this->publishedLikes->contains($like)) {
+            $this->publishedLikes->removeElement($like);
             // set the owning side to null (unless already changed)
-            if ($ye->getUser() === $this) {
-                $ye->setUser(null);
+            if ($like->getUser() === $this) {
+                $like->setUser(null);
             }
         }
 
@@ -433,12 +439,12 @@ class User implements UserInterface
         return count($this->publishedComments);
     } 
 
-    public function getnbOfPublishedLikes()
+    public function getNbOfPublishedLikes()
     {
         return count($this->publishedLikes);
     } 
 
-    public function getNbOfWritenArticles()
+    public function getNbOfWrittenArticles()
     {
         return count($this->articles);
     }
@@ -477,6 +483,34 @@ class User implements UserInterface
             if ($bookMark->getUser() === $this) {
                 $bookMark->setUser(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Channel[]
+     */
+    public function getChannels(): Collection
+    {
+        return $this->channels;
+    }
+
+    public function addChannel(Channel $channel): self
+    {
+        if (!$this->channels->contains($channel)) {
+            $this->channels[] = $channel;
+            $channel->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChannel(Channel $channel): self
+    {
+        if ($this->channels->contains($channel)) {
+            $this->channels->removeElement($channel);
+            $channel->removeUser($this);
         }
 
         return $this;

@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Bienvenue {% endblock %}
+
+{% block body %}
+    <div class = "coconuts-container">
+        <h1 class="coconuts-main-title">Ecrire sur tout, surtout sur n'importe quoi !</h1>
+        <div class="coconuts-trending-articles-block">
+            <p class="trending-articles-title">
+                Articles Top Rated
+            </p>
+            <div class="trending-articles-body">
+                {% if trendingArticles is not empty %}
+                    {% for trendingArticle in trendingArticles %}
+                        <img src="{{ vich_uploader_asset(trendingArticle) }}" alt ="{{ trendingArticle.title }}"/>
+                        <p>{{ trendingArticle.title }}</p>
+                        <p>{{ trendingArticle.content }}</p>
+                        <a href="{{ path(show_article, {'idArticle' : trendingArticle.id})}}" type="button">
+                            Lire
+                        </a>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+        <br>
+    </div>
+{% endblock %}

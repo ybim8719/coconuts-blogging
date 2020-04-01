@@ -177,22 +177,21 @@ XXXXXXXXXX
 
 }
 
-.comment.author-comment{
+li.author-comment{
     justify-content: flex-end;
 }
 
-.comment.author-comment .info{
-    order: 3;
-}
-
-.comment.author-comment .avatar{
-    order: 2;
-}
-
-.comment.author-comment p{
+li.author-comment .comment-info{
     order: 1;
 }
 
+li.author-comment .comment-avatar{
+    order: 2;
+}
+
+li.author-comment .comment-body{
+    order: 3;
+}
 
 
 .comment-username {
@@ -240,4 +239,11 @@ XXXXXXXXXX
 
 .coconuts-author-block-activity {
     display: flex;
+}
+
+
+.coconuts-main-title {
+    font-size: 3em;
+    font-family: "Roboto Light";
+    text-align: center;
 }

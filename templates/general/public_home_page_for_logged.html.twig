@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Bienvenue {% if app.user is not null %} {{app.user.username}} {% endif %}{% endblock %}
+
+{% block body %}
+    <div class = "coconuts-container">
+        <h1 class="coconuts-main-title">Ecrire sur tout... <br> Et surtout sur n'importe quoi !</h1>
+        {% if app.user is not null %}
+            <div class="coconuts-bookmarked-articles-block">
+                <p class="bookmarked-articles-title">
+                    Les articles qu'il me reste à lire :
+                </p>
+                <div class="bookmarked-articles-body">
+                    {% if bookmarkedArticles is not null %}
+                        {% for bookMarkedArticle in bookmarkedArticles %}s
+                            <img src="{{ vich_uploader_asset(bookMarkedArticle) }}" alt ="{{ bookMarkedArticle.title }}"/>
+                            <p>{{ bookMarkedArticle.title }}</p>
+                            <p>{{ bookMarkedArticle.chapeau }}</p>
+                            <a href="{{ path("article_show", {'id' : bookMarkedArticle.id})}}" type="button">
+                                Lire
+                            </a>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="followed-writer-block">
+                {% if followedWriters is not empty %}
+                    {% for writer in followedWriters %}s
+                        <img src="{{ vich_uploader_asset(writer) }}" alt ="{{ writer.username }}"/>
+                        <p>{{ writer.username }}</p>
+                        <a href="{{ path("user_show", {'id' : writer.id})}}" type="button">
+                            Voir
+                        </a>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <br>
+            <div class="coconuts-trending-articles-part">
+                Articles Tendances
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

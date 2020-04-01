@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/general")
+ * @Route("/")
  */
 class GeneralPagesController extends AbstractController
 {
@@ -31,15 +31,53 @@ class GeneralPagesController extends AbstractController
     }
 
     /**
-     * @Route("/home", name="public_home_page", methods={"GET"})
+     * @Route("", name="public_home_page", methods={"GET"})
      */
     public function publicHomePage()
     {
-        $article = $this->articleRepository->find(7);
-        dump($article);
-        dump($this->dateHelper->convertToAdaptedDuration($article->getCreatedAt()));
-        return $this->render('general/public_home_page.html.twig', [
+        $user = $this->getUser();
+        $bookMarkedArticles = [];
+        $followedWriters = [];
+
+        if ($user instanceof User) {
+            if (count($user->getBookMarks()) > 0) {
+                foreach ($user->getBookMarks() as $bookMark) {
+                    if ($bookMark->getArticle() instanceof Article) {
+                        $bookMarkedArticles[] = $bookMark->getArticle();
+                    }
+                }
+            }
+
+            if (count($user->getSubscribedFollows()) > 0) {
+                foreach ($user->getSubscribedFollows() as $follow) {
+                    if ($follow->getWriter() instanceof User) {
+                        $followedWriters[] = $follow->getWriter();
+                    }
+                }
+            }
+
+            // get the 5 most liked articles of the website
+            // $this->articleRepository->findFiveMoreLikedArticles();
+
+            // get 5 random articles
+            dump($this->articleRepository->findFiveRandomArticles());
+
+            //$this->channelRepository;
+
+
+            return $this->render('general/public_home_page_for_logged.html.twig', [
+                'bookmarkedArticles' => $bookMarkedArticles,
+                'followedWriters' => $followedWriters
+            ]);
+        }
+
+        dump($this->articleRepository->findFiveRandomArticles());
+
+        return $this->render('general/public_home_page_for_anonymous.html.twig', [
+            'trendingArticles' => [],
         ]);
+
+
     }
 }
 

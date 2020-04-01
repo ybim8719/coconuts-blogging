@@ -102,6 +102,11 @@ class Article
      */
     private $createdAt;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Channel", mappedBy="articles")
+     */
+    private $channels;
+
     public function __construct()
     {
         $this->setCreatedAt(new DateTime('now'));
@@ -110,6 +115,7 @@ class Article
         $this->likes = new ArrayCollection();
         $this->articleVisits = new ArrayCollection();
         $this->bookMarks = new ArrayCollection();
+        $this->channels = new ArrayCollection();
     }
 
 
@@ -369,6 +375,34 @@ class Article
             if ($bookMark->getArticle() === $this) {
                 $bookMark->setArticle(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Channel[]
+     */
+    public function getChannels(): Collection
+    {
+        return $this->channels;
+    }
+
+    public function addChannel(Channel $channel): self
+    {
+        if (!$this->channels->contains($channel)) {
+            $this->channels[] = $channel;
+            $channel->addArticle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChannel(Channel $channel): self
+    {
+        if ($this->channels->contains($channel)) {
+            $this->channels->removeElement($channel);
+            $channel->removeArticle($this);
         }
 
         return $this;
