@@ -2,7 +2,6 @@ html {
     height: 100%;
 }
 
-
 body {
     min-height: 100%;
     margin: 0;
@@ -23,23 +22,20 @@ footer {
     color: white;
 }
 
+a {
+    color: inherit;
+}
+
 * {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
+    font-family: "Roboto Light";
 }
 
 
 /**
-    containers
+    CONTAINERS
  */
-.coconuts-container {
-    margin-top: 20px;
-    padding: 10px;
-    width: calc(100% - 10px);
-    max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
-}
 
 .coconuts-article-container {
     margin-top: 20px;
@@ -51,12 +47,12 @@ footer {
 }
 
 /**
-    Coconuts grid system
+    GRID SYSTEM
  */
 
 
 /**
-    Coconuts navbar
+    NAVBAR
  */
 
 
@@ -121,8 +117,15 @@ XXXXXXXXXX
     background-repeat: no-repeat;
 }
 
+
 /**
-    INTERACTIONS WITH AUTHOR/ARTICLE buttons
+    CHANNELS + RELATED ARTICLE SMALL BLOCS
+ */
+
+
+
+/**
+    FOLLOW BUTTONS
  */
 
 .coconuts-follow-button {
@@ -141,6 +144,7 @@ XXXXXXXXXX
 .unfollow {
     background: #D2D2D2;
 }
+
 
 /**
     ARTICLE COMMENTS BLOCK
@@ -208,8 +212,10 @@ li.author-comment .comment-body{
 #jquery-hidden-comment-block {
     display: none;
 }
+
+
 /**
-    AUTHOR BLOCK
+    AUTHOR SHORT PROFILE BLOCK
  */
 
 .coconuts-author-block {
@@ -242,6 +248,13 @@ li.author-comment .comment-body{
 }
 
 
+/**
+    AUTHOR FULL PROFILE BLOCK
+ */
+
+/**
+    XXXXXXX
+ */
 .coconuts-main-title {
     font-size: 3em;
     font-family: "Roboto Light";

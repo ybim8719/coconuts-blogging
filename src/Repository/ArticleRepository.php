@@ -23,7 +23,7 @@ class ArticleRepository extends ServiceEntityRepository
     public function findRandomArticlesByChannelAndNumberOfResults(Channel $channel, int $nbResults)
     {
         return $this->createQueryBuilder('a')
-            ->join('a.channels', 'c')
+            ->join('a.channel', 'c')
             ->andWhere('c = :channel')
             ->setParameter('channel', $channel)
             ->orderBy('RAND()')

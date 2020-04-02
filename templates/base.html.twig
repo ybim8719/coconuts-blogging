@@ -43,6 +43,11 @@
                                 <a class="nav-link" href="{{ path('article_create') }}">Ecrire</a>
                             </li>
                         {% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('channel_channelIndexPage') }}">Channels</a>
+                        </li>
+
+
                     </ul>
                     {% if app.user is not null %}
                         <p>{{app.user.username}}</p>

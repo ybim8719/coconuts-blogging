@@ -1,7 +1,127 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} Bienvenue {% endblock %}
-
+{% block title %} Channels {% endblock %}
 
 {% block body %}
+    <div class="coconuts-article-container">
+        {% if subscribedChannelsWithArticles is not empty %}
+            <div class="coconuts-subscribed-channels-list">
+                <h3>MES CHANNELS PREFERES</h3>
+                {% for subscribedChannelWithArticles in subscribedChannelsWithArticles %}
+                    <div class="coconuts-subscribed-channel-block">
+                        <div class="channel-header-block">
+                            <div class="channel-header-left">
+                                <h3>{{ subscribedChannelWithArticles.channel.title }}</h3>
+                                <div class="chapeau">{{ subscribedChannelWithArticles.channel.description }}</div>
+                                <div class="secondary-info">
+                                    {{ subscribedChannelWithArticles.channel.getNbOfArticles }} articles publiés
+                                    {{ subscribedChannelWithArticles.channel.getNbOfChannelSubscriptions }} abonnés
+                                </div>
+                            </div>
+                            <div class="channel-header-right">
+                                <div>
+                                    <a href ="#"> Rejoindre le channel</a>
+                                </div>
+                            </div>
+                        </div>s
+                        <div class="channel-body-block">
+                            {% if subscribedChannelWithArticles.articles is not empty %}
+                                {% set mainArticle = subscribedChannelWithArticles.articles|first %}
+                                <div class="channel-article-main">
+                                    <img class="channel-article-main-pic" src ="{{ vich_uploader_asset(mainArticle) }}" alt="{{ mainArticle.title }}" height="150">
+                                    <div class="channel-article-main-body" >
+                                        <a href="{{ path('article_show', {'id': mainArticle.id})}}" >
+                                            <h5 class="">{{mainArticle.title}}</h5>
+                                        </a>
+                                        <p class="">{{mainArticle.description|striptags|slice(0, 200)}}</p>
+                                    </div>
+                                </div>
+                                <div class="channel-article-secondary">
+                                    {% for article in subscribedChannelWithArticles.articles|slice(1) %}
+                                        <div class="channel-article-secondary-item">
+                                            <img class="channel-article-main-pic" src ="{{ vich_uploader_asset(article) }}" alt="{{ article.title }}" height="70">
+                                            <div class="channel-article-main-body" >
+                                                <a href="{{ path('article_show', {'id': article.id})}}">
+                                                    <h5 class="">{{article.title}}</h5>
+                                                </a>
+                                                <p class="">{{article.description|striptags|slice(0, 200)}}</p>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <div>Aucun article n'est encore paru sur ce channel</div>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <a href="{{ path('channel_show', {'idChannel': subscribedChannelWithArticles.channel.id})}}" class="btn btn-primary">
+                                Découvrir
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if randomChannelsWithArticles is not empty %}
+            <div class="coconuts-subscribed-channels-list">
+                <h3>CES CHANNELS POURRAIENT VOUS PLAIRE</h3>
+                {% for randomChannelWithArticles in randomChannelsWithArticles %}
+                    <div class="coconuts-subscribed-channel-block">
+                        <div class="channel-header-block">
+                            <div class="channel-header-left">
+                                <h3>{{ randomChannelWithArticles.channel.title }}</h3>
+                                <div class="chapeau">{{ randomChannelWithArticles.channel.description }}</div>
+                                <div class="secondary-info">
+                                    {{ randomChannelWithArticles.channel.getNbOfArticles }} articles publiés
+                                    {{ randomChannelWithArticles.channel.getNbOfChannelSubscriptions }} abonnés
+                                </div>
+                            </div>
+                            <div class="channel-header-right">
+                                <div>
+                                    <a href ="#"> Rejoindre</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="channel-body-block">
+                            {% if randomChannelWithArticles.articles is not empty %}
+                                {% set mainArticle = randomChannelWithArticles.articles|first %}
+                                <div class="channel-article-main">
+                                    <img class="channel-article-main-pic" src ="{{ vich_uploader_asset(mainArticle) }}" alt="{{ mainArticle.title }}" height="150">
+                                    <div class="channel-article-main-body" >
+                                        <a href="{{ path('article_show', {'id': mainArticle.id})}}" >
+                                            <h5 class="">{{mainArticle.title}}</h5>
+                                        </a>
+                                        <p class="">{{mainArticle.description|striptags|slice(0, 200)}}</p>
+                                    </div>
+                                </div>
+                                <div class="channel-article-secondary">
+                                    {% for article in randomChannelWithArticles.articles|slice(1) %}
+                                        <div class="channel-article-secondary-item">
+                                            <img class="channel-article-main-pic" src ="{{ vich_uploader_asset(article) }}" alt="{{ article.title }}" height="70">
+                                            <div class="channel-article-main-body" >
+                                                <a href="{{ path('article_show', {'id': article.id})}}">
+                                                    <h5 class="">{{article.title}}</h5>
+                                                </a>
+                                                <p class="">{{article.description|striptags|slice(0, 200)}}</p>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <div>Aucun article n'est encore paru sur ce channel</div>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <a href="{{ path('channel_show', {'idChannel': randomChannelWithArticles.channel.id})}}" class="btn btn-primary">
+                                Découvrir
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+
+    </div>
 {% endblock %}

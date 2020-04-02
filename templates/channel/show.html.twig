@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {% if channel is not null %} {{ channel.title }} {% endif %} {% endblock %}
+
+{% block body %}
+    {% if channel is not null %}
+        <div class="coconuts-subscribed-channels-list">
+            {{ channel.title }}
+            {{ channel.description }}
+        </div>
+
+    {% else %}
+        No info on this channel
+    {% endif %}
+
+
+{% endblock %}

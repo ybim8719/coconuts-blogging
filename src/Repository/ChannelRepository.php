@@ -31,17 +31,16 @@ class ChannelRepository extends ServiceEntityRepository
         ;
     }
 
-    /*
-      public function findRandomChannelsNotInListAndByNumberOfResults($value): ?Channel
-      {
-          return $this->createQueryBuilder('c')
-              ->andWhere('c.exampleField = :val')
-              ->setParameter('val', $value)
-              ->getQuery()
-              ->getOneOrNullResult()
-          ;
-      }
-      */
+    public function findRandomChannelsNotInListAndByNumberOfResults(array $ids, int $nbOfChannels)
+    {
+        $qb= $this->createQueryBuilder('c');
+
+        return $qb->andWhere($qb->expr()->notIn("c.id", "(:ids)"))
+            ->setParameter('ids', implode(',', $ids))
+            ->setMaxResults($nbOfChannels)
+            ->getQuery()
+            ->getResult();
+    }
 
     public function findRandomChannelsByNumberOfResults($value)
     {
@@ -52,5 +51,4 @@ class ChannelRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
-
 }

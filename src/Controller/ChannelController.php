@@ -16,6 +16,7 @@ use App\Repository\ArticleRepository;
 use App\Service\Logger\CoconutsLogger;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,6 +30,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class ChannelController extends AbstractController
 {
     const NB_OF_ARTICLE_BY_BLOCK_OF_CHANNEL = 4;
+    const NB_OF_RANDOM_CHANNEL_TO_DISPLAY_FOR_ANONYMOUS = 7;
+    const NB_OF_RANDOM_CHANNEL_TO_DISPLAY_FOR_LOGGED = 5;
 
 
     /**
@@ -61,9 +64,9 @@ class ChannelController extends AbstractController
 
     /**
      * Display list of channels subscribed by user.
-     * @Route("/", name="channelIndexPage", methods={"GET"})
+     * @Route("/index-page", name="channel_channelIndexPage", methods={"GET"})
      */
-    public function channelIndexPage(ArticleRepository $articleRepository): Response
+    public function channelIndexPage(): Response
     {
         $user = $this->getUser();
         $subscribedChannelsWithArticles = [];
@@ -80,25 +83,38 @@ class ChannelController extends AbstractController
 
         // retrieve 7 random channels and four random associated articles subscribed by the user
         if (!empty($subscribedChannelsId)) {
-            $randomChannels = $this->channelRepository->findRandomChannelsNotInListAndByNumberOfResults($subscribedChannelsId);
+            $randomChannels = $this->channelRepository->findRandomChannelsNotInListAndByNumberOfResults($subscribedChannelsId, self::NB_OF_RANDOM_CHANNEL_TO_DISPLAY_FOR_LOGGED);
         } else {
-            $randomChannels = $this->channelRepository->findRandomChannelsByNumberOfResults(7);
+            $randomChannels = $this->channelRepository->findRandomChannelsByNumberOfResults(self::NB_OF_RANDOM_CHANNEL_TO_DISPLAY_FOR_ANONYMOUS);
         }
 
+        // populate the random channels and four random associated articles subscribed by the user
         if (!empty($randomChannels)) {
             $randomChannelsWithArticles = $this->buildArrayOfChannelsInfosAndAssociatedArticles($randomChannels, self::NB_OF_ARTICLE_BY_BLOCK_OF_CHANNEL);
         }
 
         return $this->render('channel/channel_index_page.html.twig', [
-            'subscribedChannel' => $subscribedChannelsWithArticles,
-            'randomChannels' => $randomChannelsWithArticles,
+            'subscribedChannelsWithArticles' => $subscribedChannelsWithArticles,
+            'randomChannelsWithArticles' => $randomChannelsWithArticles,
+        ]);
+    }
+
+    /**
+     * Display all public info on a channel
+     * @Route("/show/{idChannel}", name="channel_show", methods={"GET"})
+     * @ParamConverter("channel",options={"id" = "idChannel"})
+     */
+    public function show(Channel $channel)
+    {
+        return $this->render('channel/show.html.twig', [
+            'channel' => $channel,
         ]);
     }
 
 
     /**
-     * Prend un array de Channels et construit un maxi array d'info sur chaque channel et pioche
-     * pour chacun un nb d'articles donné en random
+     * Takes a array of Channels and builds a maxi array with info of each channel and find a given nb of
+     * random associated articles by channel
      * @param array $channels
      * @param int $nbOFfArticles
      * @return array
@@ -109,9 +125,7 @@ class ChannelController extends AbstractController
         foreach ($channels as $channel) {
             if ($channel instanceof Channel) {
                 $subscribedChannelsWithArticles[] = [
-                    "id" => $channel->getId(),
-                    "title" => $channel->getTitle(),
-                    "description" => $channel->getTitle(),
+                    "channel" => $channel,
                     "articles" => $this->articleRepository->findRandomArticlesByChannelAndNumberOfResults($channel, $nbOFfArticles)
                 ];
             }
