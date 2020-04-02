@@ -23,7 +23,8 @@ class ChannelRepository extends ServiceEntityRepository
     public function findBySubscriber(User $subscriber)
     {
         return $this->createQueryBuilder('c')
-            ->join('c.users', 'u')
+            ->join('c.channelSubscriptions', 'cs')
+            ->join("cs.user", 'u')
             ->andWhere('u = :subscriber')
             ->setParameter('subscriber', $subscriber)
             ->getQuery()

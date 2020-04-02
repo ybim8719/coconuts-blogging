@@ -16,19 +16,19 @@
                                 <div class="secondary-info">
                                     {{ subscribedChannelWithArticles.channel.getNbOfArticles }} articles publiés
                                     {{ subscribedChannelWithArticles.channel.getNbOfChannelSubscriptions }} abonnés
+                                    <span class="label-stylay label-green label-rikiki">Abonné</span>
                                 </div>
                             </div>
                             <div class="channel-header-right">
-                                <div>
-                                    <a href ="#"> Rejoindre le channel</a>
-                                </div>
                             </div>
                         </div>s
                         <div class="channel-body-block">
                             {% if subscribedChannelWithArticles.articles is not empty %}
                                 {% set mainArticle = subscribedChannelWithArticles.articles|first %}
                                 <div class="channel-article-main">
-                                    <img class="channel-article-main-pic" src ="{{ vich_uploader_asset(mainArticle) }}" alt="{{ mainArticle.title }}" height="150">
+                                    <a href="{{ path('article_show', {'id': mainArticle.id})}}">
+                                        <img class="channel-article-main-pic" src ="{{ vich_uploader_asset(mainArticle) }}" alt="{{ mainArticle.title }}">
+                                    </a>
                                     <div class="channel-article-main-body" >
                                         <a href="{{ path('article_show', {'id': mainArticle.id})}}" >
                                             <h5 class="">{{mainArticle.title}}</h5>
@@ -39,12 +39,13 @@
                                 <div class="channel-article-secondary">
                                     {% for article in subscribedChannelWithArticles.articles|slice(1) %}
                                         <div class="channel-article-secondary-item">
-                                            <img class="channel-article-main-pic" src ="{{ vich_uploader_asset(article) }}" alt="{{ article.title }}" height="70">
-                                            <div class="channel-article-main-body" >
+                                            <a href="{{ path('article_show', {'id': article.id})}}">
+                                            <img class="channel-article-secondary-pic" src ="{{ vich_uploader_asset(article) }}" alt="{{ article.title }}">
+                                            </a>
+                                            <div class="channel-article-secondary-body" >
                                                 <a href="{{ path('article_show', {'id': article.id})}}">
                                                     <h5 class="">{{article.title}}</h5>
                                                 </a>
-                                                <p class="">{{article.description|striptags|slice(0, 200)}}</p>
                                             </div>
                                         </div>
                                     {% endfor %}
@@ -75,6 +76,7 @@
                                 <div class="secondary-info">
                                     {{ randomChannelWithArticles.channel.getNbOfArticles }} articles publiés
                                     {{ randomChannelWithArticles.channel.getNbOfChannelSubscriptions }} abonnés
+                                    <span class="label-stylay label-blue label-rikiki">Visiteur</span>
                                 </div>
                             </div>
                             <div class="channel-header-right">
@@ -87,23 +89,26 @@
                             {% if randomChannelWithArticles.articles is not empty %}
                                 {% set mainArticle = randomChannelWithArticles.articles|first %}
                                 <div class="channel-article-main">
-                                    <img class="channel-article-main-pic" src ="{{ vich_uploader_asset(mainArticle) }}" alt="{{ mainArticle.title }}" height="150">
-                                    <div class="channel-article-main-body" >
-                                        <a href="{{ path('article_show', {'id': mainArticle.id})}}" >
-                                            <h5 class="">{{mainArticle.title}}</h5>
-                                        </a>
+                                    <a href="{{ path('article_show', {'id': mainArticle.id})}}">
+                                        <img class="channel-article-main-pic" src ="{{ vich_uploader_asset(mainArticle) }}" alt="{{ mainArticle.title }}" >
+                                    </a>
+                                        <div class="channel-article-main-body" >
+                                            <a href="{{ path('article_show', {'id': mainArticle.id})}}" >
+                                                <h5 class="">{{mainArticle.title}}</h5>
+                                            </a>
                                         <p class="">{{mainArticle.description|striptags|slice(0, 200)}}</p>
                                     </div>
                                 </div>
                                 <div class="channel-article-secondary">
                                     {% for article in randomChannelWithArticles.articles|slice(1) %}
                                         <div class="channel-article-secondary-item">
-                                            <img class="channel-article-main-pic" src ="{{ vich_uploader_asset(article) }}" alt="{{ article.title }}" height="70">
-                                            <div class="channel-article-main-body" >
+                                            <a href="{{ path('article_show', {'id': article.id})}}">
+                                                <img class="channel-article-secondary-pic" src ="{{ vich_uploader_asset(article) }}" alt="{{ article.title }}">
+                                            </a>
+                                            <div class="channel-article-secondary-body" >
                                                 <a href="{{ path('article_show', {'id': article.id})}}">
                                                     <h5 class="">{{article.title}}</h5>
                                                 </a>
-                                                <p class="">{{article.description|striptags|slice(0, 200)}}</p>
                                             </div>
                                         </div>
                                     {% endfor %}

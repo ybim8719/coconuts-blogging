@@ -123,6 +123,93 @@ XXXXXXXXXX
  */
 
 
+.coconuts-subscribed-channel-block {
+    border: 1px solid darkslateblue;
+
+}
+.channel-header-block {
+    display: flex;
+
+}
+.channel-header-left {
+    width: 700px;
+
+}
+
+.channel-header-right {
+
+}
+
+.channel-body-block{
+    display: flex;
+    border: 1px solid;
+}
+
+.channel-article-main {
+}
+.channel-article-main-body {
+    border: 1px solid;
+    width: 600px;
+}
+
+.channel-article-secondary {
+    width: 350px;
+}
+
+.channel-article-main-pic {
+    max-width: 600px;
+    max-height: 400px;
+}
+
+.channel-article-secondary-pic {
+    max-width: 300px;
+    max-height: 100px;
+}
+.chapeau {
+    font-size: 1em;
+    font-style: italic;
+    color: #3f4e5e;
+}
+
+.secondary-info {
+    font-size: 0.7em;
+    color: darkslategray;
+}
+
+
+/**
+    LABEL CLASSE
+ */
+
+.label-stylay {
+    background-color: white;
+    border-radius: 10px 10px 10px 10px;
+    font-family: "Courier New";
+    font-weight: bold;
+
+}
+
+.label-red {
+    color : darkred;
+    border: solid 2px darkred;
+}
+
+.label-green {
+    color : forestgreen;
+    border: solid 2px forestgreen;
+}
+
+.label-blue {
+    color : dodgerblue;
+    border: solid 2px dodgerblue;
+}
+
+.label-rikiki {
+    font-size:0.7em;
+    padding: 4px 4px 4px 4px;
+}
+
+
 
 /**
     FOLLOW BUTTONS
