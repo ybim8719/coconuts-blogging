@@ -20,14 +20,14 @@ class ArticleRepository extends ServiceEntityRepository
         parent::__construct($registry, Article::class);
     }
 
-    public function findFourRandomArticlesByChannel(Channel $channel)
+    public function findRandomArticlesByChannelAndNumberOfResults(Channel $channel, int $nbResults)
     {
         return $this->createQueryBuilder('a')
             ->join('a.channels', 'c')
             ->andWhere('c = :channel')
             ->setParameter('channel', $channel)
             ->orderBy('RAND()')
-            ->setMaxResults(4)
+            ->setMaxResults($nbResults)
             ->getQuery()
             ->getResult()
         ;

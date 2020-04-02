@@ -122,9 +122,9 @@ class User implements UserInterface
     private $bookMarks;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Channel", mappedBy="users")
+     * @ORM\OneToMany(targetEntity="App\Entity\ChannelSubscription", mappedBy="user")
      */
-    private $channels;
+    private $channelSubscriptions;
 
 
     public function __construct()
@@ -137,7 +137,7 @@ class User implements UserInterface
         $this->publishedComments = new ArrayCollection();
         $this->subscribedFollows = new ArrayCollection();
         $this->bookMarks = new ArrayCollection();
-        $this->channels = new ArrayCollection();
+        $this->channelSubscriptions = new ArrayCollection();
     }
 
 
@@ -489,28 +489,31 @@ class User implements UserInterface
     }
 
     /**
-     * @return Collection|Channel[]
+     * @return Collection|ChannelSubscription[]
      */
-    public function getChannels(): Collection
+    public function getChannelSubscriptions(): Collection
     {
-        return $this->channels;
+        return $this->channelSubscriptions;
     }
 
-    public function addChannel(Channel $channel): self
+    public function addChannelSubscription(ChannelSubscription $channelSubscription): self
     {
-        if (!$this->channels->contains($channel)) {
-            $this->channels[] = $channel;
-            $channel->addUser($this);
+        if (!$this->channelSubscriptions->contains($channelSubscription)) {
+            $this->channelSubscriptions[] = $channelSubscription;
+            $channelSubscription->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeChannel(Channel $channel): self
+    public function removeChannelSubscription(ChannelSubscription $channelSubscription): self
     {
-        if ($this->channels->contains($channel)) {
-            $this->channels->removeElement($channel);
-            $channel->removeUser($this);
+        if ($this->channelSubscriptions->contains($channelSubscription)) {
+            $this->channelSubscriptions->removeElement($channelSubscription);
+            // set the owning side to null (unless already changed)
+            if ($channelSubscription->getUser() === $this) {
+                $channelSubscription->setUser(null);
+            }
         }
 
         return $this;

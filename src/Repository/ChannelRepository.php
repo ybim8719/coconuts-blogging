@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Channel;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -19,32 +20,37 @@ class ChannelRepository extends ServiceEntityRepository
         parent::__construct($registry, Channel::class);
     }
 
-    // /**
-    //  * @return Channel[] Returns an array of Channel objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findBySubscriber(User $subscriber)
     {
         return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
+            ->join('c.users', 'u')
+            ->andWhere('u = :subscriber')
+            ->setParameter('subscriber', $subscriber)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
 
     /*
-    public function findOneBySomeField($value): ?Channel
+      public function findRandomChannelsNotInListAndByNumberOfResults($value): ?Channel
+      {
+          return $this->createQueryBuilder('c')
+              ->andWhere('c.exampleField = :val')
+              ->setParameter('val', $value)
+              ->getQuery()
+              ->getOneOrNullResult()
+          ;
+      }
+      */
+
+    public function findRandomChannelsByNumberOfResults($value)
     {
         return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
+            ->orderBy('rand()')
+            ->setMaxResults($value)
             ->getQuery()
-            ->getOneOrNullResult()
+            ->getResult()
         ;
     }
-    */
+
 }

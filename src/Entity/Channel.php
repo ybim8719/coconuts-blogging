@@ -29,16 +29,6 @@ class Channel
     private $description;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="channels")
-     */
-    private $users;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Article", inversedBy="channels")
-     */
-    private $articles;
-
-    /**
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
@@ -48,9 +38,20 @@ class Channel
      */
     private $updatedAt;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ChannelSubscription", mappedBy="channel")
+     */
+    private $channelSubscriptions;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Article", mappedBy="channel")
+     */
+    private $articles;
+
+
     public function __construct()
     {
-        $this->users = new ArrayCollection();
+        $this->channelSubscriptions = new ArrayCollection();
         $this->articles = new ArrayCollection();
     }
 
@@ -83,58 +84,6 @@ class Channel
         return $this;
     }
 
-    /**
-     * @return Collection|User[]
-     */
-    public function getUsers(): Collection
-    {
-        return $this->users;
-    }
-
-    public function addUser(User $user): self
-    {
-        if (!$this->users->contains($user)) {
-            $this->users[] = $user;
-        }
-
-        return $this;
-    }
-
-    public function removeUser(User $user): self
-    {
-        if ($this->users->contains($user)) {
-            $this->users->removeElement($user);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Article[]
-     */
-    public function getArticles(): Collection
-    {
-        return $this->articles;
-    }
-
-    public function addArticle(Article $article): self
-    {
-        if (!$this->articles->contains($article)) {
-            $this->articles[] = $article;
-        }
-
-        return $this;
-    }
-
-    public function removeArticle(Article $article): self
-    {
-        if ($this->articles->contains($article)) {
-            $this->articles->removeElement($article);
-        }
-
-        return $this;
-    }
-
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
@@ -157,5 +106,76 @@ class Channel
         $this->updatedAt = $updatedAt;
 
         return $this;
+    }
+
+    /**
+     * @return Collection|ChannelSubscription[]
+     */
+    public function getChannelSubscriptions(): Collection
+    {
+        return $this->channelSubscriptions;
+    }
+
+    public function addChannelSubscription(ChannelSubscription $channelSubscription): self
+    {
+        if (!$this->channelSubscriptions->contains($channelSubscription)) {
+            $this->channelSubscriptions[] = $channelSubscription;
+            $channelSubscription->setChannel($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChannelSubscription(ChannelSubscription $channelSubscription): self
+    {
+        if ($this->channelSubscriptions->contains($channelSubscription)) {
+            $this->channelSubscriptions->removeElement($channelSubscription);
+            if ($channelSubscription->getChannel() === $this) {
+                $channelSubscription->setChannel(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Article[]
+     */
+    public function getArticles(): Collection
+    {
+        return $this->articles;
+    }
+
+    public function addArticle(Article $article): self
+    {
+        if (!$this->articles->contains($article)) {
+            $this->articles[] = $article;
+            $article->setChannel($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArticle(Article $article): self
+    {
+        if ($this->articles->contains($article)) {
+            $this->articles->removeElement($article);
+            // set the owning side to null (unless already changed)
+            if ($article->getChannel() === $this) {
+                $article->setChannel(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getNbOfArticles()
+    {
+        return count($this->articles);
+    }
+
+    public function getNbOfChannelSubscriptions()
+    {
+        return count($this->channelSubscriptions);
     }
 }

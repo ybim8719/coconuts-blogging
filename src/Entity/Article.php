@@ -74,7 +74,6 @@ class Article
      */
     private $updatedAt;
 
-
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ArticleComment", mappedBy="article")
      * 
@@ -103,10 +102,10 @@ class Article
     private $createdAt;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Channel", mappedBy="articles")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Channel", inversedBy="articles")
      */
-    private $channels;
-
+    private $channel;
+    
     public function __construct()
     {
         $this->setCreatedAt(new DateTime('now'));
@@ -115,9 +114,7 @@ class Article
         $this->likes = new ArrayCollection();
         $this->articleVisits = new ArrayCollection();
         $this->bookMarks = new ArrayCollection();
-        $this->channels = new ArrayCollection();
     }
-
 
     public function getId(): ?int
     {
@@ -172,7 +169,7 @@ class Article
     public function setUser(User $writer): self
     {
         //if user didn't wrote anything before or has written articles and is not a writer, he automatically becomes a writer
-        if($writer->getNbOfWritenArticles() == 0 || ($writer->getNbOfWritenArticles() > 0 && $writer->getIsWriter() == false)) {
+        if($writer->getNbOfWrittenArticles() == 0 || ($writer->getNbOfWrittenArticles() > 0 && $writer->getIsWriter() == false)) {
             $writer->setIsWriter(true);
         }
         $this->user = $writer;
@@ -380,30 +377,14 @@ class Article
         return $this;
     }
 
-    /**
-     * @return Collection|Channel[]
-     */
-    public function getChannels(): Collection
+    public function getChannel(): ?Channel
     {
-        return $this->channels;
+        return $this->channel;
     }
 
-    public function addChannel(Channel $channel): self
+    public function setChannel(?Channel $channel): self
     {
-        if (!$this->channels->contains($channel)) {
-            $this->channels[] = $channel;
-            $channel->addArticle($this);
-        }
-
-        return $this;
-    }
-
-    public function removeChannel(Channel $channel): self
-    {
-        if ($this->channels->contains($channel)) {
-            $this->channels->removeElement($channel);
-            $channel->removeArticle($this);
-        }
+        $this->channel = $channel;
 
         return $this;
     }

@@ -6,7 +6,7 @@
     <div class ="coconuts-container">
         <h1>Modifier l'article : {{article.title}}</h1>
 
-        {{ include('article/_form.html.twig', {'button_label': 'Update'}) }}
+        {{ include('article/partials/form.html.twig', {'button_label': 'Update'}) }}
 
         <a href="{{ path('article_index') }}">back to list</a>
 

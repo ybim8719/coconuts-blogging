@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Article;
+use App\Entity\Channel;
 use App\Entity\User;
 use App\Service\Helper\DateCalculator;
 use Doctrine\ORM\EntityManagerInterface;
@@ -21,10 +22,12 @@ class GeneralPagesController extends AbstractController
     private $userRepository;
     private $articleRepository;
     private $dateHelper;
+    private $channelRepository;
 
     public function __construct(EntityManagerInterface $em, DateCalculator $calculator)
     {
         $this->userRepository = $em->getRepository(User::class);
+        $this->channelRepository = $em->getRepository(Channel::class);
         $this->articleRepository = $em->getRepository(Article::class);
         $this->em = $em;
         $this->dateHelper = $calculator;
@@ -56,22 +59,21 @@ class GeneralPagesController extends AbstractController
                 }
             }
 
-            // get the 5 most liked articles of the website
-            // $this->articleRepository->findFiveMoreLikedArticles();
-
-            // get 5 random articles
-            dump($this->articleRepository->findFiveRandomArticles());
+            if (count($this->channelRepository->findBySubscriber()) > 0) {
+                foreach ($user->getSubscribedFollows() as $follow) {
+                    if ($follow->getWriter() instanceof User) {
+                        $followedWriters[] = $follow->getWriter();
+                    }
+                }
+            }
 
             //$this->channelRepository;
-
 
             return $this->render('general/public_home_page_for_logged.html.twig', [
                 'bookmarkedArticles' => $bookMarkedArticles,
                 'followedWriters' => $followedWriters
             ]);
         }
-
-        dump($this->articleRepository->findFiveRandomArticles());
 
         return $this->render('general/public_home_page_for_anonymous.html.twig', [
             'trendingArticles' => [],
