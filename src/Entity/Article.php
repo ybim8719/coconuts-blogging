@@ -96,6 +96,7 @@ class Article
      */
     private $bookMarks;
 
+
     /**
      * @ORM\Column(type="datetime", nullable = true)
      */
@@ -376,6 +377,7 @@ class Article
 
         return $this;
     }
+
 
     public function getChannel(): ?Channel
     {

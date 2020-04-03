@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use Cassandra\Date;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -37,10 +36,6 @@ class BookMark
      */
     private $article;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $wasRed;
 
     public function __construct()
     {
@@ -93,21 +88,9 @@ class BookMark
         return $this->article;
     }
 
-    public function setArticle(?Article $article): self
+    public function setArticle(Article $article): self
     {
         $this->article = $article;
-
-        return $this;
-    }
-
-    public function getWasRed(): ?bool
-    {
-        return $this->wasRed;
-    }
-
-    public function setWasRed(bool $wasRed): self
-    {
-        $this->wasRed = $wasRed;
 
         return $this;
     }

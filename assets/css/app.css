@@ -122,18 +122,16 @@ XXXXXXXXXX
     CHANNELS + RELATED ARTICLE SMALL BLOCS
  */
 
-
 .coconuts-subscribed-channel-block {
-    border: 1px solid darkslateblue;
-
+    margin-top : 30px;
+    margin-bottom : 30px
 }
+
 .channel-header-block {
     display: flex;
-
 }
 .channel-header-left {
-    width: 700px;
-
+    width: 800px;
 }
 
 .channel-header-right {
@@ -142,28 +140,29 @@ XXXXXXXXXX
 
 .channel-body-block{
     display: flex;
-    border: 1px solid;
 }
 
 .channel-article-main {
 }
 .channel-article-main-body {
-    border: 1px solid;
     width: 600px;
 }
 
 .channel-article-secondary {
-    width: 350px;
+    width: 250px;
 }
 
 .channel-article-main-pic {
-    max-width: 600px;
+    max-width: 750px;
     max-height: 400px;
 }
 
 .channel-article-secondary-pic {
-    max-width: 300px;
-    max-height: 100px;
+    max-width: 200px;
+    max-height: 150px;
+}
+.small-font {
+    font-size : 1em;
 }
 .chapeau {
     font-size: 1em;
@@ -183,10 +182,8 @@ XXXXXXXXXX
 
 .label-stylay {
     background-color: white;
-    border-radius: 10px 10px 10px 10px;
-    font-family: "Courier New";
+    font-family: Monospace ;
     font-weight: bold;
-
 }
 
 .label-red {
@@ -205,10 +202,44 @@ XXXXXXXXXX
 }
 
 .label-rikiki {
-    font-size:0.7em;
+    border-radius: 15px 15px 15px 15px;
+    font-size : 1em;
     padding: 4px 4px 4px 4px;
 }
 
+.label-fat {
+    border-radius: 20px 20px 20px 20px;
+    font-size : 1em;
+    padding: 8px 8px 8px 8px;
+}
+
+.channel-header {
+    margin-bottom: 30px;
+    margin-top: 30px;
+    font-family: "DejaVu Sans";
+    font-weight: bold;
+    text-align: center;
+}
+
+/**
+    HR
+ */
+
+hr {
+    width: 0%;
+    min-width: 20%;
+    max-width: 100%;
+    margin: 5% auto;
+    border: none;
+    border-bottom: 1px solid #666;
+    position: relative;
+    transition: box-shadow 200ms ease-in-out;
+    box-shadow: 0px 0px 0px 0px #f9f9f9;
+}
+
+hr.activated {
+    box-shadow: 0px 4px 0px 0px #666;
+}
 
 
 /**

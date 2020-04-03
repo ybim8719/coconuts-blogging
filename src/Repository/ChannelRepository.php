@@ -52,4 +52,18 @@ class ChannelRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+
+    public function findRandomChannelsBySubscriberAndNumberOfResults($user, $value)
+    {
+        return $this->createQueryBuilder('c')
+            ->join('c.channelSubscriptions', 'cs')
+            ->join("cs.user", 'u')
+            ->andWhere('u = :subscriber')
+            ->setParameter('subscriber', $user)
+            ->orderBy('rand()')
+            ->setMaxResults($value)
+            ->getQuery()
+            ->getResult();
+    }
 }

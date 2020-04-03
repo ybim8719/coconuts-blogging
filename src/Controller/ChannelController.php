@@ -7,7 +7,7 @@ namespace App\Controller;
 use App\Entity\Article;
 use App\Entity\ArticleComment;
 use App\Entity\ArticleVisit;
-use App\Entity\BookMark;
+use App\Entity\Pin;
 use App\Entity\Channel;
 use App\Entity\Follow;
 use App\Entity\User;

@@ -6,7 +6,6 @@ namespace App\Controller;
 use App\Entity\Article;
 use App\Entity\BookMark;
 use App\Entity\User;
-use App\Entity\UserLike;
 use App\Service\Logger\CoconutsLogger;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -61,7 +60,6 @@ class BookmarkController extends AbstractController
         $bookmark = new BookMark();
         $bookmark->setUser($user);
         $bookmark->setArticle($article);
-        $bookmark->setWasRed(false);
         $this->em->persist($bookmark);
         $this->em->flush();
         $response = [

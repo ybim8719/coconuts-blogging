@@ -121,6 +121,8 @@ class User implements UserInterface
      */
     private $bookMarks;
 
+
+
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ChannelSubscription", mappedBy="user")
      */

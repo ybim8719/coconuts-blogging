@@ -31,4 +31,16 @@ class FollowRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    public function findRandomFollowByUserAndMaxResult(User $user, int $nbResults)
+    {
+        return $this->createQueryBuilder('f')
+            ->andWhere('f.follower = :user')
+            ->setParameter('user', $user)
+            ->orderBy('RAND()')
+            ->setMaxResults($nbResults)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
 }

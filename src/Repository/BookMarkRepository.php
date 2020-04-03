@@ -31,4 +31,16 @@ class BookMarkRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    public function findRandomBookmarksByUserAndMaxResult(User $user, int $nbResults)
+    {
+        return $this->createQueryBuilder('b')
+            ->join('b.user', 'u')
+            ->andWhere('u = :user')
+            ->setParameter('user', $user)
+            ->orderBy('rand()')
+            ->setMaxResults($nbResults)
+            ->getQuery()
+            ->getResult();
+    }
 }

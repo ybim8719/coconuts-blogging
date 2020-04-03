@@ -6,7 +6,7 @@
     <div class="coconuts-article-container">
         {% if subscribedChannelsWithArticles is not empty %}
             <div class="coconuts-subscribed-channels-list">
-                <h3>MES CHANNELS PREFERES</h3>
+                <h2 class="channel-header">MES CHANNELS PREFERES</h2>
                 {% for subscribedChannelWithArticles in subscribedChannelsWithArticles %}
                     <div class="coconuts-subscribed-channel-block">
                         <div class="channel-header-block">
@@ -21,7 +21,7 @@
                             </div>
                             <div class="channel-header-right">
                             </div>
-                        </div>s
+                        </div>
                         <div class="channel-body-block">
                             {% if subscribedChannelWithArticles.articles is not empty %}
                                 {% set mainArticle = subscribedChannelWithArticles.articles|first %}
@@ -59,6 +59,7 @@
                                 Découvrir
                             </a>
                         </div>
+                        <hr>
                     </div>
                 {% endfor %}
             </div>
@@ -66,7 +67,7 @@
 
         {% if randomChannelsWithArticles is not empty %}
             <div class="coconuts-subscribed-channels-list">
-                <h3>CES CHANNELS POURRAIENT VOUS PLAIRE</h3>
+                <h2 class="channel-header">CES CHANNELS POURRAIENT VOUS PLAIRE</h2>
                 {% for randomChannelWithArticles in randomChannelsWithArticles %}
                     <div class="coconuts-subscribed-channel-block">
                         <div class="channel-header-block">
@@ -81,7 +82,7 @@
                             </div>
                             <div class="channel-header-right">
                                 <div>
-                                    <a href ="#"> Rejoindre</a>
+                                    <a href ="#" class="label-red label-stylay label-fat"> Rejoindre</a>
                                 </div>
                             </div>
                         </div>
@@ -107,7 +108,7 @@
                                             </a>
                                             <div class="channel-article-secondary-body" >
                                                 <a href="{{ path('article_show', {'id': article.id})}}">
-                                                    <h5 class="">{{article.title}}</h5>
+                                                    <h5 class="small-font">{{article.title}}</h5>
                                                 </a>
                                             </div>
                                         </div>
@@ -122,6 +123,7 @@
                                 Découvrir
                             </a>
                         </div>
+                        <hr>
                     </div>
                 {% endfor %}
             </div>
