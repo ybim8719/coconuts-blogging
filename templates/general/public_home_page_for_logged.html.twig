@@ -13,7 +13,7 @@
                     </p>
                     <div class="homepage-bookmark-body">
                         {% if bookmarkedArticles is not empty %}
-                            {% set mainArticle = bookmarkedArticles.articles|first %}
+                            {% set mainArticle = bookmarkedArticles|first %}
                                 <div class="homepage-channel-article-main">
                                     <a href="{{ path('article_show', {'id': mainArticle.id})}}">
                                         <img class="channel-article-main-pic" src ="{{ vich_uploader_asset(mainArticle) }}" alt="{{ mainArticle.title }}">

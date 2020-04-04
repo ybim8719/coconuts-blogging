@@ -50,8 +50,9 @@ class GeneralPagesController extends AbstractController
         $user = $this->getUser();
         if ($user instanceof User) {
             $customData = $this->getCustomDisplayInfoForLoggedUser($user);
+            dump($customData['arrayOfBookmarkedArticles']);
             return $this->render('general/public_home_page_for_logged.html.twig', [
-                'bookmarkedArticles' => $customData['bookMarkedArticles'],
+                'bookmarkedArticles' => $customData['arrayOfBookmarkedArticles'],
                 'arrayOfWritersWithArticle' => $customData['arrayOfWritersWithArticle'],
                 'arrayOfChannelsWithArticles' => $customData['arrayOfChannelsWithArticles']
             ]);
@@ -70,14 +71,8 @@ class GeneralPagesController extends AbstractController
         $arrayOfChannelsWithArticles = [];
         $arrayOfBookmarkedArticles = [];
 
-        $article = $this->bookmarkRepository->find(3);
-        dump($article->getArticle());
-        dump($article->getUser());
-
         // get Bookmark Articles
         $bookmarks= $this->bookmarkRepository->findRandomBookmarksByUserAndMaxResult($user, self::NB_OF_BOOKMARKS);
-        dump($bookmarks);
-        dump($user->getNbOfWrittenArticles());
 
         if (count($bookmarks) > 0) {
             foreach ($bookmarks as $bookMark) {
@@ -119,7 +114,7 @@ class GeneralPagesController extends AbstractController
         return [
             'arrayOfChannelsWithArticles' => $arrayOfChannelsWithArticles,
             'arrayOfWritersWithArticle' => $arrayOfWritersWithArticle,
-            'bookMarkedArticles' => $bookMarkedArticles,
+            'arrayOfBookmarkedArticles' => $arrayOfBookmarkedArticles,
         ];
     }
 }
