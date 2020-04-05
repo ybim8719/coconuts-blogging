@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\ArticleComment;
 use App\Entity\User;
+use App\Entity\UserLike;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use App\Service\Logger\CoconutsLogger;
@@ -24,11 +26,16 @@ class UserController extends AbstractController
     private $em;
     private $logger;
 
+    private $likeRepository;
+    private $commentRepository;
+
     public function __construct(UploaderHelper $helper, EntityManagerInterface $em, CoconutsLogger $logger)
     {
         $this->helper = $helper;
         $this->em = $em;
         $this->logger = $logger;
+        $this->commentRepository = $this->em->getRepository(ArticleComment::class);
+        $this->likeRepository = $this->em->getRepository(UserLike::class);
     }
 
     /**

@@ -135,5 +135,18 @@ class ArticleCommentController extends AbstractController
         return new JsonResponse($response);
     }
 
+    /**
+     * @Route("/show/{idComment}", name="articleComment_show", options = { "expose" = true })
+     * @ParamConverter("articleComment",options={"id" = "idComment"})
+     * @param Request $request
+     * @return Response
+     */
+    public function show(ArticleComment $articleComment)
+    {
+        return $this->render('/articleComment/show.html.twig', [
+            'articleComment' => $articleComment
+        ]);
+    }
+
 
 }

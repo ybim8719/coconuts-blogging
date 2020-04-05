@@ -37,6 +37,14 @@ a {
     CONTAINERS
  */
 
+.coconuts-story-container {
+    margin-top: 20px;
+    padding: 10px;
+    width: calc(100% - 25px);
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
 .coconuts-article-container {
     margin-top: 20px;
     padding: 10px;

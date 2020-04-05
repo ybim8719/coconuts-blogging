@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Bienvenue {% endblock %}
+
+{% block body %}
+    <div class = "coconuts-article-container">
+        {% if articleComment is defined %}
+            commentaire : {{ articleComment.id }}
+        {% endif %}
+    </div>
+{% endblock %}

@@ -3,7 +3,7 @@
 {% block title %} {{ user.username }} {% endblock %}
 
 {% block body %}
-    <div class ="coconuts-article-container coconuts-page-body">
+    <div class ="coconuts-story-container">
         <h1>Profil de {{ user.username }} </h1>
         <table class="table table-info">
             <tbody>
@@ -80,11 +80,50 @@
         </div>
 
         <div id="commentaires" class="category" style="display:none">
-            <p>Liste des Commentaires</p>
+            {% if user.publishedComments is not empty %}
+                <div class="row">
+                    {% for comment in user.publishedComments %}
+                        <div class="card col-4" style="width: 18rem;">
+                            <div class="card-body">
+                                <p class="card-text">{{comment.content}}</p>
+                                <a href="{{ path('articleComment_show', {'idComment': comment.id})}}" class="btn btn-primary">LIRE</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
         </div>
 
         <div id="likes" class="category" style="display:none">
-            <p>Liste des Likes</p>
+            {% if user.publishedLikes is not null %}
+                <div class= "row">
+                    {% for like in user.publishedLikes %}
+                        <div class="card col-4" style="width: 18rem;">
+                            {% if like.isLikeAppliedOnComment %}
+                                <div class="card-body">
+                                    <img class="card-img-top"
+                                         src ="{{ vich_uploader_asset(like.likedArticle) }}"
+                                         alt="{{ like.likedArticle.title }}"
+                                         height="100"
+                                    >
+                                    <h5 class="card-title">{{ like.likedArticle.title }}</h5>
+                                    <p class="card-text">{{ like.likedArticle.chapeau|striptags|slice(0, 200) }}</p>
+                                    <a href="{{ path('article_show', {'id': like.likedArticle.id})}}" class="btn btn-primary">
+                                        LIRE
+                                    </a>
+                                    <img src ="{{ vich_uploader_asset(like.likedArticle.user) }}"
+                                         alt="{{ like.likedArticle.user.username }}"
+                                         height="100"
+                                         class ="coconuts-round-picture rikiki-img"
+                                    >
+                                </div>
+                            {% else %}
+
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
         </div>
 
         <div class= "row">

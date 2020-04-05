@@ -120,5 +120,15 @@ class UserLike
     }
 
 
+    public function isLikeAppliedOnComment()
+    {
+        if ($this->category == UserLike::ARTICLE_CATEGORY) {
+            return true;
+        }
+        return false;
+    }
+
+
+
 
 }
