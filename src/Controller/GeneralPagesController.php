@@ -50,7 +50,6 @@ class GeneralPagesController extends AbstractController
         $user = $this->getUser();
         if ($user instanceof User) {
             $customData = $this->getCustomDisplayInfoForLoggedUser($user);
-            dump($customData['arrayOfBookmarkedArticles']);
             return $this->render('general/public_home_page_for_logged.html.twig', [
                 'bookmarkedArticles' => $customData['arrayOfBookmarkedArticles'],
                 'arrayOfWritersWithArticle' => $customData['arrayOfWritersWithArticle'],

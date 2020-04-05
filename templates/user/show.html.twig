@@ -56,21 +56,36 @@
             </tbody>
         </table>
 
-        {% if user.articles is not null %}
-            <div class= "m-10 pb-20">Liste des articles écrits par cette personne </div>
-            <div class= "row">
-                {% for article in user.articles %}
-                    <div class="card col-4" style="width: 18rem;">
-                        <img class="card-img-top" src ="{{ vich_uploader_asset(article) }}" alt="{{ article.title }}" height="100">
-                        <div class="card-body">
-                            <h5 class="card-title">{{article.title}}</h5>
-                            <p class="card-text">{{article.description|striptags|slice(0, 200)}}</p>
-                            <a href="{{ path('article_show', {'id': article.id})}}" class="btn btn-primary">LIRE</a>
+        <div class="w3-bar w3-black">
+            <button class="w3-bar-item w3-button" onclick="openCategory('articles')">Articles</button>
+            <button class="w3-bar-item w3-button" onclick="openCategory('commentaires')">Commentaires</button>
+            <button class="w3-bar-item w3-button" onclick="openCategory('likes')">Likes</button>
+        </div>
+
+        <div id="articles" class="category">
+            {% if user.articles is not null %}
+                <div class= "row">
+                    {% for article in user.articles %}
+                        <div class="card col-4" style="width: 18rem;">
+                            <img class="card-img-top" src ="{{ vich_uploader_asset(article) }}" alt="{{ article.title }}" height="100">
+                            <div class="card-body">
+                                <h5 class="card-title">{{article.title}}</h5>
+                                <p class="card-text">{{article.description|striptags|slice(0, 200)}}</p>
+                                <a href="{{ path('article_show', {'id': article.id})}}" class="btn btn-primary">LIRE</a>
+                            </div>
                         </div>
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <div id="commentaires" class="category" style="display:none">
+            <p>Liste des Commentaires</p>
+        </div>
+
+        <div id="likes" class="category" style="display:none">
+            <p>Liste des Likes</p>
+        </div>
 
         <div class= "row">
             <a href="{{ path('user_index')}}">
@@ -81,4 +96,18 @@
             </a>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        function openCategory(category) {
+            var i;
+            var x = document.getElementsByClassName("category");
+            for (i = 0; i < x.length; i++) {
+                x[i].style.display = "none";
+            }
+            document.getElementById(category).style.display = "block";
+        }
+    </script>
 {% endblock %}
