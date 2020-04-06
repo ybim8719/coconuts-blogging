@@ -520,4 +520,25 @@ class User implements UserInterface
 
         return $this;
     }
+
+    public function hasBookmarkedArticle(Article $article)
+    {
+        foreach($this->getBookMarks() as $bookMark) {
+            if ($bookMark->getArticle()->getId() === $article->getId()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    public function hasBookmarkedArticleComment(ArticleComment $articleComment)
+    {
+        foreach($this->getBookMarks() as $bookmark) {
+            if ($bookmark->getArticleComment()->getId() === $articleComment->getId()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

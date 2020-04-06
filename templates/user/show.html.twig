@@ -4,57 +4,32 @@
 
 {% block body %}
     <div class ="coconuts-story-container">
-        <h1>Profil de {{ user.username }} </h1>
-        <table class="table table-info">
-            <tbody>
-                <tr>
-                    <th>Inscrit depuis le :</th>
-                    <td>{{user.createdAt|date("m/d/Y")}}</td>
-                </tr>
-                <tr>
-                    <th>Username</th>
-                    <td>
-                        {{ user.username }}      
-                        <img src="{{ vich_uploader_asset(user) }}" alt="{{ user.username }}" 
-                             class="coconuts-round-picture small-img" />
-                    </td>
-                </tr>
-                <tr>
-                    <th>Email</th>
-                    <td>{{ user.email }}</td>
-                </tr>
-                <tr>
-                    <th>Est administrateur</th>
-                    <td>{{ user.isAdmin ? 'Yes' : 'No' }}</td>
-                </tr>
-                <tr>
-                    <th>Description</th>
-                    <td>{{ user.profileDescription }}</td>
-                </tr>
-                <tr>
-                    <th>Abonnements</th>
-                    <td>{{user.nbOfSubscribedFollows}} </td>
-                </tr>
-                <tr>
-                    <th>Abonnés</th>
-                    <td>{{user.nbOfIncomingFollows}}</td>
-                </tr>
-                <tr>
-                    <th>Articles écrits</th>
-                    <td>{{user.nbOfArticles}}</td>
-                </tr>
-                <tr>
-                    <th>Actions</th>
-                    <td>
-                        <button class="coconuts_follow_writer button-block" {% if app.user is null %} disabled
-                        {% else %} data-id ={{app.user.id}} {% endif %}>
+        <div class ="block-user-profile border-stylay ">
+            <div class="is-row">
+                <div>
+                    <p class="is-title">
+                        {{ user.username }}
+                        <button class="coconuts_follow_writer button-block"
+                                {% if app.user is null %} disabled {% else %} data-id ={{app.user.id}}
+                                {% endif %}>
                             Follow
                         </button>
-                    </td>
-                </tr>
+                    </p>
+                    <p>{{ user.profileDescription }}</p>
+                </div>
+                <div>
+                    <img src="{{ vich_uploader_asset(user) }}"
+                         alt="{{ user.username }}"
+                         class="coconuts-round-picture small-img"
+                    />
+                </div>
+            </div>
+            <div>
+                <p class="is-secondary">Membre Coconuts depuis le {{user.createdAt|date("m/d/Y")}}</p>
+                <p class="is-secondary">{{user.nbOfSubscribedFollows}} Abonnements {{user.nbOfIncomingFollows}} Abonnés {{user.nbOfArticles}} Articles <p/>
+            </div>
+        </div>
 
-            </tbody>
-        </table>
 
         <div class="w3-bar w3-black">
             <button class="w3-bar-item w3-button" onclick="openCategory('articles')">Articles</button>
@@ -62,80 +37,149 @@
             <button class="w3-bar-item w3-button" onclick="openCategory('likes')">Likes</button>
         </div>
 
+        <hr>
+
         <div id="articles" class="category">
             {% if user.articles is not null %}
-                <div class= "row">
-                    {% for article in user.articles %}
-                        <div class="card col-4" style="width: 18rem;">
-                            <img class="card-img-top" src ="{{ vich_uploader_asset(article) }}" alt="{{ article.title }}" height="100">
-                            <div class="card-body">
-                                <h5 class="card-title">{{article.title}}</h5>
-                                <p class="card-text">{{article.description|striptags|slice(0, 200)}}</p>
-                                <a href="{{ path('article_show', {'id': article.id})}}" class="btn btn-primary">LIRE</a>
+                {% for article in user.articles %}
+                    {% set hasBookmark = false %}
+                    {% if app.user is not null %}
+                        {% if app.user.hasBookmarkedArticle(article) == true %}
+                            {% set hasBookmark = true %}
+                        {% endif %}
+                    {% endif %}
+                    <div class="story-article border-stylay ">
+                        <div class="story-article-header is-row">
+                            <img src ="{{ vich_uploader_asset(article.user) }}"
+                                 alt="{{ article.user.username }}"
+                                 class ="coconuts-round-picture rikiki-img"
+                            >
+                            <div>
+                                <a href="{{ path('article_show', {'id': article.id})}}">
+                                    <p class="is-title">{{article.user.username}}</p>
+                                </a>
+                                <p class="is-secondary">{{article.updatedAt|date("d-m-Y")}} - XX minutes read</p>
                             </div>
                         </div>
-                    {% endfor %}
-                </div>
+                        <div class="story-article-body">
+                            <a href="{{ path('article_show', {'id': article.id})}}">
+                                <p class="is-main-title">{{article.title}}</p>
+                            </a>
+                            <a href="{{ path('article_show', {'id': article.id})}}">
+                                <img class="story-article-cover" src ="{{ vich_uploader_asset(article) }}" alt="{{ article.title }}">
+                            </a>
+                            <div class="story-article-content">{{article.description|striptags|slice(0, 200)}}...</div>
+                        </div>
+                        <div class="story-article-footer">
+                            <i class="far fa-heart toggle-like-article fa-2x"></i>
+                            <span class="dynamic-likes-counter-of-article">{{article.nbOfLikes}}</span>
+                            <i class="{{ hasBookmark ? "fas" : "far" }} fa-2x fa-bookmark toggle-bookmark-article"></i>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+            <div class="border-stylay ">
+                Pas d'article pour ce membre.
+            </div>
             {% endif %}
         </div>
 
+
         <div id="commentaires" class="category" style="display:none">
             {% if user.publishedComments is not empty %}
-                <div class="row">
                     {% for comment in user.publishedComments %}
-                        <div class="card col-4" style="width: 18rem;">
-                            <div class="card-body">
-                                <p class="card-text">{{comment.content}}</p>
-                                <a href="{{ path('articleComment_show', {'idComment': comment.id})}}" class="btn btn-primary">LIRE</a>
+                        {% set hasBookmark = false %}
+                        {% if app.user is not null %}
+                            {% if app.user.hasBookmarkedArticleComment(comment) == true %}
+                                {% set hasBookmark = true %}
+                            {% endif %}
+                        {% endif %}
+                        <div class="border-stylay ">
+                            <div class="story-article-header is-row">
+                                <img src ="{{ vich_uploader_asset(comment.author) }}"
+                                     alt="{{ comment.author.username }}"
+                                     class ="coconuts-round-picture rikiki-img"
+                                >
+                                <div>
+                                    <a href="{{ path('user_show', {'id': comment.author.id})}}">
+                                        <p class="is-title">{{comment.author.username}}</p>
+                                    </a>
+                                    <p class="is-secondary">{{comment.createdAt|date("d-m-Y")}} - XX minutes read</p>
+                                </div>
+                            </div>
+                            <div class="story-comment-body border-stylay ">
+                                <a href="{{ path('article_show', {'id': comment.article.id})}}">
+                                    <p class="is-title">{{comment.article.title}}</p>
+                                </a>
+                                <a href="{{ path('article_show', {'id': comment.article.id})}}">
+                                    <p class="is-secondary">{{comment.article.user.username}}</p>
+                                </a>
+
+                            </div>
+                            <div class="story-article-footer">
+                                <p class="">{{comment.content}}</p>
+                                <div class="story-article-footer">
+                                    <i class="far fa-heart toggle-like-article fa-2x"></i>
+                                    <span class="dynamic-likes-counter-of-article">{{comment.nbOfLikes}}</span>
+                                    <i class="{{ hasBookmark ? "fas" : "far" }} fa-2x fa-bookmark toggle-bookmark-comment"></i>
+                                </div>
                             </div>
                         </div>
                     {% endfor %}
+            {% else %}
+                <div class="border-stylay ">
+                    Aucun commentaire pour ce membre.
                 </div>
             {% endif %}
         </div>
 
         <div id="likes" class="category" style="display:none">
             {% if user.publishedLikes is not null %}
-                <div class= "row">
-                    {% for like in user.publishedLikes %}
-                        <div class="card col-4" style="width: 18rem;">
-                            {% if like.isLikeAppliedOnComment %}
-                                <div class="card-body">
-                                    <img class="card-img-top"
-                                         src ="{{ vich_uploader_asset(like.likedArticle) }}"
-                                         alt="{{ like.likedArticle.title }}"
-                                         height="100"
-                                    >
-                                    <h5 class="card-title">{{ like.likedArticle.title }}</h5>
-                                    <p class="card-text">{{ like.likedArticle.chapeau|striptags|slice(0, 200) }}</p>
-                                    <a href="{{ path('article_show', {'id': like.likedArticle.id})}}" class="btn btn-primary">
-                                        LIRE
-                                    </a>
-                                    <img src ="{{ vich_uploader_asset(like.likedArticle.user) }}"
-                                         alt="{{ like.likedArticle.user.username }}"
-                                         height="100"
-                                         class ="coconuts-round-picture rikiki-img"
-                                    >
-                                </div>
-                            {% else %}
-
-                            {% endif %}
+                {% for like in user.publishedLikes %}
+                    {% set hasBookmark = false %}
+                    {% if app.user is not null %}
+                        {% if app.user.hasBookmarkedArticle(like.likedArticle) == true %}
+                            {% set hasBookmark = true %}
+                        {% endif %}
+                    {% endif %}
+                    <div class="story-article border-stylay ">
+                        <div class="story-article-header is-row">
+                            <img src ="{{ vich_uploader_asset(like.likedArticle.user) }}"
+                                 alt="{{ like.likedArticle.user.username }}"
+                                 class ="coconuts-round-picture rikiki-img"
+                            >
+                            <div>
+                                <a href="{{ path('article_show', {'id': like.likedArticle.id})}}">
+                                    <p class="is-title">{{like.likedArticle.user.username}}</p>
+                                </a>
+                                <p class="is-secondary">{{like.likedArticle.updatedAt|date("d-m-Y")}} - XX minutes read</p>
+                            </div>
                         </div>
-                    {% endfor %}
+                        <div class="story-article-body">
+                            <a href="{{ path('article_show', {'id': like.likedArticle.id})}}">
+                                <p class="is-main-title">{{like.likedArticle.title}}</p>
+                            </a>
+                            <a href="{{ path('article_show', {'id': like.likedArticle.id})}}">
+                                <img class="story-article-cover" src ="{{ vich_uploader_asset(like.likedArticle) }}" alt="{{ like.likedArticle.title }}">
+                            </a>
+                            <div class="story-article-content">{{like.likedArticle.description|striptags|slice(0, 200)}}...</div>
+                        </div>
+                        <div class="story-article-footer">
+                            <i class="far fa-heart toggle-like-article fa-2x"></i>
+                            <span class="dynamic-likes-counter-of-article">{{like.likedArticle.nbOfLikes}}</span>
+                            <i class="{{ hasBookmark ? "fas" : "far" }} fa-2x fa-bookmark toggle-bookmark-article"></i>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="border-stylay ">
+                    Aucun like pour ce membre.
                 </div>
             {% endif %}
         </div>
-
-        <div class= "row">
-            <a href="{{ path('user_index')}}">
-                <input type="button" value="Retour à la liste" />
-            </a>
-               <a href="{{ path('user_edit', {'id': user.id})}}">
-                <input type="button" value="Modifier" />
-            </a>
-        </div>
     </div>
 {% endblock %}
+
 
 {% block javascripts %}
     {{ parent() }}

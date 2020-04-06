@@ -33,7 +33,7 @@ class UserLike
     private $category;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="likes")
+     * @ORM\ManyToOne(targetEntity="App\Entity\ArticleComment", inversedBy="likes")
      * @ORM\JoinColumn(nullable=true)
      */
     private $likedArticleComment;

@@ -34,8 +34,70 @@ a {
 
 
 /**
+    UNIQUE CLASS FOR ONE ROLE
+ */
+
+
+.is-row{
+    display: flex;
+}
+
+.is-column{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    vertical-align: middle
+}
+
+.is-title {
+    font-weight: bold;
+    color: black;
+}
+
+.is-main-title {
+    font-weight: bold;
+    color: black;
+    font-size: 2em;
+}
+
+.is-secondary {
+    font-size: 0.7em;
+    color: darkslategray;
+}
+
+.border-stylay {
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 4px;
+    background-color: rgb(255, 255, 255);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    padding: 5px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+/**
+    STORY
+ */
+
+.story-article-cover {
+    height: 250px;
+    width: 650px;
+    object-fit: cover;
+    object-position: center;
+}
+
+.story-article-content {
+    text-align: justify;
+}
+
+.story-article {
+
+}
+
+/**
     CONTAINERS
  */
+
 
 .coconuts-story-container {
     margin-top: 20px;

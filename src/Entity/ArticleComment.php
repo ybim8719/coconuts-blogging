@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -34,6 +36,13 @@ class ArticleComment
     private $content;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\UserLike", mappedBy="likedArticleComment")
+     */
+    private $likes;
+
+
+
+    /**
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
@@ -41,6 +50,8 @@ class ArticleComment
     public function __construct()
     {
         $this->createdAt = new \DateTime();
+        $this->likes = new ArrayCollection();
+        $this->bookMarks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -94,5 +105,39 @@ class ArticleComment
         $this->createdAt = $createdAt;
 
         return $this;
+    }
+    /**
+     * @return Collection|UserLike[]
+     */
+    public function getLikes(): Collection
+    {
+        return $this->likes;
+    }
+
+    public function addLike(UserLike $like): self
+    {
+        if (!$this->likes->contains($like)) {
+            $this->likes[] = $like;
+            $like->setLikedArticleComment($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLike(UserLike $like): self
+    {
+        if ($this->likes->contains($like)) {
+            $this->likes->removeElement($like);
+            if ($like->getLikedArticleComment() === $this) {
+                $like->setLikedArticleComment(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getNbOfLikes()
+    {
+        return count($this->likes);
     }
 }

@@ -129,7 +129,7 @@ class ArticleController extends AbstractController
             $actualBookmarkOfUserForThisArticle = $this->bookmarkRepository->findByArticleAndUser($article, $this->getUser());
             if (!empty($actualBookmarkOfUserForThisArticle)){
                 $hasBookmark = true;
-                if (count($actualLikeOfUserForThisArticle) > 1) {
+                if (count($actualBookmarkOfUserForThisArticle) > 1) {
                     $this->logger->error("User n°".$this->getUser()->getId()." has bookmarked more than 1 time the article id".$article->getId().'// Please fix with in DB');
                 }
             }

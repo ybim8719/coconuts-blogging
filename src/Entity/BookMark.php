@@ -36,6 +36,12 @@ class BookMark
      */
     private $article;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\ArticleComment", inversedBy="bookMarks")
+     */
+    private $articleComment;
+
+
 
     public function __construct()
     {
@@ -67,7 +73,6 @@ class BookMark
     public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
-
         return $this;
     }
 
@@ -91,6 +96,18 @@ class BookMark
     public function setArticle(Article $article): self
     {
         $this->article = $article;
+
+        return $this;
+    }
+
+    public function getArticleComment(): ?ArticleComment
+    {
+        return $this->articleComment;
+    }
+
+    public function setArticleComment(ArticleComment $articleComment): self
+    {
+        $this->articleComment = $articleComment;
 
         return $this;
     }
