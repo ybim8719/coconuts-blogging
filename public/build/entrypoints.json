@@ -3,7 +3,7 @@
     "app": {
       "js": [
         "/build/runtime.js",
-        "/build/vendors~app~manageArticleComment~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
+        "/build/vendors~app~manageArticleComment~manageTabs~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
         "/build/vendors~app.js",
         "/build/app.js"
       ],
@@ -15,37 +15,46 @@
     "toggleArticleLike": {
       "js": [
         "/build/runtime.js",
-        "/build/vendors~app~manageArticleComment~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
-        "/build/vendors~manageArticleComment~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
-        "/build/manageArticleComment~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
+        "/build/vendors~app~manageArticleComment~manageTabs~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
+        "/build/vendors~manageArticleComment~manageTabs~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
+        "/build/manageArticleComment~manageTabs~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
         "/build/toggleArticleLike.js"
       ]
     },
     "toggleArticleBookmark": {
       "js": [
         "/build/runtime.js",
-        "/build/vendors~app~manageArticleComment~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
-        "/build/vendors~manageArticleComment~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
-        "/build/manageArticleComment~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
+        "/build/vendors~app~manageArticleComment~manageTabs~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
+        "/build/vendors~manageArticleComment~manageTabs~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
+        "/build/manageArticleComment~manageTabs~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
         "/build/toggleArticleBookmark.js"
       ]
     },
     "toggleWriterFollow": {
       "js": [
         "/build/runtime.js",
-        "/build/vendors~app~manageArticleComment~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
-        "/build/vendors~manageArticleComment~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
-        "/build/manageArticleComment~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
+        "/build/vendors~app~manageArticleComment~manageTabs~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
+        "/build/vendors~manageArticleComment~manageTabs~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
+        "/build/manageArticleComment~manageTabs~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
         "/build/toggleWriterFollow.js"
       ]
     },
     "manageArticleComment": {
       "js": [
         "/build/runtime.js",
-        "/build/vendors~app~manageArticleComment~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
-        "/build/vendors~manageArticleComment~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
-        "/build/manageArticleComment~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
+        "/build/vendors~app~manageArticleComment~manageTabs~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
+        "/build/vendors~manageArticleComment~manageTabs~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
+        "/build/manageArticleComment~manageTabs~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
         "/build/manageArticleComment.js"
+      ]
+    },
+    "manageTabs": {
+      "js": [
+        "/build/runtime.js",
+        "/build/vendors~app~manageArticleComment~manageTabs~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
+        "/build/vendors~manageArticleComment~manageTabs~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
+        "/build/manageArticleComment~manageTabs~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
+        "/build/manageTabs.js"
       ]
     }
   }

@@ -28,6 +28,7 @@ Encore
     .addEntry('toggleArticleBookmark', './assets/js/toggleBookMarkArticle.js')
     .addEntry('toggleWriterFollow', './assets/js/toggleWriterFollow.js')
     .addEntry('manageArticleComment', './assets/js/manageArticleComment.js')
+    .addEntry('manageTabs', './assets/js/manageTabs.js')
     //.addEntry('page2', './assets/js/page2.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.

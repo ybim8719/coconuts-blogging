@@ -31,15 +31,15 @@
         </div>
 
 
-        <div class="w3-bar w3-black">
-            <button class="w3-bar-item w3-button" onclick="openCategory('articles')">Articles</button>
-            <button class="w3-bar-item w3-button" onclick="openCategory('commentaires')">Commentaires</button>
-            <button class="w3-bar-item w3-button" onclick="openCategory('likes')">Likes</button>
+        <div class="">
+            <button class="tab-button coconuts-active" id="articles" data-type="user-profile">Articles</button>
+            <button class="tab-button coconuts-inactive" id="commentaires" data-type="user-profile" >Commentaires</button>
+            <button class="tab-button coconuts-inactive" id="likes" data-type="user-profile">Likes</button>
         </div>
 
         <hr>
 
-        <div id="articles" class="category">
+        <div id="articles" data-type="user-profile">
             {% if user.articles is not null %}
                 {% for article in user.articles %}
                     {% set hasBookmark = false %}
@@ -85,7 +85,7 @@
         </div>
 
 
-        <div id="commentaires" class="category" style="display:none">
+        <div id="commentaires" data-type="user-profile" class="coconuts-hide">
             {% if user.publishedComments is not empty %}
                     {% for comment in user.publishedComments %}
                         {% set hasBookmark = false %}
@@ -133,7 +133,7 @@
             {% endif %}
         </div>
 
-        <div id="likes" class="category" style="display:none">
+        <div id="likes" data-type="user-profile" class="coconuts-hide">
             {% if user.publishedLikes is not null %}
                 {% for like in user.publishedLikes %}
                     {% set hasBookmark = false %}

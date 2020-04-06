@@ -75,6 +75,25 @@ a {
     margin-bottom: 30px;
 }
 
+.tab-button {
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 4px;
+    padding: 5px;
+    font-family: "DejaVu Sans";
+}
+
+.coconuts-active {
+    background-color: lightblue;
+}
+
+.coconuts-inactive {
+    background-color: aliceblue;
+}
+
+.coconuts-hide {
+    display: none;
+}
+
 /**
     STORY
  */
