@@ -19,13 +19,12 @@ $(function () {
     function modifyTab(tabToEnableId, typeOfTab) {
         //tabs buttons are modified
         $('button[data-type='+ typeOfTab +']').each(function() {
-            $(this).removeClass('coconuts-active');
-            $(this).addClass('coconuts-inactive');
-            console.log($(this).attr('id'))
-            console.log(tabToEnableId)
             if ($(this).attr('id') === tabToEnableId) {
                 $(this).removeClass('coconuts-inactive');
                 $(this).addClass('coconuts-active');
+            }else {
+                $(this).removeClass('coconuts-active');
+                $(this).addClass('coconuts-inactive');
             }
         })
 

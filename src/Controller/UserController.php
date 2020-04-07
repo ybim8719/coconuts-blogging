@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\ArticleComment;
+use App\Entity\Follow;
 use App\Entity\User;
 use App\Entity\UserLike;
 use App\Form\UserType;
@@ -28,6 +29,7 @@ class UserController extends AbstractController
 
     private $likeRepository;
     private $commentRepository;
+    private $followRepository;
 
     public function __construct(UploaderHelper $helper, EntityManagerInterface $em, CoconutsLogger $logger)
     {
@@ -36,6 +38,7 @@ class UserController extends AbstractController
         $this->logger = $logger;
         $this->commentRepository = $this->em->getRepository(ArticleComment::class);
         $this->likeRepository = $this->em->getRepository(UserLike::class);
+        $this->followRepository = $this->em->getRepository(Follow::class);
     }
 
     /**
@@ -80,8 +83,15 @@ class UserController extends AbstractController
      */
     public function show(User $user): Response
     {
+        $isFollowing = false;
+        $follows = $this->followRepository->findByUserAndWriter($this->getUser(), $user);
+        if (count($follows) > 0) {
+            $isFollowing = true;
+        }
+
         return $this->render('user/show.html.twig', [
             'user' => $user,
+            'isFollowing' => $isFollowing
         ]);
     }
 

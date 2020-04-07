@@ -534,11 +534,14 @@ class User implements UserInterface
 
     public function hasBookmarkedArticleComment(ArticleComment $articleComment)
     {
-        foreach($this->getBookMarks() as $bookmark) {
-            if ($bookmark->getArticleComment()->getId() === $articleComment->getId()) {
-                return true;
+        if (count($this->getBookMarks()) > 0) {
+            foreach($this->getBookMarks() as $bookmark) {
+                if ($bookmark->getArticleComment()->getId() === $articleComment->getId()) {
+                    return true;
+                }
             }
         }
+
         return false;
     }
 }

@@ -9,11 +9,13 @@
                 <div>
                     <p class="is-title">
                         {{ user.username }}
-                        <button class="coconuts_follow_writer button-block"
-                                {% if app.user is null %} disabled {% else %} data-id ={{app.user.id}}
-                                {% endif %}>
-                            Follow
-                        </button>
+                        <a href="javascript:void(0)"
+                           class= "coconuts-follow-button coconuts-toggle-follow
+                            {{ isFollowing == false ? 'follow' : 'unfollow' }}"
+                        >
+                            {{ isFollowing == false ? "S\'abonner" : 'Se désabonner'  }}
+                        </a>
+
                     </p>
                     <p>{{ user.profileDescription }}</p>
                 </div>
@@ -89,11 +91,7 @@
             {% if user.publishedComments is not empty %}
                     {% for comment in user.publishedComments %}
                         {% set hasBookmark = false %}
-                        {% if app.user is not null %}
-                            {% if app.user.hasBookmarkedArticleComment(comment) == true %}
-                                {% set hasBookmark = true %}
-                            {% endif %}
-                        {% endif %}
+
                         <div class="border-stylay ">
                             <div class="story-article-header is-row">
                                 <img src ="{{ vich_uploader_asset(comment.author) }}"
@@ -121,7 +119,6 @@
                                 <div class="story-article-footer">
                                     <i class="far fa-heart toggle-like-article fa-2x"></i>
                                     <span class="dynamic-likes-counter-of-article">{{comment.nbOfLikes}}</span>
-                                    <i class="{{ hasBookmark ? "fas" : "far" }} fa-2x fa-bookmark toggle-bookmark-comment"></i>
                                 </div>
                             </div>
                         </div>
@@ -177,6 +174,9 @@
                 </div>
             {% endif %}
         </div>
+        <input id="visitorId" name="visitorId" type="hidden" value="{{ app.user is null ? "" : app.user.id }}">
+        <input id="writerId" name="writerId" type="hidden" value="{{ user.id}}">
+        <input id="isFollowing" name="isFollowing" type="hidden" value="{{ isFollowing == false ? 0 : 1}}">
     </div>
 {% endblock %}
 
