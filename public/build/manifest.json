@@ -12,7 +12,7 @@
   "build/vendors~app.js": "/build/vendors~app.js",
   "build/vendors~app~manageArticleComment~manageTabs~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js": "/build/vendors~app~manageArticleComment~manageTabs~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
   "build/vendors~manageArticleComment~manageTabs~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js": "/build/vendors~manageArticleComment~manageTabs~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
-  "build/manageArticleComment~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js": "/build/manageArticleComment~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
-  "build/vendors~app~manageArticleComment~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js": "/build/vendors~app~manageArticleComment~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
-  "build/vendors~manageArticleComment~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js": "/build/vendors~manageArticleComment~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js"
+  "build/manageArticleComment~manageTabs~toggleArticleBookmark~toggleWriterFollow.js": "/build/manageArticleComment~manageTabs~toggleArticleBookmark~toggleWriterFollow.js",
+  "build/vendors~app~manageArticleComment~manageTabs~toggleArticleBookmark~toggleWriterFollow.js": "/build/vendors~app~manageArticleComment~manageTabs~toggleArticleBookmark~toggleWriterFollow.js",
+  "build/vendors~manageArticleComment~manageTabs~toggleArticleBookmark~toggleWriterFollow.js": "/build/vendors~manageArticleComment~manageTabs~toggleArticleBookmark~toggleWriterFollow.js"
 }

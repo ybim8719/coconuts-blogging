@@ -15,7 +15,6 @@
                         >
                             {{ isFollowing == false ? "S\'abonner" : 'Se désabonner'  }}
                         </a>
-
                     </p>
                     <p>{{ user.profileDescription }}</p>
                 </div>
@@ -32,7 +31,6 @@
             </div>
         </div>
 
-
         <div class="">
             <button class="tab-button coconuts-active" id="articles" data-type="user-profile">Articles</button>
             <button class="tab-button coconuts-inactive" id="commentaires" data-type="user-profile" >Commentaires</button>
@@ -45,11 +43,17 @@
             {% if user.articles is not null %}
                 {% for article in user.articles %}
                     {% set hasBookmark = false %}
+                    {% set hasLiked = false %}
+
                     {% if app.user is not null %}
                         {% if app.user.hasBookmarkedArticle(article) == true %}
                             {% set hasBookmark = true %}
                         {% endif %}
+                        {% if app.user.hasLikedArticle(article) == true %}
+                            {% set hasLiked = true %}
+                        {% endif %}
                     {% endif %}
+
                     <div class="story-article border-stylay ">
                         <div class="story-article-header is-row">
                             <img src ="{{ vich_uploader_asset(article.user) }}"
@@ -73,9 +77,17 @@
                             <div class="story-article-content">{{article.description|striptags|slice(0, 200)}}...</div>
                         </div>
                         <div class="story-article-footer">
-                            <i class="far fa-heart toggle-like-article fa-2x"></i>
-                            <span class="dynamic-likes-counter-of-article">{{article.nbOfLikes}}</span>
-                            <i class="{{ hasBookmark ? "fas" : "far" }} fa-2x fa-bookmark toggle-bookmark-article"></i>
+                            <i class="{{ hasLiked ? "fas" : "far" }} fa-heart fa-2x toggle-like-article"
+                               data-article-id = "{{ article.id }}"
+                               data-has-liked = "{{ hasLiked == false ? "false" : "true" }}">
+                            </i>
+                            <span class="dynamic-likes-counter-of-article" data-article-id = {{ article.id }}>
+                                {{article.nbOfLikes}}
+                            </span>
+                            <i class="{{ hasBookmark ? "fas" : "far" }} fa-2x fa-bookmark toggle-bookmark-article"
+                               data-article-id = "{{ article.id }}"
+                               data-has-bookmark = {{ hasBookmark == false ? "0" : "1" }}>
+                            </i>
                         </div>
                     </div>
                 {% endfor %}
@@ -91,7 +103,16 @@
             {% if user.publishedComments is not empty %}
                     {% for comment in user.publishedComments %}
                         {% set hasBookmark = false %}
-
+                        {#
+                            Cette partie est réservée aux futurs marques-page de commentaires.
+                            Pour peu que l'on crée cette jointure dès lors, il faudra ajouter un js
+                            dédié différent du marques-page article
+                            {% if app.user is not null %}
+                                {% if app.user.hasBookmarkedArticle(comment) == true %}
+                                    {% set hasBookmark = true %}
+                                {% endif %}
+                            {% endif %}
+                        #}
                         <div class="border-stylay ">
                             <div class="story-article-header is-row">
                                 <img src ="{{ vich_uploader_asset(comment.author) }}"
@@ -118,7 +139,9 @@
                                 <p class="">{{comment.content}}</p>
                                 <div class="story-article-footer">
                                     <i class="far fa-heart toggle-like-article fa-2x"></i>
-                                    <span class="dynamic-likes-counter-of-article">{{comment.nbOfLikes}}</span>
+                                    <span class="dynamic-likes-counter-of-comment" data-comment-id = "{{ comment.id }}">
+                                        {{comment.nbOfLikes}}
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -137,6 +160,12 @@
                     {% if app.user is not null %}
                         {% if app.user.hasBookmarkedArticle(like.likedArticle) == true %}
                             {% set hasBookmark = true %}
+                        {% endif %}
+                    {% endif %}
+                    {% set hasLiked = false %}
+                    {% if app.user is not null %}
+                        {% if app.user.hasLikedArticle(like.likedArticle) == true %}
+                            {% set hasLiked = true %}
                         {% endif %}
                     {% endif %}
                     <div class="story-article border-stylay ">
@@ -162,9 +191,17 @@
                             <div class="story-article-content">{{like.likedArticle.description|striptags|slice(0, 200)}}...</div>
                         </div>
                         <div class="story-article-footer">
-                            <i class="far fa-heart toggle-like-article fa-2x"></i>
-                            <span class="dynamic-likes-counter-of-article">{{like.likedArticle.nbOfLikes}}</span>
-                            <i class="{{ hasBookmark ? "fas" : "far" }} fa-2x fa-bookmark toggle-bookmark-article"></i>
+                            <i class="{{ hasLiked ? "fas" : "far" }} fa-heart fa-2x"
+                               data-article-id = "{{ like.likedArticle.id }}"
+                               data-has-liked = "{{ hasLiked == false ? "false" : "true" }}">
+                            </i>
+                            <span class="dynamic-likes-counter-of-article" data-article-id = "{{ like.likedArticle.id }}">
+                                {{like.likedArticle.nbOfLikes}}
+                            </span>
+                            <i class="{{ hasBookmark ? "fas" : "far" }} fa-2x fa-bookmark toggle-bookmark-article"
+                               data-article-id = "{{ like.likedArticle.id }}"
+                               data-has-bookmark = {{ hasBookmark == false ? "1" : "0" }}>
+                            </i>
                         </div>
                     </div>
                 {% endfor %}

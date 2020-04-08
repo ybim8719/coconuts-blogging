@@ -544,4 +544,15 @@ class User implements UserInterface
 
         return false;
     }
+
+
+    public function hasLikedArticle(Article $article)
+    {
+        foreach($this->getPublishedLikes() as $like) {
+            if ($like->getLikedArticle()->getId() === $article->getId()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

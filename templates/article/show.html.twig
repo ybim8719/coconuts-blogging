@@ -16,12 +16,17 @@
         </h1>
         <h4>
             <span>{{ article.chapeau }}</span>
-            <i class="{{ hasBookmark ? "fas" : "far" }} fa-bookmark toggle-bookmark-article"></i>
+            <i class="{{ hasBookmark ? "fas" : "far" }} fa-bookmark fa-2x toggle-bookmark-article"
+               data-has-bookmark = "{{ hasBookmark == false ? "false" : "true" }}"
+               data-article-id = {{ article.id }}>
+            </i>
         </h4>
         <div class="row">
             <div class="col-1 ">
-                <i class="far fa-heart"></i>
-                <span class="dynamic-likes-counter-of-article">{{article.nbOfLikes}}</span>
+                <i class="{{ userHasLiked ? "fas" : "far" }} far fa-heart"></i>
+                <span class="dynamic-likes-counter-of-article" data-article_id = "{{ article.id }}">
+                    {{article.nbOfLikes}}
+                </span>
             </div>
             <div class="col-1 ">
                 <i class="fas fa-glasses"></i>
@@ -62,8 +67,13 @@
 
         <div>
             Vous avez aimé cet article ? Faites-le savoir à son auteur (qui vous aimera d'autant plus fort!)
-            <i class="far fa-heart fa-3x toggle-like-article"></i>
-            <span class="dynamic-likes-counter-of-article">{{article.nbOfLikes}}</span>
+            <i class="{{ userHasLiked ? "fas" : "far" }} fa-heart fa-3x toggle-like-article"
+               data-article-id = "{{ article.id }}"
+               data-has-liked = "{{ userHasLiked == false ? "false" : "true" }}">
+            </i>
+            <span class="dynamic-likes-counter-of-article" data-article-id = "{{ article.id }}">
+                {{article.nbOfLikes}}
+            </span>
         </div>
 
         <!-- BLOC AUTEUR -->
@@ -73,12 +83,9 @@
         )) }}
 
         <input id="visitorId" name="visitorId" type="hidden" value="{{ app.user is null ? "" : app.user.id }}">
-        <input id="hasLiked" name="hasLiked" type="hidden" value="{{ userHasLiked == false ? 0 : 1 }}">
         <input id="articleId" name="articleId" type="hidden" value="{{ article.id }}">
-        <input id="hasBookmark" name="hasBookmark" type="hidden" value="{{ hasBookmark == false ? 0 : 1 }}">
         <input id="writerId" name="writerId" type="hidden" value="{{ article.user.id}}">
         <input id="isFollowing" name="isFollowing" type="hidden" value="{{ isFollowing == false ? 0 : 1}}">
-
 
         <div id="comment-list">
             {% if comments is not empty %}
@@ -100,7 +107,8 @@
                         <i class="fas fa-trash-alt"></i>
                     </li>
                     {% for comment in comments %}
-                        <li class="comment {{ comment.author.id == article.user.id ? "author-comment" : "user-comment"}}" data-id = "{{ comment.id }}">
+                        <li class= "comment {{ comment.author.id == article.user.id ? "author-comment" : "user-comment"}}"
+                            data-id = "{{ comment.id }}">
                             <div class="comment-info">
                                 <a class="comment-username" href="{{ path('user_show', {id : comment.author.id}) }}">
                                     {{ comment.author.username }}

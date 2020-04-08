@@ -53,7 +53,7 @@ class UserLikeController extends AbstractController
             $this->returnInvalidJsonResponse('Can\'t find User with given visitorId ');
         }
 
-        if (!empty($this->userLikeRepository ->findByArticleAndUser($article, $user))) {
+        if (count($this->userLikeRepository ->findByArticleAndUser($article, $user)) > 0) {
             $this->returnInvalidJsonResponse('Can\'t add Like, since the User has already');
         }
 
@@ -67,7 +67,8 @@ class UserLikeController extends AbstractController
             "code" => 200,
             'message' => "Like ajouté!",
             "currentNbOfLikes" => $article->getNbOfLikes(),
-            "hasLikedCurrentStatus" => true
+            "hasLikedCurrentStatus" => true,
+            "modifiedArticleId" => $article->getId()
         ];
 
         return new JsonResponse($response);
@@ -91,9 +92,9 @@ class UserLikeController extends AbstractController
         if (!$user instanceof User) {
             $this->returnInvalidJsonResponse('Can\'t find User with given visitorId ');
         }
-        $likeToBeRemoved = $this->userLikeRepository ->findByArticleAndUser($article, $user);
 
-        if (empty($likeToBeRemoved)) {
+        $likeToBeRemoved = $this->userLikeRepository ->findByArticleAndUser($article, $user);
+        if (empty($likeToBeRemoved) || count($likeToBeRemoved) == 0) {
             $this->returnInvalidJsonResponse('Can\'t remove Like from article since it couldn t be found in DB');
         }
 
@@ -109,7 +110,8 @@ class UserLikeController extends AbstractController
             "code" => 200,
             'message' => "Like supprimé!",
             "currentNbOfLikes" => $article->getNbOfLikes(),
-            "hasLikedCurrentStatus" => false
+            "hasLikedCurrentStatus" => false,
+            "modifiedArticleId" => $article->getId()
         ];
 
         return new JsonResponse($response);

@@ -22,43 +22,47 @@
                         {% if app.user is null %}
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ path('app_login') }}">S'identifier</a>
-
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ path('register_as_new_member') }}">Devenir Membre</a>
-                            </li>
-                             <li class="nav-item">
-                                <a class="nav-link" href="{{ path('app_login') }}">Ecrire</a>
-                            </li>
-                        {% else %} 
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ path('app_logout') }}">Se déconnecter</a>
-                            </li>
-                            {% if app.user.isAdmin %}
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ path('user_index') }}">Membres</a>
-                                </li>
-                            {% endif %}
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ path('article_create') }}">Ecrire</a>
                             </li>
                         {% endif %}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ path('channel_channelIndexPage') }}">Channels</a>
                         </li>
-
-
                     </ul>
-                    {% if app.user is not null %}
-                        <p>{{app.user.username}}</p>
-                        <img src="{{ vich_uploader_asset(app.user) }}"
-                             alt="{{ app.user.username }}"
-                             class="coconuts-round-picture rikiki-img"
-                        />
-                    {% endif %}
+                    <div class="dropdown">
+                            <span>
+                                {% if app.user is not null %}
+                                    <span class="is-title">{{app.user.username}}</span>
+                                    <img src="{{ vich_uploader_asset(app.user) }}"
+                                         alt="{{ app.user.username }}"
+                                         class="coconuts-round-picture rikiki-img"
+                                    />
+                                {% endif %}
+                            </span>
+                        <div class="dropdown-content">
+                            {% if app.user is not null %}
+                                <a href="{{ path('user_show', {'id' : app.user.id}) }}">
+                                    <p>Mon profil</p>
+                                </a>
+                                <a href="{{ path('app_login') }}">
+                                    <p>Ecrire</p>
+                                </a>
+                                <a href="{{ path('app_logout') }}">
+                                    <p>Se déconnecter</p>
+                                </a>
+                                {% if app.user.isAdmin %}
+                                    <a href="{{ path('user_index') }}">
+                                        <p>Membres</p>
+                                    </a>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
                     <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                     </form>
                 </div>
             </nav>

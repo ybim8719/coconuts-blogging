@@ -6,14 +6,19 @@ Routing.setRoutingData(routes);
 $(function () {
     $(document).ready(function() {
         $(document).on('click','.toggle-like-article', function(){
-            operateAddOrRemoveLikeOnArticle();
+            console.log($(this).attr('data-has-liked'));
+            operateAddOrRemoveLikeOnArticle($(this).data('article-id'), $(this).attr('data-has-liked'));
         })
     });
 
-    function operateAddOrRemoveLikeOnArticle() {
+    function operateAddOrRemoveLikeOnArticle(articleId, hasLiked) {
+        console.log("article id : " + articleId );
+        console.log("has liked is : " + hasLiked );
+        console.log(typeof hasLiked);
+
         var visitorId = $('#visitorId').val();
-        var articleId = $('#articleId').val();
-        var hasLiked = $('#hasLiked').val();
+        //var articleId = $('#articleId').val();
+        //var hasLiked = $('#hasLiked').val();
         var ajaxPath = "userLike_ajaxAddLikeToArticle";
         console.log(visitorId)
 
@@ -22,7 +27,8 @@ $(function () {
         }
 
         else {
-            if (hasLiked === "1") {
+            if (hasLiked === "true") {
+                console.log('changed for remove like')
                 ajaxPath = "userLike_ajaxRemoveLikeOfArticle";
             }
             console.log(ajaxPath);
@@ -38,14 +44,27 @@ $(function () {
                 .done(function(response) {
                     let currentNbOfLikes = response.currentNbOfLikes;
                     let hasLikedCurrentStatus = response.hasLikedCurrentStatus;
+                    let modifiedArticleId = response.modifiedArticleId;
+                    let heartSelector = $('.toggle-like-article[data-article-id=' + modifiedArticleId + ']');
                     if (currentNbOfLikes !== null) {
-                        $('.dynamic-likes-counter-of-article').text(currentNbOfLikes);
+                        $('.dynamic-likes-counter-of-article[data-article-id=' + modifiedArticleId + ']').text(currentNbOfLikes);
                     }
+                    console.log(heartSelector);
                     if (hasLikedCurrentStatus === true) {
-                        $('#hasLiked').attr('value', '1')
+                        //$('#hasLiked').attr('value', '1')
+                        console.log("output is true")
+                        heartSelector.removeClass('far')
+                        heartSelector.addClass('fas')
+                        heartSelector.attr('data-has-liked', 'true')
                     }
                     else if (hasLikedCurrentStatus === false) {
-                        $('#hasLiked').attr('value', '0')
+                        console.log("output is false")
+
+                        //$('#hasLiked').attr('value', '0')
+                        heartSelector.addClass('far')
+                        heartSelector.removeClass('fas')
+                        heartSelector.attr('data-has-liked', 'false')
+
                     }
                     console.log(response.message);
                 })

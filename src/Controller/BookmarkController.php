@@ -65,7 +65,8 @@ class BookmarkController extends AbstractController
         $response = [
             "code" => 200,
             'message' => "marque-page ajouté!",
-            "isBookmarkedCurrentStatus" => true
+            "isBookmarkedCurrentStatus" => true,
+            "modifiedArticleId" => $article->getId()
         ];
 
         return new JsonResponse($response);
@@ -91,7 +92,7 @@ class BookmarkController extends AbstractController
         }
         $bookmarkToBeRemoved = $this->bookmarkRepository->findByArticleAndUser($article, $user);
 
-        if (empty($bookmarkToBeRemoved)) {
+        if (count($bookmarkToBeRemoved) == 0) {
             $this->returnInvalidJsonResponse('Can\'t remove bookmark from article since it couldn t be found in DB');
         }
 
@@ -100,13 +101,15 @@ class BookmarkController extends AbstractController
             $this->returnInvalidJsonResponse('Can\'t remove bookmark from article since it couldn t be found in DB');
         }
 
+        dump($bookmarkToBeRemoved);
         $this->em->remove($bookmarkToBeRemoved[0]);
         $this->em->flush();
 
         $response = [
             "code" => 200,
             'message' => "bookmark supprimé!",
-            "isBookmarkedCurrentStatus" => false
+            "isBookmarkedCurrentStatus" => false,
+            "modifiedArticleId" => $article->getId()
         ];
 
         return new JsonResponse($response);
