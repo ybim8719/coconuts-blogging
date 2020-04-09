@@ -6,6 +6,7 @@ Routing.setRoutingData(routes);
 $(function () {
     $(document).ready(function() {
         $(document).on('click','#send-comment-action', function(){
+            console.log('hello')
             AddArticleComment();
         })
 
@@ -44,17 +45,18 @@ $(function () {
                     let commentId = response.commentId;
                     let hrefPath = $('#visitor-picture').attr("data-href");
                     let imgPath = $('#visitor-picture').attr("src");
-
                     if (commentAuthor !== null && authorUsername !== null) {
                         // clone a template of html block hidden in DOM
                         let clonedHtml = $("#jquery-hidden-comment-block").clone();
                         // and complete info of this template with the create Comment action
                         clonedHtml.removeAttr('id').attr('data-id', commentId);
                         clonedHtml.find('.comment-username').attr("href", hrefPath).html(authorUsername);
-                        clonedHtml.addClass(isAuthor === "false" ? 'user-comment' : "author-comment");
+                        clonedHtml.addClass(isAuthor === false ? 'user-comment' : "author-comment");
                         clonedHtml.find('.comment-body').html(commentAuthor);
                         clonedHtml.find('.comment-avatar').attr("href", hrefPath);
                         clonedHtml.find('.user-picture').attr("src", imgPath).attr("title", authorUsername);
+                        clonedHtml.find('.delete-comment-action').attr("data-id", commentId);
+                        $('#send-comment-input').val('');
                         clonedHtml.insertBefore('.write-new');
                     }
                 })

@@ -88,24 +88,24 @@
         <input id="isFollowing" name="isFollowing" type="hidden" value="{{ isFollowing == false ? 0 : 1}}">
 
         <div id="comment-list">
-            {% if comments is not empty %}
-                <div>Commentaires : </div>
-                <ul class="coconuts-comment-section">
-                    <li id = "jquery-hidden-comment-block" class="comment" data-id = "">
-                        <div class="comment-info">
-                            <a class="comment-username" href="">
-                            </a>
-                            <span class="comment-date">A l'instant</span>
-                        </div>
-                        <a class="comment-avatar" href="#">
-                            <img class="coconuts-round-picture rikiki-img user-picture"
-                                 src=""
-                                 width="35" alt="Profile Avatar" title=""
-                            />
+            <div>Commentaires : </div>
+            <ul class="coconuts-comment-section">
+                <li id = "jquery-hidden-comment-block" class="comment" data-id = "">
+                    <div class="comment-info">
+                        <a class="comment-username" href="">
                         </a>
-                        <p class="comment-body"></p>
-                        <i class="fas fa-trash-alt"></i>
-                    </li>
+                        <span class="comment-date">A l'instant</span>
+                    </div>
+                    <a class="comment-avatar" href="#">
+                        <img class="coconuts-round-picture rikiki-img user-picture"
+                             src=""
+                             width="35" alt="Profile Avatar" title=""
+                        />
+                    </a>
+                    <p class="comment-body"></p>
+                    <i class="fas fa-trash-alt delete-comment-action"></i>
+                </li>
+                {% if comments is not empty %}
                     {% for comment in comments %}
                         <li class= "comment {{ comment.author.id == article.user.id ? "author-comment" : "user-comment"}}"
                             data-id = "{{ comment.id }}">
@@ -123,30 +123,37 @@
                             </a>
                             <p class="comment-body">{{ comment.content }}</p>
                             {% if app.user is not null %}
-                                {% if app.user.isAdmin or app.user.id == comment.id %}
+                                {% if app.user.isAdmin or app.user.id == comment.author.id %}
                                     <i class="fas fa-trash-alt delete-comment-action" data-id=" {{ comment.id }}"></i>
                                 {% endif %}
                             {% endif %}
                         </li>
                     {% endfor %}
-
-                    {% if app.user is not null  %}
-                        <li class="write-new">
-                            <label for = "send-comment-input"></label>
-                            <input name ="send-comment-input" id="send-comment-input" type="text">
+                {% else %}
+                    <li id="no-commentary">Pas de commentaires à ce jour : </li>
+                {% endif %}
+                {% if app.user is not null  %}
+                    <li class="write-new">
+                        <div class="is-row">
                             <div>
-                                <button id="send-comment-action">Envoyer</button>
+                                <label for = "send-comment-input"></label>
+                                <input name ="send-comment-input"
+                                       id="send-comment-input"
+                                       type="textarea"
+                                       placeholder="Entrez un commentaire"
+                                       title="Votre commentaire">
+                                <div>
+                                    <button id="send-comment-action">Envoyer</button>
+                                </div>
                             </div>
                             <img class="coconuts-round-picture rikiki-img" id="visitor-picture"
                                  src="{{ vich_uploader_asset(app.user) }}" data-href="{{ path('user_show', {id : app.user.id} ) }}"
                                  width="35" alt="Profile Avatar" title="{{ app.user.username }}"
                             />
-                        </li>
-                    {% endif %}
-                </ul>
-                {% else %}
-                    <div>Pas de commentaires à ce jour : </div>
-            {% endif %}
+                        </div>
+                    </li>
+                {% endif %}
+            </ul>
         </div>
 
         {% if app.user is not null %}
