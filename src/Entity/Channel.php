@@ -48,11 +48,17 @@ class Channel
      */
     private $articles;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ChannelSubscriptionRequest", mappedBy="channel")
+     */
+    private $channelSubscriptionRequests;
+
 
     public function __construct()
     {
         $this->channelSubscriptions = new ArrayCollection();
         $this->articles = new ArrayCollection();
+        $this->channelSubscriptionRequests = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -169,6 +175,38 @@ class Channel
         return $this;
     }
 
+
+    /**
+     * @return Collection|ChannelSubscriptionRequest[]
+     */
+    public function getChannelSubscriptionRequests(): Collection
+    {
+        return $this->channelSubscriptionRequests;
+    }
+
+    public function addChannelSubscriptionRequest(ChannelSubscriptionRequest $channelSubscriptionRequest): self
+    {
+        if (!$this->channelSubscriptionRequests->contains($channelSubscriptionRequest)) {
+            $this->channelSubscriptionRequests[] = $channelSubscriptionRequest;
+            $channelSubscriptionRequest->setChannel($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChannelSubscriptionRequest(ChannelSubscriptionRequest $channelSubscriptionRequest): self
+    {
+        if ($this->channelSubscriptionRequests->contains($channelSubscriptionRequest)) {
+            $this->channelSubscriptionRequests->removeElement($channelSubscriptionRequest);
+            // set the owning side to null (unless already changed)
+            if ($channelSubscriptionRequest->getChannel() === $this) {
+                $channelSubscriptionRequest->setChannel(null);
+            }
+        }
+
+        return $this;
+    }
+
     public function getNbOfArticles()
     {
         return count($this->articles);
@@ -177,5 +215,19 @@ class Channel
     public function getNbOfChannelSubscriptions()
     {
         return count($this->channelSubscriptions);
+    }
+
+
+    public function getAdminUsers()
+    {
+        $tab = [];
+
+        foreach ($this->channelSubscriptions as $channelSubscription) {
+            if ($channelSubscription->getIsAdmin()) {
+                $tab[] = $channelSubscription->getUser();
+            }
+        }
+
+        return $tab;
     }
 }

@@ -34,6 +34,18 @@ class ArticleRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findByChannelAndWriter(Channel $channel,User $writer)
+    {
+        return $this->createQueryBuilder('a')
+            ->join('a.channel', 'c')
+            ->andWhere('c = :channel')
+            ->andWhere('a.user = :user')
+            ->setParameter('user', $writer)
+            ->setParameter('channel', $channel)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function findRandomArticleByAuthorAndMaxResult(User $user, int $nbResult)
     {
         $qb = $this->createQueryBuilder('a')
@@ -55,6 +67,18 @@ class ArticleRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
             ;
+    }
+
+    public function findArticleByChannelByDescendingOrder(Channel $channel)
+    {
+        $qb = $this->createQueryBuilder('a')
+            ->andWhere('a.channel = :channel')
+            ->setParameter('channel', $channel)
+            ->orderBy('a.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+
+        return $qb;
     }
 
     // @todo problem of groupBy mode in SQL, to be solved

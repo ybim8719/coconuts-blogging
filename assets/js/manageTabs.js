@@ -7,8 +7,8 @@ $(function () {
     $(document).ready(function() {
         console.log("manageTabs ok");
         $(document).on('click','.tab-button', function(){
-            if ($(this).attr('id') !== "" && $(this).data('type') !== "") {
-                modifyTab($(this).attr('id'), $(this).data('type'));
+            if ($(this).attr('id') !== "" && $(this).attr('data-type') !== "") {
+                modifyTab($(this).attr('id'), $(this).attr('data-type'));
             }
             else {
                 console.log("la tab que vous souhaitez afficher n'a pas d'ID ou de type")

@@ -1,0 +1,12 @@
+<h1>Bonjour {{ username }}</h1>
+
+<p>
+    Vous avez reçu une demande d'inscription pour le channel {{ channelTitle }} de la part de l'utilisateur {{ applicantUsername }}
+    en date du {{ "now"|date("m/d/Y") }}.
+</p>
+<p>
+    pour consulter la demande du client, vous pouvez cliquer
+    <a href="localhost:8000{{ path('user_show', {'id' => applicantId}) }}">
+        ici
+    </a>
+</p>

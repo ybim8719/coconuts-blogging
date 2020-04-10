@@ -84,7 +84,12 @@ class UserController extends AbstractController
     public function show(User $user): Response
     {
         $isFollowing = false;
-        $follows = $this->followRepository->findByUserAndWriter($this->getUser(), $user);
+        $follows = [];
+
+        if ($this->getUser() !== null) {
+            $follows = $this->followRepository->findByUserAndWriter($this->getUser(), $user);
+        }
+
         if (count($follows) > 0) {
             $isFollowing = true;
         }

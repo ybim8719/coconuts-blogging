@@ -3,15 +3,143 @@
 {% block title %} {% if channel is not null %} {{ channel.title }} {% endif %} {% endblock %}
 
 {% block body %}
-    {% if channel is not null %}
-        <div class="coconuts-subscribed-channels-list">
-            {{ channel.title }}
-            {{ channel.description }}
-        </div>
+    <div class="coconuts-story-container">
+        {% if channel is not null %}
+            <div>
+                <h3>{{ channel.title }}</h3>
+                <div class="chapeau">{{ channel.description }}</div>
+                <div class="secondary-info">
+                    {{ channel.getNbOfArticles }} articles publiés
+                    {{ channel.getNbOfChannelSubscriptions }} abonnés
+                    <span class="label-stylay label-green label-rikiki">Abonné</span>
+                </div>
+            </div>
 
-    {% else %}
-        No info on this channel
-    {% endif %}
+            <div class="">
+                <button class="tab-button coconuts-active" id="articles" data-type="channel-profile">Articles</button>
+                <button class="tab-button coconuts-inactive" id="writers" data-type="channel-profile" >Auteurs</button>
+                <button class="tab-button coconuts-inactive" id="subscription-requests" data-type="channel-profile">Demandes</button>
+                <button class="tab-button coconuts-inactive" id="subscribers" data-type="channel-profile">Membres</button>
+            </div>
 
+            <div id="articles" data-type="channel-profile">
+                {% if articles is not null %}
+                    {% for article in articles %}
+                        {% set hasBookmark = false %}
+                        {% set hasLiked = false %}
+                        {% if app.user is not null %}
+                            {% if app.user.hasBookmarkedArticle(article) == true %}
+                                {% set hasBookmark = true %}
+                            {% endif %}
+                            {% if app.user.hasLikedArticle(article) == true %}
+                                {% set hasLiked = true %}
+                            {% endif %}
+                        {% endif %}
+
+                        <div class="story-article border-stylay ">
+                            <div class="story-article-header is-row">
+                                <img src ="{{ vich_uploader_asset(article.user) }}"
+                                     alt="{{ article.user.username }}"
+                                     class ="coconuts-round-picture rikiki-img"
+                                >
+                                <div>
+                                    <a href="{{ path('article_show', {'id': article.id})}}">
+                                        <p class="is-title">{{article.user.username}}</p>
+                                    </a>
+                                    <p class="is-secondary">{{article.updatedAt|date("d-m-Y")}} - XX minutes read</p>
+                                </div>
+                            </div>
+                            <div class="story-article-body">
+                                <a href="{{ path('article_show', {'id': article.id})}}">
+                                    <p class="is-main-title">{{article.title}}</p>
+                                </a>
+                                <a href="{{ path('article_show', {'id': article.id})}}">
+                                    <img class="story-article-cover" src ="{{ vich_uploader_asset(article) }}" alt="{{ article.title }}">
+                                </a>
+                                <div class="story-article-content">{{article.description|striptags|slice(0, 200)}}...</div>
+                            </div>
+                            <div class="story-article-footer">
+                                <i class="{{ hasLiked ? "fas" : "far" }} fa-heart fa-2x toggle-like-article"
+                                   data-article-id = "{{ article.id }}"
+                                   data-has-liked = "{{ hasLiked == false ? "false" : "true" }}">
+                                </i>
+                                <span class="dynamic-likes-counter-of-article" data-article-id = {{ article.id }}>
+                                    {{article.nbOfLikes}}
+                                </span>
+                                <i class="{{ hasBookmark ? "fas" : "far" }} fa-2x fa-bookmark toggle-bookmark-article"
+                                   data-article-id = "{{ article.id }}"
+                                   data-has-bookmark = {{ hasBookmark == false ? "0" : "1" }}>
+                                </i>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="border-stylay ">
+                        Pas d'article pour ce membre.
+                    </div>
+                {% endif %}
+            </div>
+
+            <div id="writers" data-type="channel-profile">
+                {% if writers is not null %}
+                    {% for writer in writers %}
+                        <div class="story-article border-stylay ">
+                            <div class="story-article-header is-row">
+                                <img src ="{{ vich_uploader_asset(writer[0]) }}"
+                                     alt="{{ writer[0].username }}"
+                                     class ="coconuts-round-picture rikiki-img"
+                                >
+                                <div>
+                                    <a href="{{ path('user_show', {'id': writer[0].id})}}">
+                                        <p class="is-title">{{writer[0].username}}</p>
+                                    </a>
+                                    <p class="is-secondary">inscrit depuis le {{writer.createdAt|date("d-m-Y")}}</p>
+                                    <p class="is-secondary">{{writer.isAdmin == true ? "ADMIN" : ""}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="border-stylay ">
+                        Pas d'article pour ce membre.
+                    </div>
+                {% endif %}
+            </div>
+
+            <div id="subscription-requests" data-type="channel-profile">
+                Demandes
+            </div>
+
+            <div id="subscribers" data-type="channel-profile">
+                {% if subscribers is not null %}
+                    {% for subscriber in subscribers %}
+                        <div class="story-article border-stylay ">
+                            <div class="story-article-header is-row">
+                                <img src ="{{ vich_uploader_asset(subscriber[0]) }}"
+                                     alt="{{ subscriber[0].username }}"
+                                     class ="coconuts-round-picture rikiki-img"
+                                >
+                                <div>
+                                    <a href="{{ path('user_show', {'id': subscriber[0].id})}}">
+                                        <p class="is-title">{{subscriber[0].username}}</p>
+                                    </a>
+                                    <p class="is-secondary">inscrit depuis le {{subscriber.createdAt|date("d-m-Y")}}</p>
+                                    <p class="is-secondary">{{subscriber.isAdmin == true ? "ADMIN" : ""}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="border-stylay ">
+                        Pas d'article pour ce membre.
+                    </div>
+                {% endif %}
+            </div>
+
+
+        {% else %}
+            No info on this channel
+        {% endif %}
+    </div>
 
 {% endblock %}

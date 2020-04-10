@@ -154,7 +154,7 @@
         </div>
 
         <div id="likes" data-type="user-profile" class="coconuts-hide">
-            {% if user.publishedLikes is not null %}
+            {% if user.publishedLikes is not empty %}
                 {% for like in user.publishedLikes %}
                     {% set hasBookmark = false %}
                     {% if app.user is not null %}

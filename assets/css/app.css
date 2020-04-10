@@ -293,7 +293,7 @@ XXXXXXXXXX
 /**
     LABEL CLASSE
  */
-
+ >
 .label-stylay {
     background-color: white;
     font-family: Monospace ;
@@ -335,6 +335,12 @@ XXXXXXXXXX
     text-align: center;
 }
 
+
+.textarea-stylay {
+    width: 350px;
+    height: 80px;
+    border-radius: 10px 10px 10px 10px;
+}
 /**
     HR
  */
@@ -387,18 +393,26 @@ hr.activated {
     margin-top:15px;
     margin-bottom:15px;
 }
-.comment-body{
+.author-comment > .comment-body{
+    background-color: palegreen;
+}
+
+.user-comment > .comment-body{
+    background-color: lightblue;
+}
+
+.comment-body {
+    font-family: Arial;
+    font-size: 0.8em;
+    box-shadow: 5px 2px 5px black;
+    display: table-cell;
+    vertical-align: middle;
     width : 400px;
     height : 50px;
     padding : 10px;
     margin-left : 15px;
     margin-right : 15px;
-    background-color: palegreen;
-    font-family: Arial;
-    font-size: 0.8em;
-    box-shadow: 5px 2px 5px black;
-    display: table-cell;
-    vertical-align: middle
+    border-radius: 10px 10px 10px 10px;
 }
 
 .comment-info {
@@ -410,23 +424,22 @@ hr.activated {
 }
 .comment-avatar{
     width: 50px;
-
 }
 
 li.author-comment{
     justify-content: flex-end;
 }
 
-li.author-comment .comment-info{
-    order: 1;
+li.author-comment > .comment-info{
+    order: 3;
 }
 
-li.author-comment .comment-avatar{
+li.author-comment > .comment-avatar{
     order: 2;
 }
 
-li.author-comment .comment-body{
-    order: 3;
+li.author-comment > .comment-body{
+    order: 1;
 }
 
 

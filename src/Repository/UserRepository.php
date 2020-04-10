@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Channel;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -32,5 +33,40 @@ class UserRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
         ;
+    }
+
+
+    /**
+     * return an array with lines made with the subscriber object + a boolean status
+     * @param Channel $channel
+     * @return mixed
+     */
+    public function findSubscribersByChannelWithAdminStatus(Channel $channel)
+    {
+        return $this->createQueryBuilder('u')
+            ->addSelect('cs.isAdmin')
+            ->addSelect('cs.createdAt')
+            ->join('u.channelSubscriptions', 'cs')
+            ->join('cs.channel', "c")
+            ->andWhere('c = :channel')
+            ->setParameter('channel', $channel)
+            ->orderBy('cs.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findWriterByChannelWithAdminStatus(Channel $channel)
+    {
+        return $this->createQueryBuilder('u')
+            ->addSelect('cs.isAdmin')
+            ->addSelect('cs.createdAt')
+            ->join('u.articles', 'a')
+            ->join('a.channel', "c")
+            ->join('u.channelSubscriptions', "cs")
+            ->andWhere('c = :channel')
+            ->setParameter('channel', $channel)
+            ->orderBy('cs.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
     }
 }

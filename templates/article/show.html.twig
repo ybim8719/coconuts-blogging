@@ -115,7 +115,7 @@
                                 </a>
                                 <span class="comment-date">{{ date_calculator.convertToAdaptedDuration(comment.createdAt)}}</span>
                             </div>
-                            <a class="comment-avatar" href="#">
+                            <a class="comment-avatar" href="{{ path('user_show', {id : comment.author.id}) }}">
                                 <img class="coconuts-round-picture rikiki-img"
                                      src="{{ vich_uploader_asset(comment.author) }}"
                                      width="35" alt="Profile Avatar" title="{{ comment.author.username }}"
@@ -137,19 +137,21 @@
                         <div class="is-row">
                             <div>
                                 <label for = "send-comment-input"></label>
-                                <input name ="send-comment-input"
+                                <textarea name ="send-comment-input"
                                        id="send-comment-input"
-                                       type="textarea"
-                                       placeholder="Entrez un commentaire"
-                                       title="Votre commentaire">
+                                       class="textarea-stylay"
+                                >Entrez un commentaire
+                                </textarea>
                                 <div>
                                     <button id="send-comment-action">Envoyer</button>
                                 </div>
                             </div>
-                            <img class="coconuts-round-picture rikiki-img" id="visitor-picture"
-                                 src="{{ vich_uploader_asset(app.user) }}" data-href="{{ path('user_show', {id : app.user.id} ) }}"
-                                 width="35" alt="Profile Avatar" title="{{ app.user.username }}"
-                            />
+                            <a href="{{ path('user_show', {id : app.user.id}) }}">
+                                <img class="coconuts-round-picture rikiki-img" id="visitor-picture"
+                                     src="{{ vich_uploader_asset(app.user) }}" data-href="{{ path('user_show', {id : app.user.id} ) }}"
+                                     width="35" alt="Profile Avatar" title="{{ app.user.username }}"
+                                />
+                            </a>
                         </div>
                     </li>
                 {% endif %}

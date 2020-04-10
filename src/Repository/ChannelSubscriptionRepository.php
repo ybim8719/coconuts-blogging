@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Channel;
 use App\Entity\ChannelSubscription;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -19,32 +20,4 @@ class ChannelSubscriptionRepository extends ServiceEntityRepository
         parent::__construct($registry, ChannelSubscription::class);
     }
 
-    // /**
-    //  * @return ChannelSubscription[] Returns an array of ChannelSubscription objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?ChannelSubscription
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

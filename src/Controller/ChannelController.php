@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Entity\Article;
 use App\Entity\ArticleComment;
 use App\Entity\ArticleVisit;
+use App\Entity\ChannelSubscription;
 use App\Entity\Pin;
 use App\Entity\Channel;
 use App\Entity\Follow;
@@ -53,11 +54,14 @@ class ChannelController extends AbstractController
 
     private $logger;
 
+    private $channelSubscriptionsRepository;
+
     public function __construct(EntityManagerInterface $em, CoconutsLogger $logger)
     {
         $this->userRepository = $em->getRepository(User::class);
         $this->channelRepository = $em->getRepository(Channel::class);
         $this->articleRepository = $em->getRepository(Article::class);
+        $this->channelSubscriptionsRepository = $em->getRepository(ChannelSubscription::class);
         $this->em = $em;
         $this->logger = $logger;
     }
@@ -106,8 +110,39 @@ class ChannelController extends AbstractController
      */
     public function show(Channel $channel)
     {
+        $subscribers = $this->userRepository->findSubscribersByChannelWithAdminStatus($channel);
+        if (!empty($subscribers)) {
+            foreach ($subscribers as $subscriber) {
+                if ($subscriber[0] instanceof User) {
+                    if (count($this->articleRepository->findByChannelAndWriter($channel, $subscriber[0])) > 0) {
+                        $subscriber['isAuthor'] = true;
+                    }
+                }
+                else {
+                    $subscriber['isAuthor'] = false;
+                }
+            }
+        }
+        $articles = $this->articleRepository->findArticleByChannelByDescendingOrder($channel);
+        $writers = $this->userRepository->findWriterByChannelWithAdminStatus($channel);
+
+        // FAIRE UNE methode de repo avec les writers + articles
         return $this->render('channel/show.html.twig', [
             'channel' => $channel,
+            'articles' =>$articles,
+            'subscribers' =>$subscribers,
+            'writers' =>$writers
+        ]);
+    }
+
+    /**
+     * Display all public info on a channel
+     * @Route("/create/{idChannel}", name="channel_create", methods={"GET"})
+     * @ParamConverter("channel",options={"id" = "idChannel"})
+     */
+    public function create(Channel $channel)
+    {
+        return $this->render('channel/create.html.twig', [
         ]);
     }
 

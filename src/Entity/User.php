@@ -128,6 +128,11 @@ class User implements UserInterface
      */
     private $channelSubscriptions;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ChannelSubscriptionRequest", mappedBy="applicant")
+     */
+    private $channelSubscriptionRequests;
+
 
     public function __construct()
     {
@@ -140,6 +145,7 @@ class User implements UserInterface
         $this->subscribedFollows = new ArrayCollection();
         $this->bookMarks = new ArrayCollection();
         $this->channelSubscriptions = new ArrayCollection();
+        $this->channelSubscriptionRequests = new ArrayCollection();
     }
 
 
@@ -554,5 +560,36 @@ class User implements UserInterface
             }
         }
         return false;
+    }
+
+    /**
+     * @return Collection|ChannelSubscriptionRequest[]
+     */
+    public function getChannelSubscriptionRequests(): Collection
+    {
+        return $this->channelSubscriptionRequests;
+    }
+
+    public function addChannelSubscriptionRequest(ChannelSubscriptionRequest $channelSubscriptionRequest): self
+    {
+        if (!$this->channelSubscriptionRequests->contains($channelSubscriptionRequest)) {
+            $this->channelSubscriptionRequests[] = $channelSubscriptionRequest;
+            $channelSubscriptionRequest->setApplicant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChannelSubscriptionRequest(ChannelSubscriptionRequest $channelSubscriptionRequest): self
+    {
+        if ($this->channelSubscriptionRequests->contains($channelSubscriptionRequest)) {
+            $this->channelSubscriptionRequests->removeElement($channelSubscriptionRequest);
+            // set the owning side to null (unless already changed)
+            if ($channelSubscriptionRequest->getApplicant() === $this) {
+                $channelSubscriptionRequest->setApplicant(null);
+            }
+        }
+
+        return $this;
     }
 }
