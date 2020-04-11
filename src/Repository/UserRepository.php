@@ -58,14 +58,10 @@ class UserRepository extends ServiceEntityRepository
     public function findWriterByChannelWithAdminStatus(Channel $channel)
     {
         return $this->createQueryBuilder('u')
-            ->addSelect('cs.isAdmin')
-            ->addSelect('cs.createdAt')
-            ->join('u.articles', 'a')
-            ->join('a.channel', "c")
-            ->join('u.channelSubscriptions', "cs")
+            ->leftJoin('u.articles', 'a')
+            ->leftJoin('a.channel', "c")
             ->andWhere('c = :channel')
             ->setParameter('channel', $channel)
-            ->orderBy('cs.createdAt', 'DESC')
             ->getQuery()
             ->getResult();
     }

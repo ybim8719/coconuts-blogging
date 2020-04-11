@@ -107,7 +107,77 @@
             </div>
 
             <div id="subscription-requests" data-type="channel-profile">
-                Demandes
+                {% if requests is not empty %}
+                    <p>Demandes en attente</p>
+                    {% if requests.pending is not empty %}
+                        {% for pending in requests.pending %}
+                            <div class="story-article border-stylay ">
+                                <div class="story-article-header is-row">
+                                    <img src ="{{ vich_uploader_asset(pending) }}"
+                                         alt="{{ pending.username }}"
+                                         class ="coconuts-round-picture rikiki-img"
+                                    >
+                                    <div>
+                                        <a href="{{ path('user_show', {'id': pending.id})}}">
+                                            <p class="is-title">{{pending.username}}</p>
+                                        </a>
+                                        <p class="is-secondary">inscrit depuis le {{pending.createdAt|date("d-m-Y")}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p> Pas de demandes en attente</p>
+                    {% endif %}
+
+                    <p>Demandes acceptées</p>
+                    {% if requests.accepted is not empty %}
+                        {% for accepted in requests.accepted %}
+                            <div class="story-article border-stylay ">
+                                <div class="story-article-header is-row">
+                                    <img src ="{{ vich_uploader_asset(accepted) }}"
+                                         alt="{{ accepted.username }}"
+                                         class ="coconuts-round-picture rikiki-img"
+                                    >
+                                    <div>
+                                        <a href="{{ path('user_show', {'id': accepted.id})}}">
+                                            <p class="is-title">{{accepted.username}}</p>
+                                        </a>
+                                        <p class="is-secondary">inscrit depuis le {{accepted.createdAt|date("d-m-Y")}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p> Aucune demande acceptée n'a été retrouvée </p>
+                    {% endif %}
+                    <p>Demandes refusées</p>
+                    {% if requests.refused is not empty %}
+                        {% for refused in requests.refused %}
+                            <div class="story-article border-stylay ">
+                                <div class="story-article-header is-row">
+                                    <img src ="{{ vich_uploader_asset(refused) }}"
+                                         alt="{{ refused.username }}"
+                                         class ="coconuts-round-picture rikiki-img"
+                                    >
+                                    <div>
+                                        <a href="{{ path('user_show', {'id': refused.id})}}">
+                                            <p class="is-title">{{refused.username}}</p>
+                                        </a>
+                                        <p class="is-secondary">inscrit depuis le {{refused.createdAt|date("d-m-Y")}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p> Aucune demande acceptée n'a été retrouvée </p>
+                    {% endif %}
+
+                {% else %}
+                    <div class="border-stylay ">
+                        Pas de demande refusée retrouvée.
+                    </div>
+                {% endif %}
             </div>
 
             <div id="subscribers" data-type="channel-profile">

@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Channel;
 use App\Entity\ChannelSubscriptionRequest;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -18,6 +19,19 @@ class ChannelSubscriptionRequestRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, ChannelSubscriptionRequest::class);
     }
+
+    public function findByChannelAndStatusCode(Channel $channel, int $statusCode)
+    {
+        return $this->createQueryBuilder('csr')
+            ->andWhere('csr.channel = :channel')
+            ->andWhere('csr.status = :code')
+            ->setParameter('channel', $channel)
+            ->setParameter('code', $statusCode)
+            ->orderBy('csr.createdAt', 'desc')
+            ->getQuery()
+            ->getResult();
+    }
+
 
     // /**
     //  * @return ChannelSubscriptionRequest[] Returns an array of ChannelSubscriptionRequest objects

@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Channel;
 use App\Entity\ChannelSubscription;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -19,5 +20,17 @@ class ChannelSubscriptionRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, ChannelSubscription::class);
     }
+
+    public function findByChannelAndUser(Channel $channel, User $user)
+    {
+        return $this->createQueryBuilder('cs')
+            ->andWhere('cs.channel = :channel')
+            ->andWhere('cs.user = :user')
+            ->setParameter('user', $user)
+            ->setParameter('channel', $channel)
+            ->getQuery()
+            ->getResult();
+    }
+
 
 }

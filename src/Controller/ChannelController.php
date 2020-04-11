@@ -8,6 +8,7 @@ use App\Entity\Article;
 use App\Entity\ArticleComment;
 use App\Entity\ArticleVisit;
 use App\Entity\ChannelSubscription;
+use App\Entity\ChannelSubscriptionRequest;
 use App\Entity\Pin;
 use App\Entity\Channel;
 use App\Entity\Follow;
@@ -55,6 +56,8 @@ class ChannelController extends AbstractController
     private $logger;
 
     private $channelSubscriptionsRepository;
+    private $channelSubscriptionsRequestRepository;
+
 
     public function __construct(EntityManagerInterface $em, CoconutsLogger $logger)
     {
@@ -62,6 +65,7 @@ class ChannelController extends AbstractController
         $this->channelRepository = $em->getRepository(Channel::class);
         $this->articleRepository = $em->getRepository(Article::class);
         $this->channelSubscriptionsRepository = $em->getRepository(ChannelSubscription::class);
+        $this->channelSubscriptionsRequestRepository = $em->getRepository(ChannelSubscriptionRequest::class);
         $this->em = $em;
         $this->logger = $logger;
     }
@@ -126,12 +130,34 @@ class ChannelController extends AbstractController
         $articles = $this->articleRepository->findArticleByChannelByDescendingOrder($channel);
         $writers = $this->userRepository->findWriterByChannelWithAdminStatus($channel);
 
+        $requests = [];
+        $requests['pending'] = $this->channelSubscriptionsRequestRepository->findByChannelAndStatusCode($channel, ChannelSubscriptionRequest::CHANNEL_SUBSCRIPTION_PENDING);
+        $requests['accepted'] = $this->channelSubscriptionsRequestRepository->findByChannelAndStatusCode($channel, ChannelSubscriptionRequest::CHANNEL_SUBSCRIPTION_ACCEPTED);
+        $requests['refused'] = $this->channelSubscriptionsRequestRepository->findByChannelAndStatusCode($channel, ChannelSubscriptionRequest::CHANNEL_SUBSCRIPTION_REFUSED);
+
+        dump($writers);
+        if (!empty($writers)) {
+            foreach ($writers as $writer) {
+                $count = 0;
+                if ($writer instanceof User) {
+                    $user =$this->channelSubscriptionsRepository->findByChannelAndUser($channel, $writer);
+                    if (!empty($user) && $user->getIsAdmin()) {
+                        $writers[$count] = [$writers[$count]];
+                        $writers[$count]['isAdmin'] = true;
+                    } else {
+                        $writers[$count] = [$writers[$count]];
+                        $writers[$count]['isAdmin'] = false;                    }
+                }
+            }
+        }
+
         // FAIRE UNE methode de repo avec les writers + articles
         return $this->render('channel/show.html.twig', [
             'channel' => $channel,
             'articles' =>$articles,
             'subscribers' =>$subscribers,
-            'writers' =>$writers
+            'writers' =>$writers,
+            'requests' =>$requests
         ]);
     }
 
