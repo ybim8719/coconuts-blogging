@@ -46,6 +46,19 @@ class ArticleRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findNbOfArticlesByChannelAndWriter(Channel $channel,User $writer)
+    {
+        return $this->createQueryBuilder('a')
+            ->select('count(a.id)')
+            ->join('a.channel', 'c')
+            ->andWhere('c = :channel')
+            ->andWhere('a.user = :user')
+            ->setParameter('user', $writer)
+            ->setParameter('channel', $channel)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function findRandomArticleByAuthorAndMaxResult(User $user, int $nbResult)
     {
         $qb = $this->createQueryBuilder('a')

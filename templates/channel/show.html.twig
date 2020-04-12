@@ -14,12 +14,11 @@
                     <span class="label-stylay label-green label-rikiki">Abonné</span>
                 </div>
             </div>
-
             <div class="">
                 <button class="tab-button coconuts-active" id="articles" data-type="channel-profile">Articles</button>
                 <button class="tab-button coconuts-inactive" id="writers" data-type="channel-profile" >Auteurs</button>
-                <button class="tab-button coconuts-inactive" id="subscription-requests" data-type="channel-profile">Demandes</button>
                 <button class="tab-button coconuts-inactive" id="subscribers" data-type="channel-profile">Membres</button>
+                <button class="tab-button coconuts-inactive" id="subscription-requests" data-type="channel-profile">Demandes</button>
             </div>
 
             <div id="articles" data-type="channel-profile">
@@ -36,42 +35,7 @@
                             {% endif %}
                         {% endif %}
 
-                        <div class="story-article border-stylay ">
-                            <div class="story-article-header is-row">
-                                <img src ="{{ vich_uploader_asset(article.user) }}"
-                                     alt="{{ article.user.username }}"
-                                     class ="coconuts-round-picture rikiki-img"
-                                >
-                                <div>
-                                    <a href="{{ path('article_show', {'id': article.id})}}">
-                                        <p class="is-title">{{article.user.username}}</p>
-                                    </a>
-                                    <p class="is-secondary">{{article.updatedAt|date("d-m-Y")}} - XX minutes read</p>
-                                </div>
-                            </div>
-                            <div class="story-article-body">
-                                <a href="{{ path('article_show', {'id': article.id})}}">
-                                    <p class="is-main-title">{{article.title}}</p>
-                                </a>
-                                <a href="{{ path('article_show', {'id': article.id})}}">
-                                    <img class="story-article-cover" src ="{{ vich_uploader_asset(article) }}" alt="{{ article.title }}">
-                                </a>
-                                <div class="story-article-content">{{article.description|striptags|slice(0, 200)}}...</div>
-                            </div>
-                            <div class="story-article-footer">
-                                <i class="{{ hasLiked ? "fas" : "far" }} fa-heart fa-2x toggle-like-article"
-                                   data-article-id = "{{ article.id }}"
-                                   data-has-liked = "{{ hasLiked == false ? "false" : "true" }}">
-                                </i>
-                                <span class="dynamic-likes-counter-of-article" data-article-id = {{ article.id }}>
-                                    {{article.nbOfLikes}}
-                                </span>
-                                <i class="{{ hasBookmark ? "fas" : "far" }} fa-2x fa-bookmark toggle-bookmark-article"
-                                   data-article-id = "{{ article.id }}"
-                                   data-has-bookmark = {{ hasBookmark == false ? "0" : "1" }}>
-                                </i>
-                            </div>
-                        </div>
+                        {% include '/article/partials/article_medium_size_block.html.twig' with {'article': article, 'hasLiked': hasLiked, 'hasBookmark': hasBookmark} %}
                     {% endfor %}
                 {% else %}
                     <div class="border-stylay ">
@@ -81,23 +45,10 @@
             </div>
 
             <div id="writers" data-type="channel-profile">
-                {% if writers is not null %}
-                    {% for writer in writers %}
-                        <div class="story-article border-stylay ">
-                            <div class="story-article-header is-row">
-                                <img src ="{{ vich_uploader_asset(writer[0]) }}"
-                                     alt="{{ writer[0].username }}"
-                                     class ="coconuts-round-picture rikiki-img"
-                                >
-                                <div>
-                                    <a href="{{ path('user_show', {'id': writer[0].id})}}">
-                                        <p class="is-title">{{writer[0].username}}</p>
-                                    </a>
-                                    <p class="is-secondary">inscrit depuis le {{writer.createdAt|date("d-m-Y")}}</p>
-                                    <p class="is-secondary">{{writer.isAdmin == true ? "ADMIN" : ""}}</p>
-                                </div>
-                            </div>
-                        </div>
+                {% if writersWithRelatedArticles is not null %}
+                    {% for writer in writersWithRelatedArticles %}
+                        {% include 'user/partial/user_wih_articles_short_table_item.html.twig'
+                            with {'writer': writer[0], 'articlesOfWriter': writer.articles, 'createdAt':  writer.createdAt} %}
                     {% endfor %}
                 {% else %}
                     <div class="border-stylay ">
@@ -105,108 +56,44 @@
                     </div>
                 {% endif %}
             </div>
-
+            <div id="subscribers" data-type="channel-profile">
+                {% if subscribers is not null %}
+                    {% for subscriber in subscribers %}
+                        {% include 'user/partial/user_wih_articles_short_table_item.html.twig'
+                            with {'writer': subscriber[0], 'isAuthor': subscriber.isAuthor, 'createdAt':
+                            subscriber.createdAt, 'isAdmin' : subscriber.isAdmin, 'nbOfArticles' : subscriber.nbOfArticles } %}
+                    {% endfor %}
+                {% else %}
+                    <div class="border-stylay ">
+                        Pas d'article pour ce membre.
+                    </div>
+                {% endif %}
+            </div>
             <div id="subscription-requests" data-type="channel-profile">
                 {% if requests is not empty %}
                     <p>Demandes en attente</p>
                     {% if requests.pending is not empty %}
-                        {% for pending in requests.pending %}
-                            <div class="story-article border-stylay ">
-                                <div class="story-article-header is-row">
-                                    <img src ="{{ vich_uploader_asset(pending) }}"
-                                         alt="{{ pending.username }}"
-                                         class ="coconuts-round-picture rikiki-img"
-                                    >
-                                    <div>
-                                        <a href="{{ path('user_show', {'id': pending.id})}}">
-                                            <p class="is-title">{{pending.username}}</p>
-                                        </a>
-                                        <p class="is-secondary">inscrit depuis le {{pending.createdAt|date("d-m-Y")}}</p>
-                                    </div>
-                                </div>
-                            </div>
+                        {% for user in requests.pending %}
+                            {% include 'user/partial/user_wih_articles_short_table_item.html.twig' with {'user': user} %}
                         {% endfor %}
                     {% else %}
                         <p> Pas de demandes en attente</p>
                     {% endif %}
 
-                    <p>Demandes acceptées</p>
-                    {% if requests.accepted is not empty %}
-                        {% for accepted in requests.accepted %}
-                            <div class="story-article border-stylay ">
-                                <div class="story-article-header is-row">
-                                    <img src ="{{ vich_uploader_asset(accepted) }}"
-                                         alt="{{ accepted.username }}"
-                                         class ="coconuts-round-picture rikiki-img"
-                                    >
-                                    <div>
-                                        <a href="{{ path('user_show', {'id': accepted.id})}}">
-                                            <p class="is-title">{{accepted.username}}</p>
-                                        </a>
-                                        <p class="is-secondary">inscrit depuis le {{accepted.createdAt|date("d-m-Y")}}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    {% else %}
-                        <p> Aucune demande acceptée n'a été retrouvée </p>
-                    {% endif %}
                     <p>Demandes refusées</p>
                     {% if requests.refused is not empty %}
-                        {% for refused in requests.refused %}
-                            <div class="story-article border-stylay ">
-                                <div class="story-article-header is-row">
-                                    <img src ="{{ vich_uploader_asset(refused) }}"
-                                         alt="{{ refused.username }}"
-                                         class ="coconuts-round-picture rikiki-img"
-                                    >
-                                    <div>
-                                        <a href="{{ path('user_show', {'id': refused.id})}}">
-                                            <p class="is-title">{{refused.username}}</p>
-                                        </a>
-                                        <p class="is-secondary">inscrit depuis le {{refused.createdAt|date("d-m-Y")}}</p>
-                                    </div>
-                                </div>
-                            </div>
+                        {% for user in requests.refused %}
+                            {% include 'user/partial/user_wih_articles_short_table_item.html.twig' with {'user': user} %}
                         {% endfor %}
                     {% else %}
                         <p> Aucune demande acceptée n'a été retrouvée </p>
                     {% endif %}
-
                 {% else %}
                     <div class="border-stylay ">
                         Pas de demande refusée retrouvée.
                     </div>
                 {% endif %}
             </div>
-
-            <div id="subscribers" data-type="channel-profile">
-                {% if subscribers is not null %}
-                    {% for subscriber in subscribers %}
-                        <div class="story-article border-stylay ">
-                            <div class="story-article-header is-row">
-                                <img src ="{{ vich_uploader_asset(subscriber[0]) }}"
-                                     alt="{{ subscriber[0].username }}"
-                                     class ="coconuts-round-picture rikiki-img"
-                                >
-                                <div>
-                                    <a href="{{ path('user_show', {'id': subscriber[0].id})}}">
-                                        <p class="is-title">{{subscriber[0].username}}</p>
-                                    </a>
-                                    <p class="is-secondary">inscrit depuis le {{subscriber.createdAt|date("d-m-Y")}}</p>
-                                    <p class="is-secondary">{{subscriber.isAdmin == true ? "ADMIN" : ""}}</p>
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}
-                {% else %}
-                    <div class="border-stylay ">
-                        Pas d'article pour ce membre.
-                    </div>
-                {% endif %}
-            </div>
-
-
         {% else %}
             No info on this channel
         {% endif %}

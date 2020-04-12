@@ -114,51 +114,87 @@ class ChannelController extends AbstractController
      */
     public function show(Channel $channel)
     {
-        $subscribers = $this->userRepository->findSubscribersByChannelWithAdminStatus($channel);
-        if (!empty($subscribers)) {
-            foreach ($subscribers as $subscriber) {
-                if ($subscriber[0] instanceof User) {
-                    if (count($this->articleRepository->findByChannelAndWriter($channel, $subscriber[0])) > 0) {
-                        $subscriber['isAuthor'] = true;
-                    }
-                }
-                else {
-                    $subscriber['isAuthor'] = false;
-                }
-            }
-        }
+        // get array of articles linked to the channel
         $articles = $this->articleRepository->findArticleByChannelByDescendingOrder($channel);
-        $writers = $this->userRepository->findWriterByChannelWithAdminStatus($channel);
 
+        // get pending and refused requests of subscription to the channel  => for admin
         $requests = [];
         $requests['pending'] = $this->channelSubscriptionsRequestRepository->findByChannelAndStatusCode($channel, ChannelSubscriptionRequest::CHANNEL_SUBSCRIPTION_PENDING);
-        $requests['accepted'] = $this->channelSubscriptionsRequestRepository->findByChannelAndStatusCode($channel, ChannelSubscriptionRequest::CHANNEL_SUBSCRIPTION_ACCEPTED);
         $requests['refused'] = $this->channelSubscriptionsRequestRepository->findByChannelAndStatusCode($channel, ChannelSubscriptionRequest::CHANNEL_SUBSCRIPTION_REFUSED);
 
-        dump($writers);
-        if (!empty($writers)) {
-            foreach ($writers as $writer) {
-                $count = 0;
-                if ($writer instanceof User) {
-                    $user =$this->channelSubscriptionsRepository->findByChannelAndUser($channel, $writer);
-                    if (!empty($user) && $user->getIsAdmin()) {
-                        $writers[$count] = [$writers[$count]];
-                        $writers[$count]['isAdmin'] = true;
-                    } else {
-                        $writers[$count] = [$writers[$count]];
-                        $writers[$count]['isAdmin'] = false;                    }
-                }
-            }
-        }
+        // add info for subscribers list to be displayed (is author, is admin, nb of articles etc...) => for admin
+        $subscribers = $this->getArrayOfMembersForChannel($channel);
 
-        // FAIRE UNE methode de repo avec les writers + articles
+        // add info for writers list to be displayed (date of subscription to channel, articles he wrote for the channel)
+        $writersWithRelatedArticles = $this->getArrayOfWriterForChannel($channel);
+
         return $this->render('channel/show.html.twig', [
             'channel' => $channel,
             'articles' =>$articles,
             'subscribers' =>$subscribers,
-            'writers' =>$writers,
+            'writersWithRelatedArticles' =>$writersWithRelatedArticles,
             'requests' =>$requests
         ]);
+    }
+
+
+
+    private function getArrayOfMembersForChannel(Channel $channel)
+    {
+        $subscribers = $this->userRepository->findSubscribersByChannelWithAdminStatus($channel);
+        if (!empty($subscribers)) {
+            $count = 0;
+            foreach ($subscribers as $subscriber) {
+                // Add isAuthor status to each member
+                if ($subscriber[0] instanceof User) {
+                    if (count($this->articleRepository->findByChannelAndWriter($channel, $subscriber[0])) > 0) {
+                        $subscribers[$count]['isAuthor'] = true;
+                    } else {
+                        $subscribers[$count]['isAuthor'] = false;
+                    }
+
+                    $nbOfArticles = $this->articleRepository->findNbOfArticlesByChannelAndWriter($channel, $subscriber[0]);
+                    // $nbOfArticles[0]["1"] because it's the format return by repo for retrieving value
+                    if ($nbOfArticles[0]["1"] !== "0") {
+                        $subscribers[$count]['nbOfArticles'] = $nbOfArticles[0]["1"];
+                    } else {
+                        $subscribers[$count]['nbOfArticles'] = 0;
+                    }
+                }
+                else {
+                    $subscribers[$count]['isAuthor'] = false;
+                    $subscribers[$count]['nbOfArticles'] = 0;
+                }
+                $count++;
+            }
+        }
+
+        return $subscribers;
+    }
+
+
+    private function getArrayOfWriterForChannel(Channel $channel)
+    {
+        $writers = $this->userRepository->findWriterByChannelWithAdminStatus($channel);
+        if (!empty($writers)) {
+            $count = 0;
+            foreach ($writers as $writer) {
+                if ($writer[0] instanceof User) {
+                    $articles = $this->articleRepository->findByChannelAndWriter($channel, $writer[0]);
+                    if (!empty($articles)) {
+                        foreach ($articles as $article) {
+                            $writers[$count]['articles'][] = $article;
+                        }
+                    } else {
+                        $writers[$count]['articles'] = [];
+                    }
+                } else {
+                    $writers[$count]['articles'] = [];
+                }
+                $count++;
+            }
+        }
+        return $writers;
     }
 
     /**

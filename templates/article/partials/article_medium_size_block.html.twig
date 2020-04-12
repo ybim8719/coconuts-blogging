@@ -1,0 +1,36 @@
+<div class="story-article border-stylay ">
+    <div class="story-article-header is-row">
+        <img src ="{{ vich_uploader_asset(article.user) }}"
+             alt="{{ article.user.username }}"
+             class ="coconuts-round-picture rikiki-img"
+        >
+        <div>
+            <a href="{{ path('article_show', {'id': article.id})}}">
+                <p class="is-title">{{article.user.username}}</p>
+            </a>
+            <p class="is-secondary">{{article.updatedAt|date("d-m-Y")}} - XX minutes read</p>
+        </div>
+    </div>
+    <div class="story-article-body">
+        <a href="{{ path('article_show', {'id': article.id})}}">
+            <p class="is-main-title">{{article.title}}</p>
+        </a>
+        <a href="{{ path('article_show', {'id': article.id})}}">
+            <img class="story-article-cover" src ="{{ vich_uploader_asset(article) }}" alt="{{ article.title }}">
+        </a>
+        <div class="story-article-content">{{article.description|striptags|slice(0, 200)}}...</div>
+    </div>
+    <div class="story-article-footer">
+        <i class="{{ hasLiked ? "fas" : "far" }} fa-heart fa-2x toggle-like-article"
+           data-article-id = "{{ article.id }}"
+           data-has-liked = "{{ hasLiked == false ? "false" : "true" }}">
+        </i>
+        <span class="dynamic-likes-counter-of-article" data-article-id = {{ article.id }}>
+            {{article.nbOfLikes}}
+        </span>
+        <i class="{{ hasBookmark ? "fas" : "far" }} fa-2x fa-bookmark toggle-bookmark-article"
+           data-article-id = "{{ article.id }}"
+           data-has-bookmark = {{ hasBookmark == false ? "0" : "1" }}>
+        </i>
+    </div>
+</div>
