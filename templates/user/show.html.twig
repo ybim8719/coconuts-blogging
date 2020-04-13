@@ -35,6 +35,8 @@
             <button class="tab-button coconuts-active" id="articles" data-type="user-profile">Articles</button>
             <button class="tab-button coconuts-inactive" id="commentaires" data-type="user-profile" >Commentaires</button>
             <button class="tab-button coconuts-inactive" id="likes" data-type="user-profile">Likes</button>
+            <button class="tab-button coconuts-inactive" id="channels" data-type="user-profile">Chaines</button>
+            <button class="tab-button coconuts-inactive" id="writers" data-type="user-profile">Abonnements</button>
         </div>
 
         <hr>
@@ -68,7 +70,7 @@
         </div>
 
 
-        <div id="commentaires"  class="coconuts-hide" data-type="user-profile" class="coconuts-hide">
+        <div id="commentaires"  class="coconuts-hide" data-type="user-profile">
             {% if user.publishedComments is not empty %}
                     {% for comment in user.publishedComments %}
                         {% set hasBookmark = false %}
@@ -122,7 +124,7 @@
             {% endif %}
         </div>
 
-        <div id="likes" class = "coconuts-hide" data-type="user-profile" class="coconuts-hide">
+        <div id="likes" class = "coconuts-hide" data-type="user-profile">
             {% if user.publishedLikes is not empty %}
                 {% for like in user.publishedLikes %}
                     {% set hasBookmark = false %}
@@ -151,6 +153,27 @@
                 </div>
             {% endif %}
         </div>
+
+        <div id="channels" class = "coconuts-hide" data-type="user-profile" >
+            {% if user.channelSubscriptionRequests is not empty %}
+                {% for cs in user.channelSubscriptions %}
+                    <div> {{ cs.channel.title }}</div>
+                {% endfor %}
+            {% else %}
+                <div>Aucun channel</div>
+            {% endif %}
+        </div>
+
+        <div id="writers" class = "coconuts-hide" data-type="user-profile" >
+            {% if user.subscribedFollows is not empty %}
+                {% for follow in user.subscribedFollows %}
+                    <div> {{ follow.writer.username }}</div>
+                {% endfor %}
+            {% else %}
+                <div>Aucun channel</div>
+            {% endif %}
+        </div>
+
         <input id="visitorId" name="visitorId" type="hidden" value="{{ app.user is null ? "" : app.user.id }}">
         <input id="writerId" name="writerId" type="hidden" value="{{ user.id}}">
         <input id="isFollowing" name="isFollowing" type="hidden" value="{{ isFollowing == false ? 0 : 1}}">

@@ -14,8 +14,8 @@
                 </a>
                 <p class="is-secondary">Membre depuis le {{createdAt|date("d-m-Y")}}</p>
             </div>
-            <p>{{ isAuthor is defined ? (isAuthor == "1" ? "AUTEUR" : "") : ""}} </p>
-            <p>{{ isAdmin is defined ? (isAdmin == "1" ? "ADMIN" : "") : ""}} </p>
+            <p>{{ isAuthor is defined ? render_author_badge(isAuthor) : ""}} </p>
+            <p>{{ isAdmin is defined ? render_channel_admin_badge(isAdmin) : ""}} </p>
             {% if nbOfArticles is defined %}
                 <p>Nb d'articles : {{ nbOfArticles }}</p>
             {% endif %}
@@ -36,7 +36,4 @@
         {% endfor %}
     {% endif %}
 
-    {{ dump('hello') }}
-
-    {{ render_badge() }}
 </div>

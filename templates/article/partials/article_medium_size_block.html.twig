@@ -9,6 +9,11 @@
                 <p class="is-title">{{article.user.username}}</p>
             </a>
             <p class="is-secondary">{{article.updatedAt|date("d-m-Y")}} - XX minutes read</p>
+            {% if article.channel is not null %}
+                <div class="is-secondary">
+                    Paru dans : {{ article.channel.title }}
+                </div>
+            {% endif %}
         </div>
     </div>
     <div class="story-article-body">

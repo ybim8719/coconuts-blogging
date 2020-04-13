@@ -124,28 +124,9 @@ a {
 /**
     COLLAPSIBLE
  */
-.collapsible {
-    background-color: #777;
-    color: white;
-    cursor: pointer;
-    padding: 18px;
-    width: 100%;
-    border: none;
-    text-align: left;
-    outline: none;
-    font-size: 15px;
-}
 
-.active, .collapsible:hover {
-    background-color: #555;
-}
 
-.content {
-    padding: 0 18px;
-    display: none;
-    overflow: hidden;
-    background-color: #f1f1f1;
-}
+
 
 /**
     CONTAINERS
@@ -335,29 +316,52 @@ XXXXXXXXXX
  */
  >
 .label-stylay {
-    background-color: white;
-    font-weight: bold;
+     color: white;
+     font-weight: bold;
 }
 
-.label-red {
-    color : darkred;
+.label-admin {
+    background-color : firebrick;
     border: solid 2px darkred;
 }
 
-.label-green {
-    color : forestgreen;
+.label-subscribed {
+    background-color : limegreen;
     border: solid 2px forestgreen;
 }
 
-.label-blue {
-    color : dodgerblue;
+.label-not-subscribed {
+    background-color : darkslateblue;
     border: solid 2px dodgerblue;
+}
+
+.label-writer {
+    background-color : mediumpurple;
+    border: solid 2px purple;
+}
+
+.label-join-channel {
+    background-color : tomato;
+    border: solid 2px orangered;
+}
+
+.label-leave-channel {
+    background-color : #3adb76;
+    border: solid 2px #ee2d4d;
+}
+
+.label-micro {
+    border-radius: 12px 12px 12px 12px;
+    font-size : 0.7em;
+    padding: 4px 4px 4px 4px;
+    color: white;
 }
 
 .label-rikiki {
     border-radius: 15px 15px 15px 15px;
     font-size : 1em;
     padding: 4px 4px 4px 4px;
+    color: white;
 }
 
 .label-fat {

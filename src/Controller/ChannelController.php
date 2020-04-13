@@ -114,6 +114,8 @@ class ChannelController extends AbstractController
      */
     public function show(Channel $channel)
     {
+        $userIsAdminOfChannel = false;
+
         // get array of articles linked to the channel
         $articles = $this->articleRepository->findArticleByChannelByDescendingOrder($channel);
 
@@ -128,12 +130,19 @@ class ChannelController extends AbstractController
         // add info for writers list to be displayed (date of subscription to channel, articles he wrote for the channel)
         $writersWithRelatedArticles = $this->getArrayOfWriterForChannel($channel);
 
+        if ($this->getUser() instanceof User) {
+            if (!empty($this->channelSubscriptionsRepository->findByChannelAndUser($channel, $this->getUser()))) {
+                $userIsAdminOfChannel = true;
+            }
+        }
+
         return $this->render('channel/show.html.twig', [
             'channel' => $channel,
-            'articles' =>$articles,
-            'subscribers' =>$subscribers,
-            'writersWithRelatedArticles' =>$writersWithRelatedArticles,
-            'requests' =>$requests
+            'articles' => $articles,
+            'subscribers' => $subscribers,
+            'writersWithRelatedArticles' => $writersWithRelatedArticles,
+            'requests' => $requests,
+            'userIsAdminOfChannel' => $userIsAdminOfChannel
         ]);
     }
 

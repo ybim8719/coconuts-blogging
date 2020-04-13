@@ -59,6 +59,14 @@
                 <div>
                     {{ article.createdAt|date('M-d') }}
                 </div>
+                {% if article.channel is not null %}
+                    <div class="is-secondary">
+                        Paru dans :
+                        <a href="{{ path('channel_show', {'idChannel' : article.channel.id}) }}">
+                            {{ article.channel.title }}
+                        </a>
+                    </div>
+                {% endif %}
             </div>
         </div>
 

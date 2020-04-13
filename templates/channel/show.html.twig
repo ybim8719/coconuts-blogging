@@ -5,21 +5,23 @@
 {% block body %}
     <div class="coconuts-story-container">
         {% if channel is not null %}
-
             <div>
                 <h3>{{ channel.title }}</h3>
+                {{render_subscriber_of_channel_badge_by_params(app.user, channel)}}
+                {{render_join_channel_badge_by_params(app.user, channel)}}
                 <div class="chapeau">{{ channel.description }}</div>
                 <div class="secondary-info">
                     {{ channel.getNbOfArticles }} articles publiés
                     {{ channel.getNbOfChannelSubscriptions }} abonnés
-                    <span class="label-stylay label-green label-rikiki">Abonné</span>
                 </div>
             </div>
             <div class="">
                 <button class="tab-button coconuts-active" id="articles" data-type="channel-profile">Articles</button>
                 <button class="tab-button coconuts-inactive" id="writers" data-type="channel-profile" >Auteurs</button>
-                <button class="tab-button coconuts-inactive" id="subscribers" data-type="channel-profile">Membres</button>
-                <button class="tab-button coconuts-inactive" id="subscription-requests" data-type="channel-profile">Demandes</button>
+                {% if userIsAdminOfChannel %}
+                    <button class="tab-button coconuts-inactive" id="subscribers" data-type="channel-profile">Membres</button>
+                    <button class="tab-button coconuts-inactive" id="subscription-requests" data-type="channel-profile">Demandes</button>
+                {% endif %}
             </div>
 
             <div id="articles" data-type="channel-profile">
@@ -35,7 +37,6 @@
                                 {% set hasLiked = true %}
                             {% endif %}
                         {% endif %}
-
                         {% include '/article/partials/article_medium_size_block.html.twig' with {'article': article, 'hasLiked': hasLiked, 'hasBookmark': hasBookmark} %}
                     {% endfor %}
                 {% else %}
@@ -57,44 +58,46 @@
                     </div>
                 {% endif %}
             </div>
-            <div id="subscribers" class="coconuts-hide" data-type="channel-profile">
-                {% if subscribers is not null %}
-                    {% for subscriber in subscribers %}
-                        {% include 'user/partial/user_wih_articles_short_table_item.html.twig'
-                            with {'user': subscriber[0], 'isAuthor': subscriber.isAuthor, 'createdAt':
-                            subscriber.createdAt, 'isAdmin' : subscriber.isAdmin, 'nbOfArticles' : subscriber.nbOfArticles } %}
-                    {% endfor %}
-                {% else %}
-                    <div class="border-stylay ">
-                        Pas d'article pour ce membre.
-                    </div>
-                {% endif %}
-            </div>
-            <div id="subscription-requests" class="coconuts-hide" data-type="channel-profile">
-                {% if requests is not empty %}
-                    <p>Demandes en attente</p>
-                    {% if requests.pending is not empty %}
-                        {% for request in requests.pending %}
-                            {% include '/channelSubscriptionRequest/partials/request_small_line_list.html.twig' with {'user': request.applicant} %}
+            {% if userIsAdminOfChannel %}
+                <div id="subscribers" class="coconuts-hide" data-type="channel-profile">
+                    {% if subscribers is not null %}
+                        {% for subscriber in subscribers %}
+                            {% include 'user/partial/user_wih_articles_short_table_item.html.twig'
+                                with {'user': subscriber[0], 'isAuthor': subscriber.isAuthor, 'createdAt':
+                                subscriber.createdAt, 'isAdmin' : subscriber.isAdmin, 'nbOfArticles' : subscriber.nbOfArticles } %}
                         {% endfor %}
                     {% else %}
-                        <p> Pas de demandes en attente</p>
+                        <div class="border-stylay ">
+                            Pas d'article pour ce membre.
+                        </div>
                     {% endif %}
+                </div>
+                <div id="subscription-requests" class="coconuts-hide" data-type="channel-profile">
+                    {% if requests is not empty %}
+                        <p>Demandes en attente</p>
+                        {% if requests.pending is not empty %}
+                            {% for request in requests.pending %}
+                                {% include '/channelSubscriptionRequest/partials/request_small_line_list.html.twig' with {'user': request.applicant} %}
+                            {% endfor %}
+                        {% else %}
+                            <p> Pas de demandes en attente</p>
+                        {% endif %}
 
-                    <p>Demandes refusées</p>
-                    {% if requests.refused is not empty %}
-                        {% for request in requests.refused %}
-                            {% include '/channelSubscriptionRequest/partials/request_small_line_list.html.twig' with {'user': request.applicant} %}
-                        {% endfor %}
+                        <p>Demandes refusées</p>
+                        {% if requests.refused is not empty %}
+                            {% for request in requests.refused %}
+                                {% include '/channelSubscriptionRequest/partials/request_small_line_list.html.twig' with {'user': request.applicant} %}
+                            {% endfor %}
+                        {% else %}
+                            <p> Aucune demande acceptée n'a été retrouvée </p>
+                        {% endif %}
                     {% else %}
-                        <p> Aucune demande acceptée n'a été retrouvée </p>
+                        <div class="border-stylay ">
+                            Pas de demande refusée retrouvée.
+                        </div>
                     {% endif %}
-                {% else %}
-                    <div class="border-stylay ">
-                        Pas de demande refusée retrouvée.
-                    </div>
-                {% endif %}
-            </div>
+                </div>
+            {% endif %}
         {% else %}
             No info on this channel
         {% endif %}

@@ -10,13 +10,15 @@
                 {% for subscribedChannelWithArticles in subscribedChannelsWithArticles %}
                     <div class="coconuts-subscribed-channel-block">
                         <div class="channel-header-block">
-                            <div class="channel-header-left">
-                                <h3>{{ subscribedChannelWithArticles.channel.title }}</h3>
+                            <div class="channel-header-left">s
+                                <a href ="{{ path("channel_show", {'idChannel' : subscribedChannelWithArticles.channel.id}) }}">
+                                    <h3>{{ subscribedChannelWithArticles.channel.title }}</h3>
+                                </a>
+                                {{render_join_channel_badge(true)}}
                                 <div class="chapeau">{{ subscribedChannelWithArticles.channel.description }}</div>
                                 <div class="secondary-info">
                                     {{ subscribedChannelWithArticles.channel.getNbOfArticles }} articles publiés
                                     {{ subscribedChannelWithArticles.channel.getNbOfChannelSubscriptions }} abonnés
-                                    <span class="label-stylay label-green label-rikiki">Abonné</span>
                                 </div>
                             </div>
                             <div class="channel-header-right">
@@ -72,17 +74,19 @@
                     <div class="coconuts-subscribed-channel-block">
                         <div class="channel-header-block">
                             <div class="channel-header-left">
-                                <h3>{{ randomChannelWithArticles.channel.title }}</h3>
+                                <a href ="{{ path("channel_show", {'idChannel' : randomChannelWithArticles.channel.id}) }}">
+                                    <h3>{{ randomChannelWithArticles.channel.title }}</h3>
+                                </a>
+                                {{ render_subscriber_of_channel_badge(false) }}
                                 <div class="chapeau">{{ randomChannelWithArticles.channel.description }}</div>
                                 <div class="secondary-info">
                                     {{ randomChannelWithArticles.channel.getNbOfArticles }} articles publiés
                                     {{ randomChannelWithArticles.channel.getNbOfChannelSubscriptions }} abonnés
-                                    <span class="label-stylay label-blue label-rikiki">Visiteur</span>
                                 </div>
                             </div>
                             <div class="channel-header-right">
                                 <div>
-                                    <a href ="#" class="label-red label-stylay label-fat"> Rejoindre</a>
+                                    {{ render_join_channel_badge(false)}}
                                 </div>
                             </div>
                         </div>
