@@ -27,7 +27,7 @@
             </div>
             <div>
                 <p class="is-secondary">Membre Coconuts depuis le {{user.createdAt|date("m/d/Y")}}</p>
-                <p class="is-secondary">{{user.nbOfSubscribedFollows}} Abonnements {{user.nbOfIncomingFollows}} Abonnés {{user.nbOfArticles}} Articles <p/>
+                <p class="is-secondary">{{user.nbOfSubscribedFollows}} Abonnements {{user.nbOfIncomingFollows}} Abonnés {{user.nbOfArticles}} Articles </p>
             </div>
         </div>
 
@@ -54,52 +54,21 @@
                         {% endif %}
                     {% endif %}
 
-                    <div class="story-article border-stylay ">
-                        <div class="story-article-header is-row">
-                            <img src ="{{ vich_uploader_asset(article.user) }}"
-                                 alt="{{ article.user.username }}"
-                                 class ="coconuts-round-picture rikiki-img"
-                            >
-                            <div>
-                                <a href="{{ path('article_show', {'id': article.id})}}">
-                                    <p class="is-title">{{article.user.username}}</p>
-                                </a>
-                                <p class="is-secondary">{{article.updatedAt|date("d-m-Y")}} - XX minutes read</p>
-                            </div>
-                        </div>
-                        <div class="story-article-body">
-                            <a href="{{ path('article_show', {'id': article.id})}}">
-                                <p class="is-main-title">{{article.title}}</p>
-                            </a>
-                            <a href="{{ path('article_show', {'id': article.id})}}">
-                                <img class="story-article-cover" src ="{{ vich_uploader_asset(article) }}" alt="{{ article.title }}">
-                            </a>
-                            <div class="story-article-content">{{article.description|striptags|slice(0, 200)}}...</div>
-                        </div>
-                        <div class="story-article-footer">
-                            <i class="{{ hasLiked ? "fas" : "far" }} fa-heart fa-2x toggle-like-article"
-                               data-article-id = "{{ article.id }}"
-                               data-has-liked = "{{ hasLiked == false ? "false" : "true" }}">
-                            </i>
-                            <span class="dynamic-likes-counter-of-article" data-article-id = {{ article.id }}>
-                                {{article.nbOfLikes}}
-                            </span>
-                            <i class="{{ hasBookmark ? "fas" : "far" }} fa-2x fa-bookmark toggle-bookmark-article"
-                               data-article-id = "{{ article.id }}"
-                               data-has-bookmark = {{ hasBookmark == false ? "0" : "1" }}>
-                            </i>
-                        </div>
-                    </div>
+                    {% include "/article/partials/article_medium_size_block.html.twig" with {
+                        "article" : article,
+                        "hasLiked" : hasLiked,
+                        "hasBookmark" : hasBookmark,
+                    } %}
                 {% endfor %}
             {% else %}
-            <div class="border-stylay ">
-                Pas d'article pour ce membre.
-            </div>
+                <div class="border-stylay ">
+                    Pas d'article pour ce membre.
+                </div>
             {% endif %}
         </div>
 
 
-        <div id="commentaires" data-type="user-profile" class="coconuts-hide">
+        <div id="commentaires"  class="coconuts-hide" data-type="user-profile" class="coconuts-hide">
             {% if user.publishedComments is not empty %}
                     {% for comment in user.publishedComments %}
                         {% set hasBookmark = false %}
@@ -153,7 +122,7 @@
             {% endif %}
         </div>
 
-        <div id="likes" data-type="user-profile" class="coconuts-hide">
+        <div id="likes" class = "coconuts-hide" data-type="user-profile" class="coconuts-hide">
             {% if user.publishedLikes is not empty %}
                 {% for like in user.publishedLikes %}
                     {% set hasBookmark = false %}
@@ -168,42 +137,13 @@
                             {% set hasLiked = true %}
                         {% endif %}
                     {% endif %}
-                    <div class="story-article border-stylay ">
-                        <div class="story-article-header is-row">
-                            <img src ="{{ vich_uploader_asset(like.likedArticle.user) }}"
-                                 alt="{{ like.likedArticle.user.username }}"
-                                 class ="coconuts-round-picture rikiki-img"
-                            >
-                            <div>
-                                <a href="{{ path('article_show', {'id': like.likedArticle.id})}}">
-                                    <p class="is-title">{{like.likedArticle.user.username}}</p>
-                                </a>
-                                <p class="is-secondary">{{like.likedArticle.updatedAt|date("d-m-Y")}} - XX minutes read</p>
-                            </div>
-                        </div>
-                        <div class="story-article-body">
-                            <a href="{{ path('article_show', {'id': like.likedArticle.id})}}">
-                                <p class="is-main-title">{{like.likedArticle.title}}</p>
-                            </a>
-                            <a href="{{ path('article_show', {'id': like.likedArticle.id})}}">
-                                <img class="story-article-cover" src ="{{ vich_uploader_asset(like.likedArticle) }}" alt="{{ like.likedArticle.title }}">
-                            </a>
-                            <div class="story-article-content">{{like.likedArticle.description|striptags|slice(0, 200)}}...</div>
-                        </div>
-                        <div class="story-article-footer">
-                            <i class="{{ hasLiked ? "fas" : "far" }} fa-heart fa-2x"
-                               data-article-id = "{{ like.likedArticle.id }}"
-                               data-has-liked = "{{ hasLiked == false ? "false" : "true" }}">
-                            </i>
-                            <span class="dynamic-likes-counter-of-article" data-article-id = "{{ like.likedArticle.id }}">
-                                {{like.likedArticle.nbOfLikes}}
-                            </span>
-                            <i class="{{ hasBookmark ? "fas" : "far" }} fa-2x fa-bookmark toggle-bookmark-article"
-                               data-article-id = "{{ like.likedArticle.id }}"
-                               data-has-bookmark = {{ hasBookmark == false ? "1" : "0" }}>
-                            </i>
-                        </div>
-                    </div>
+
+                    {% include "/article/partials/article_medium_size_block.html.twig" with {
+                        "article" : like.likedArticle,
+                        "hasLiked" : hasLiked,
+                        "hasBookmark" : hasBookmark,
+                    } %}
+
                 {% endfor %}
             {% else %}
                 <div class="border-stylay ">
@@ -215,19 +155,4 @@
         <input id="writerId" name="writerId" type="hidden" value="{{ user.id}}">
         <input id="isFollowing" name="isFollowing" type="hidden" value="{{ isFollowing == false ? 0 : 1}}">
     </div>
-{% endblock %}
-
-
-{% block javascripts %}
-    {{ parent() }}
-    <script>
-        function openCategory(category) {
-            var i;
-            var x = document.getElementsByClassName("category");
-            for (i = 0; i < x.length; i++) {
-                x[i].style.display = "none";
-            }
-            document.getElementById(category).style.display = "block";
-        }
-    </script>
 {% endblock %}

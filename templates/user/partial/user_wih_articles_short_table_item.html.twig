@@ -1,37 +1,42 @@
 <div class="story-article border-stylay ">
     <div class="story-article-header is-row">
-        <img src ="{{ vich_uploader_asset(writer) }}"
-             alt="{{ writer.username }}"
+        <img src="{{ asset('images/icons/iconfinder_expand2_308964.png') }}"
+             class="trigger-collapse-articles small-icon"
+             data-id ="{{ user.id }}">
+        <img src ="{{ vich_uploader_asset(user) }}"
+             alt="{{ user.username }}"
              class ="coconuts-round-picture rikiki-img"
         >
-        <div class="is-row>
-            <a href="{{ path('user_show', {'id': writer.id})}}">
-                <p class="is-title">{{writer.username}}</p>
-            </a>
-            <p class="is-secondary">Membre depuis le {{createdAt|date("d-m-Y")}}</p>
+        <div class="is-row">
+            <div>
+                <a href="{{ path('user_show', {'id': user.id})}}" >
+                    <p class="is-title">{{user.username}}</p>
+                </a>
+                <p class="is-secondary">Membre depuis le {{createdAt|date("d-m-Y")}}</p>
+            </div>
             <p>{{ isAuthor is defined ? (isAuthor == "1" ? "AUTEUR" : "") : ""}} </p>
             <p>{{ isAdmin is defined ? (isAdmin == "1" ? "ADMIN" : "") : ""}} </p>
             {% if nbOfArticles is defined %}
-                <p >Nb d'articles : {{ nbOfArticles }}</p>
+                <p>Nb d'articles : {{ nbOfArticles }}</p>
             {% endif %}
         </div>
     </div>
     {% if articlesOfWriter is defined %}
         {% for article in articlesOfWriter %}
-            <div>
+            <div class="content-to-collapse border-serious" data-id ="{{ user.id }}">
+                <a href="{{ path('article_show', {'id': article.id})}}">
+                    <p class="is-bold">{{article.title}}</p>
+                </a>
                 <div class="is-row">
-                    <div>
-                        <a href="{{ path('article_show', {'id': article.id})}}">
-                            <p class="is-main-title">{{article.title}}</p>
-                        </a>
-                        <p class="is-secondary">{{article.updatedAt|date("d-m-Y")}} - XX minutes read</p>
-                        <span class="is-secondary" data-article-id = {{ article.id }}>
-                            <i class="fas fa-heart"></i>
-                            {{article.nbOfLikes}}
-                        </span>
-                    </div>
+                    <p class="is-secondary">{{article.updatedAt|date("d-m-Y")}} - XX minutes read</p>
+                    <i class="fas fa-heart margin-left "></i>
+                    <p class="margin-left">{{article.nbOfLikes}}</p>
                 </div>
             </div>
         {% endfor %}
     {% endif %}
+
+    {{ dump('hello') }}
+
+    {{ render_badge() }}
 </div>

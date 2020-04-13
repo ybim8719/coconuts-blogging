@@ -6,8 +6,10 @@
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
             <link rel="stylesheet" href="/build/app.css">
+            <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+            <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
         {% endblock %}
-        <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+
     </head>
     <body>
         {% block header %} 
@@ -83,6 +85,8 @@
         {{ encore_entry_script_tags('toggleArticleLike') }}
         {{ encore_entry_script_tags('toggleArticleBookmark') }}
         {{ encore_entry_script_tags('manageTabs') }}
+        {{ encore_entry_script_tags('manageExpandCollapse') }}
+
         <script src="https://kit.fontawesome.com/ef10a582ff.js" crossorigin="anonymous"></script>
 
     {% endblock %}

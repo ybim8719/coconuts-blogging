@@ -29,3 +29,6 @@ services:
         arguments: ['@logger']
         tags:
             - { name: monolog.logger, channel: coconuts }
+
+    # well, no arguments and tags needed...
+    App\Twig\RenderBadgeTwigExtension: ~
