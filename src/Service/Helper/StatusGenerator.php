@@ -89,7 +89,7 @@ class StatusGenerator
         return false;
     }
 
-    public function getHasLikedArticleStatus(Article $article, User $user)
+    public function getHasLikedArticleStatus(Article $article = null, User $user = null)
     {
         if ($article == null || $user == null) {
             return false;

@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Article;
 use App\Entity\ArticleComment;
+use App\Entity\Channel;
 use App\Entity\Follow;
 use App\Entity\User;
 use App\Entity\UserLike;
@@ -30,6 +32,9 @@ class UserController extends AbstractController
     private $likeRepository;
     private $commentRepository;
     private $followRepository;
+    private $articleRepository;
+    private $channelRepository;
+    private $userRepository;
 
     public function __construct(UploaderHelper $helper, EntityManagerInterface $em, CoconutsLogger $logger)
     {
@@ -39,6 +44,9 @@ class UserController extends AbstractController
         $this->commentRepository = $this->em->getRepository(ArticleComment::class);
         $this->likeRepository = $this->em->getRepository(UserLike::class);
         $this->followRepository = $this->em->getRepository(Follow::class);
+        $this->articleRepository = $this->em->getRepository(Article::class);
+        $this->channelRepository = $this->em->getRepository(Channel::class);
+        $this->userRepository = $this->em->getRepository(User::class);
     }
 
     /**
@@ -84,18 +92,37 @@ class UserController extends AbstractController
     public function show(User $user): Response
     {
         $isFollowing = false;
-        $follows = [];
 
+        // check if the user is folloed by visitor
         if ($this->getUser() !== null) {
             $follows = $this->followRepository->findByUserAndWriter($this->getUser(), $user);
+            if (count($follows) > 0) {
+                $isFollowing = true;
+            }
         }
 
-        if (count($follows) > 0) {
-            $isFollowing = true;
-        }
+        // getArticles in anti-chronological time
+        $articles = $this->articleRepository->findByUserInDescOrder($user);
+
+        // getComments in anti-chronological time
+        $publishedComments = $this->commentRepository->findByUserInDescOrder($user);
+
+        // get liked articles in anti-chronological time
+        $likedArticles = $this->articleRepository->findArticlesLikedByUser($user);
+
+        // get Channels in anti-chronological time
+        $channels = $this->channelRepository->findByUserInDescOrder($user);
+
+        // get writers that the visitor follow in anti-chronological time
+        $followedWriters = $this->userRepository->findWritersFollowedByUser($user);
 
         return $this->render('user/show.html.twig', [
             'user' => $user,
+            'articles' => $articles,
+            'publishedComments' => $publishedComments,
+            'likedArticles' => $likedArticles,
+            'followedWriters' => $followedWriters,
+            'channels' => $channels,
             'isFollowing' => $isFollowing
         ]);
     }

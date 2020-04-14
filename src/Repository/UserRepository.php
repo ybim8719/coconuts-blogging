@@ -55,6 +55,19 @@ class UserRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+
+    public function findWritersFollowedByUser(User $user)
+    {
+        return $this->createQueryBuilder('u')
+            ->join('u.subscribedFollows', 'i')
+            ->join('i.follower', "f")
+            ->andWhere('f = :user')
+            ->setParameter('user', $user)
+            ->orderBy('i.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
     public function findWriterByChannelWithAdminStatus(Channel $channel)
     {
         return $this->createQueryBuilder('u')

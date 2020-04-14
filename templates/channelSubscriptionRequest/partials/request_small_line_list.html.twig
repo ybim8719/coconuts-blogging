@@ -1,14 +1,19 @@
 <div class="story-article border-stylay ">
     <div class="story-article-header is-row">
-        <img src ="{{ vich_uploader_asset(user) }}"
-             alt="{{ user.username }}"
-             class ="coconuts-round-picture rikiki-img"
-        >
+        <a href="{{ path('user_show', {'id': user.id})}}">
+            <img src ="{{ vich_uploader_asset(user) }}"
+                 alt="{{ user.username }}"
+                 class ="coconuts-round-picture rikiki-img"
+            >
+        </a>
         <div>
             <a href="{{ path('user_show', {'id': user.id})}}">
                 <p class="is-title">{{user.username}}</p>
             </a>
             <p class="is-secondary">inscrit depuis le {{user.createdAt|date("d-m-Y")}}</p>
+            {{ render_author_badge(user.hasWritten) }}
+            <p>Nb d'articles : {{ user.nbOfArticles }}</p>
+
         </div>
     </div>
 </div>

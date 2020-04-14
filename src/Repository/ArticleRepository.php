@@ -42,6 +42,7 @@ class ArticleRepository extends ServiceEntityRepository
             ->andWhere('a.user = :user')
             ->setParameter('user', $writer)
             ->setParameter('channel', $channel)
+            ->orderBy('a.createdAt', 'DESC')
             ->getQuery()
             ->getResult();
     }
@@ -104,5 +105,27 @@ class ArticleRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
             ;
+    }
+
+    public function findByUserInDescOrder(User $user)
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.user = :user')
+            ->setParameter('user', $user)
+            ->orderBy('a.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findArticlesLikedByUser(User $user)
+    {
+        return $this->createQueryBuilder('a')
+            ->leftJoin('a.likes', 'l')
+            ->leftJoin('l.user', 'u')
+            ->andWhere('u = :user')
+            ->setParameter('user', $user)
+            ->orderBy('a.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
     }
 }

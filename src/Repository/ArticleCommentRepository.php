@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\ArticleComment;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -30,15 +31,13 @@ class ArticleCommentRepository extends ServiceEntityRepository
         ;
     }
 
-    /*
-    public function findOneBySomeField($value): ?ArticleComment
+    public function findByUserInDescOrder(User $user)
     {
         return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
+            ->andWhere('a.author = :user')
+            ->setParameter('user', $user)
+            ->orderBy('a.createdAt', 'DESC')
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getResult();
     }
-    */
 }

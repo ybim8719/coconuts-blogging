@@ -66,4 +66,15 @@ class ChannelRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findByUserInDescOrder(User $user)
+    {
+        return $this->createQueryBuilder('c')
+            ->leftJoin('c.channelSubscriptions', 'cs')
+            ->andWhere('cs.user = :user')
+            ->setParameter('user', $user)
+            ->orderBy('cs.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 }

@@ -5,13 +5,16 @@
              class ="coconuts-round-picture rikiki-img"
         >
         <div>
-            <a href="{{ path('article_show', {'id': article.id})}}">
+            <a href="{{ path('user_show', {'id': article.user.id})}}">
                 <p class="is-title">{{article.user.username}}</p>
             </a>
             <p class="is-secondary">{{article.updatedAt|date("d-m-Y")}} - XX minutes read</p>
             {% if article.channel is not null %}
                 <div class="is-secondary">
-                    Paru dans : {{ article.channel.title }}
+                    Paru dans :
+                    <a href="{{ path('channel_show', {'idChannel' : article.channel.id}) }}">
+                        {{ article.channel.title }}
+                    </a>
                 </div>
             {% endif %}
         </div>
