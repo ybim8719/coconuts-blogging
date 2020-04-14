@@ -7,7 +7,7 @@ $(function () {
     $(document).ready(function() {
         $(document).on('click','.toggle-like-article', function(){
             console.log($(this).attr('data-has-liked'));
-            operateAddOrRemoveLikeOnArticle($(this).data('article-id'), $(this).attr('data-has-liked'));
+            operateAddOrRemoveLikeOnArticle($(this).attr('data-article-id'), $(this).attr('data-has-liked'));
         })
     });
 
@@ -20,7 +20,7 @@ $(function () {
         //var articleId = $('#articleId').val();
         //var hasLiked = $('#hasLiked').val();
         var ajaxPath = "userLike_ajaxAddLikeToArticle";
-        console.log(visitorId)
+        console.log('visitor id is ' + visitorId)
 
         if (visitorId === "") {
             console.log('no user id/ cannot like Article');

@@ -8,13 +8,14 @@
             <div class="coconuts-subscribed-channels-list">
                 <h2 class="channel-header">MES CHANNELS PREFERES</h2>
                 {% for subscribedChannelWithArticles in subscribedChannelsWithArticles %}
+                    {% set joinChannelStatus = status_generator.getChannelSubscriptionBool(subscribedChannelWithArticles.channel, app.user) %}
                     <div class="coconuts-subscribed-channel-block">
                         <div class="channel-header-block">
-                            <div class="channel-header-left">s
+                            <div class="channel-header-left">
                                 <a href ="{{ path("channel_show", {'idChannel' : subscribedChannelWithArticles.channel.id}) }}">
                                     <h3>{{ subscribedChannelWithArticles.channel.title }}</h3>
                                 </a>
-                                {{render_join_channel_badge(true)}}
+                                {{ render_subscriber_of_channel_badge(joinChannelStatus) }}
                                 <div class="chapeau">{{ subscribedChannelWithArticles.channel.description }}</div>
                                 <div class="secondary-info">
                                     {{ subscribedChannelWithArticles.channel.getNbOfArticles }} articles publiés
@@ -71,13 +72,15 @@
             <div class="coconuts-subscribed-channels-list">
                 <h2 class="channel-header">CES CHANNELS POURRAIENT VOUS PLAIRE</h2>
                 {% for randomChannelWithArticles in randomChannelsWithArticles %}
+                    {% set joinChannelStatus = status_generator.getChannelSubscriptionStatusCode(randomChannelWithArticles.channel, app.user) %}
+                    {% set isSubscriberStatus = status_generator.getChannelSubscriptionBool(randomChannelWithArticles.channel, app.user) %}
                     <div class="coconuts-subscribed-channel-block">
                         <div class="channel-header-block">
                             <div class="channel-header-left">
                                 <a href ="{{ path("channel_show", {'idChannel' : randomChannelWithArticles.channel.id}) }}">
                                     <h3>{{ randomChannelWithArticles.channel.title }}</h3>
                                 </a>
-                                {{ render_subscriber_of_channel_badge(false) }}
+                                {{ render_subscriber_of_channel_badge(isSubscriberStatus) }}
                                 <div class="chapeau">{{ randomChannelWithArticles.channel.description }}</div>
                                 <div class="secondary-info">
                                     {{ randomChannelWithArticles.channel.getNbOfArticles }} articles publiés
@@ -86,7 +89,7 @@
                             </div>
                             <div class="channel-header-right">
                                 <div>
-                                    {{ render_join_channel_badge(false)}}
+                                    {{ render_join_channel_badge(joinChannelStatus)}}
                                 </div>
                             </div>
                         </div>

@@ -4,3 +4,4 @@ twig:
         - '@FOSCKEditor/Form/ckeditor_widget.html.twig'
     globals:
         date_calculator: '@App\Service\Helper\DateCalculator'
+        status_generator: '@App\Service\Helper\StatusGenerator'

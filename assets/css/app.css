@@ -330,7 +330,7 @@ XXXXXXXXXX
     border: solid 2px forestgreen;
 }
 
-.label-not-subscribed {
+.label-visitor {
     background-color : darkslateblue;
     border: solid 2px dodgerblue;
 }
@@ -345,10 +345,21 @@ XXXXXXXXXX
     border: solid 2px orangered;
 }
 
-.label-leave-channel {
+.label-accepted-join-channel {
     background-color : #3adb76;
     border: solid 2px #ee2d4d;
 }
+
+.label-awaiting-channel {
+    background-color : turquoise;
+    border: solid 2px #dedede;
+}
+
+.label-refused-join-channel {
+    background-color : deeppink;
+    border: solid 2px #d8d8d8;
+}
+
 
 .label-micro {
     border-radius: 12px 12px 12px 12px;
@@ -368,6 +379,8 @@ XXXXXXXXXX
     border-radius: 20px 20px 20px 20px;
     font-size : 1em;
     padding: 8px 8px 8px 8px;
+    color: white;
+
 }
 
 .channel-header {

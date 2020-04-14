@@ -4,6 +4,7 @@ namespace App\Twig;
 
 use App\Entity\Channel;
 use App\Entity\ChannelSubscription;
+use App\Entity\ChannelSubscriptionRequest;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Twig\Environment;
@@ -13,18 +14,31 @@ use Twig\TwigFunction;
 
 class RenderBadgeTwigExtension extends AbstractExtension
 {
+    const WRITER_STATUS = "Auteur";
+    const ADMIN_STATUS = "Admin";
+    const SUBSCRIBED_STATUS = "Membre";
+    const VISITOR_STATUS = "Visiteur";
+
+    const JOIN_CHANNEL_STATUS = "Rejoindre";
+    const ACCEPTED_JOIN_CHANNEL_STATUS = "Accepté";
+    const AWAITING_CHANNEL_ACCEPTANCE_STATUS = "En attente";
+    const REFUSED_JOIN_CHANNEL_STATUS = "Refusé";
+
     const WRITER_LABEL = "label-writer";
     const ADMIN_LABEL = "label-admin";
     const SUBSCRIBED_LABEL = "label-subscribed";
-    const NOT_SUBSCRIBED_LABEL = "label-not-subscribed";
+    const VISITOR_LABEL = "label-visitor";
+
     const JOIN_CHANNEL_LABEL = "label-join-channel";
-    const LEAVE_CHANNEL_LABEL = "label-leave-channel";
-    const WRITER_STATUS = "Auteur";
-    const ADMIN_STATUS = "Admin";
-    const NOT_SUBSCRIBED_STATUS = "Visiteur";
-    const SUBSCRIBED_STATUS = "Abonné";
-    const JOIN_CHANNEL_STATUS = "Rejoindre";
-    const LEAVE_CHANNEL_STATUS = "Quitter ?";
+    const AWAITING_CHANNEL_ACCEPTANCE_LABEL = "label-awaiting-channel";
+    const ACCEPTED_JOIN_CHANNEL_LABEL = "label-accepted-join-channel";
+    const REFUSED_JOIN_CHANNEL_LABEL = "label-refused-join-channel";
+
+    const JOIN_CHANNEL_CODE = 0;
+    const AWAITING_CHANNEL_ACCEPTANCE_CODE = 1;
+    const ACCEPTED_JOIN_CHANNEL_CODE = 2;
+    const REFUSED_JOIN_CHANNEL_CODE = 3;
+
     const FAT_SIZE = "label-fat";
     const MICRO_SIZE ="label-micro";
     /**
@@ -33,6 +47,7 @@ class RenderBadgeTwigExtension extends AbstractExtension
     protected $em;
 
     protected $channelSubscriptionsRepository;
+    protected $channelSubscriptionsRequestRepository;
 
     /**
      * RenderInvoiceTwigExtension constructor.
@@ -42,6 +57,7 @@ class RenderBadgeTwigExtension extends AbstractExtension
     {
         $this->em = $em;
         $this->channelSubscriptionsRepository = $em->getRepository(ChannelSubscription::class);
+        $this->channelSubscriptionsRequestRepository = $em->getRepository(ChannelSubscriptionRequest::class);
     }
 
     public function getFunctions()
@@ -59,128 +75,78 @@ class RenderBadgeTwigExtension extends AbstractExtension
                 'needs_environment' => true,
                 'is_safe' => ['html']
             ]),
-            new TwigFunction('render_subscriber_of_channel_badge_by_params', [$this, 'renderSubscriberOfChannelBadgeByParams'], [
-                'needs_environment' => true,
-                'is_safe' => ['html']
-            ]),
             new TwigFunction('render_join_channel_badge', [$this, 'renderJoinChannelBadge'], [
                 'needs_environment' => true,
                 'is_safe' => ['html']
-            ]),
-            new TwigFunction('render_join_channel_badge_by_params', [$this, 'renderJoinChannelBadgeByParams'], [
-                'needs_environment' => true,
-                'is_safe' => ['html']
-            ]),
+            ])
         ];
     }
 
 
-    public function renderJoinChannelBadgeByParams(Environment $environment, User $user = null, Channel $channel= null)
+    public function renderJoinChannelBadge(Environment $environment, int $statusCode)
     {
-        $text = self::JOIN_CHANNEL_STATUS;
-        $class = self::JOIN_CHANNEL_LABEL;
-
-        if ($user == null || $channel == null) {
-            return $environment->render('twig/render_badge.html.twig', [
-                'text' => $text,
-                'class' => $class,
-                'size' => self::FAT_SIZE
-            ]);
+        switch ($statusCode) {
+            case self::JOIN_CHANNEL_CODE:
+                $text = self::JOIN_CHANNEL_STATUS;
+                $class = self::JOIN_CHANNEL_LABEL;
+                break;
+            case self::AWAITING_CHANNEL_ACCEPTANCE_CODE:
+                $text = self::AWAITING_CHANNEL_ACCEPTANCE_STATUS;
+                $class = self::AWAITING_CHANNEL_ACCEPTANCE_LABEL;
+                break;
+            case self::REFUSED_JOIN_CHANNEL_CODE:
+                $text = self::REFUSED_JOIN_CHANNEL_STATUS;
+                $class = self::REFUSED_JOIN_CHANNEL_LABEL;
+                break;
+            case self::ACCEPTED_JOIN_CHANNEL_CODE:
+                $text = self::ACCEPTED_JOIN_CHANNEL_STATUS;
+                $class = self::ACCEPTED_JOIN_CHANNEL_LABEL;
+                break;
+            default:
+                return "";
         }
 
-        if (!empty($this->channelSubscriptionsRepository->findByChannelAndUser($channel, $user))) {
-            $text = self::LEAVE_CHANNEL_STATUS;
-            $class = self::LEAVE_CHANNEL_LABEL;
-        }
-
-        return $environment->render('twig/render_badge.html.twig', [
-            'text' => $text,
-            'class' => $class,
-            'size' => self::FAT_SIZE
-        ]);
-    }
-
-    public function renderJoinChannelBadge(Environment $environment, bool $hasBadge)
-    {
-        $text = self::JOIN_CHANNEL_STATUS;
-        $class = self::JOIN_CHANNEL_LABEL;
-
-        if ($hasBadge) {
-            $text = self::LEAVE_CHANNEL_STATUS;
-            $class = self::LEAVE_CHANNEL_LABEL;
-        }
-
-        return $environment->render('twig/render_badge.html.twig', [
-            'text' => $text,
-            'class' => $class,
-            'size' => self::FAT_SIZE
-        ]);
-    }
-
-    public function renderSubscriberOfChannelBadgeByParams(Environment $environment, User $user = null, Channel $channel= null)
-    {
-        $text = self::NOT_SUBSCRIBED_STATUS;
-        $class = self::NOT_SUBSCRIBED_LABEL;
-        $size = self::MICRO_SIZE;
-
-        if ($user == null || $channel == null) {
-            return $environment->render('twig/render_badge.html.twig', [
-                'text' => $text,
-                'class' => $class,
-                'size' => $size,
-            ]);
-        }
-
-        if (!empty($this->channelSubscriptionsRepository->findByChannelAndUser($channel, $user))) {
-            $text = self::SUBSCRIBED_STATUS;
-            $class = self::SUBSCRIBED_LABEL;
-        }
-
-        return $environment->render('twig/render_badge.html.twig', [
-            'text' => $text,
-            'class' => $class,
-            'size' => $size,
-        ]);
+        return $this->renderBadge($environment, $text, $class, self::FAT_SIZE);
     }
 
     public function renderSubscriberOfChannelBadge(Environment $environment, bool $isSubcriber)
     {
-        $text = self::NOT_SUBSCRIBED_STATUS;
-        $class = self::NOT_SUBSCRIBED_LABEL;
+        $text = self::VISITOR_STATUS;
+        $class = self::VISITOR_LABEL;
 
         if ($isSubcriber) {
             $text = self::SUBSCRIBED_STATUS;
             $class = self::SUBSCRIBED_LABEL;
         }
-        return $environment->render('twig/render_badge.html.twig', [
-            'text' => $text,
-            'class' => $class,
-            'size' => self::MICRO_SIZE
-        ]);
+
+        return $this->renderBadge($environment, $text, $class, self::MICRO_SIZE);
     }
 
 
     public function renderChannelAdminBadge(Environment $environment, bool $isAdmin)
     {
         if ($isAdmin) {
-            return $environment->render('twig/render_badge.html.twig', [
-                'text' => self::ADMIN_STATUS,
-                'class' => self::ADMIN_LABEL,
-                'size' => self::MICRO_SIZE
-            ]);
+            return $this->renderBadge($environment, self::ADMIN_STATUS, self::ADMIN_LABEL, self::MICRO_SIZE);
         }
+
         return "";
     }
 
     public function renderAuthorBadge(Environment $environment, bool $isAuthor)
     {
         if ($isAuthor) {
-            return $environment->render('twig/render_badge.html.twig', [
-                'text' => self::WRITER_STATUS,
-                'class' => self::WRITER_LABEL,
-                'size' => self::MICRO_SIZE
-            ]);
+            return $this->renderBadge($environment, self::WRITER_STATUS, self::WRITER_LABEL, self::MICRO_SIZE);
         }
         return "";
+    }
+
+
+    private function renderBadge(Environment $environment, $text, $class, $size)
+    {
+        return $environment->render('twig/render_badge.html.twig', [
+            'text' => $text,
+            'class' => $class,
+            'size' => $size
+        ]);
     }
 }

@@ -2,8 +2,9 @@
   "build/app.css": "/build/app.css",
   "build/app.js": "/build/app.js",
   "build/manageArticleComment.js": "/build/manageArticleComment.js",
-  "build/manageArticleComment~manageExpandCollapse~manageTabs~toggleArticleBookmark~toggleArticleLike~toggleW~990338c0.js": "/build/manageArticleComment~manageExpandCollapse~manageTabs~toggleArticleBookmark~toggleArticleLike~toggleW~990338c0.js",
+  "build/manageArticleComment~manageExpandCollapse~manageJoinChannelRequest~manageTabs~toggleArticleBookmark~~638521e2.js": "/build/manageArticleComment~manageExpandCollapse~manageJoinChannelRequest~manageTabs~toggleArticleBookmark~~638521e2.js",
   "build/manageExpandCollapse.js": "/build/manageExpandCollapse.js",
+  "build/manageJoinChannelRequest.js": "/build/manageJoinChannelRequest.js",
   "build/manageTabs.js": "/build/manageTabs.js",
   "build/runtime.js": "/build/runtime.js",
   "build/toggleArticleBookmark.js": "/build/toggleArticleBookmark.js",
@@ -11,9 +12,6 @@
   "build/toggleWriterFollow.js": "/build/toggleWriterFollow.js",
   "build/vendors~app.css": "/build/vendors~app.css",
   "build/vendors~app.js": "/build/vendors~app.js",
-  "build/vendors~app~manageArticleComment~manageExpandCollapse~manageTabs~toggleArticleBookmark~toggleArticle~fe478918.js": "/build/vendors~app~manageArticleComment~manageExpandCollapse~manageTabs~toggleArticleBookmark~toggleArticle~fe478918.js",
-  "build/vendors~manageArticleComment~manageExpandCollapse~manageTabs~toggleArticleBookmark~toggleArticleLike~664ffc85.js": "/build/vendors~manageArticleComment~manageExpandCollapse~manageTabs~toggleArticleBookmark~toggleArticleLike~664ffc85.js",
-  "build/manageArticleComment~manageTabs~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js": "/build/manageArticleComment~manageTabs~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
-  "build/vendors~app~manageArticleComment~manageTabs~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js": "/build/vendors~app~manageArticleComment~manageTabs~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js",
-  "build/vendors~manageArticleComment~manageTabs~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js": "/build/vendors~manageArticleComment~manageTabs~toggleArticleBookmark~toggleArticleLike~toggleWriterFollow.js"
+  "build/vendors~app~manageArticleComment~manageExpandCollapse~manageJoinChannelRequest~manageTabs~toggleArti~5918ea3b.js": "/build/vendors~app~manageArticleComment~manageExpandCollapse~manageJoinChannelRequest~manageTabs~toggleArti~5918ea3b.js",
+  "build/vendors~manageArticleComment~manageExpandCollapse~manageJoinChannelRequest~manageTabs~toggleArticleB~e68393d8.js": "/build/vendors~manageArticleComment~manageExpandCollapse~manageJoinChannelRequest~manageTabs~toggleArticleB~e68393d8.js"
 }

@@ -7,13 +7,14 @@
         <div class ="block-user-profile border-stylay ">
             <div class="is-row">
                 <div>
+                    <p>{{ render_author_badge(user.hasWritten) }}</p>
                     <p class="is-title">
                         {{ user.username }}
                         <a href="javascript:void(0)"
-                           class= "coconuts-follow-button coconuts-toggle-follow
-                            {{ isFollowing == false ? 'follow' : 'unfollow' }}"
-                        >
-                            {{ isFollowing == false ? "S\'abonner" : 'Se désabonner'  }}
+                               class= "coconuts-follow-button coconuts-toggle-follow
+                                {{ isFollowing == false ? 'follow' : 'unfollow' }}"
+                            >
+                                {{ isFollowing == false ? "S\'abonner" : 'Se désabonner'  }}
                         </a>
                     </p>
                     <p>{{ user.profileDescription }}</p>
@@ -44,18 +45,8 @@
         <div id="articles" data-type="user-profile">
             {% if user.articles is not null %}
                 {% for article in user.articles %}
-                    {% set hasBookmark = false %}
-                    {% set hasLiked = false %}
-
-                    {% if app.user is not null %}
-                        {% if app.user.hasBookmarkedArticle(article) == true %}
-                            {% set hasBookmark = true %}
-                        {% endif %}
-                        {% if app.user.hasLikedArticle(article) == true %}
-                            {% set hasLiked = true %}
-                        {% endif %}
-                    {% endif %}
-
+                    {% set hasBookmark = status_generator.getHasBookmarkStatus(article, app.user) %}
+                    {% set hasLiked = status_generator.getHasLikedArticleStatus(article, app.user) %}
                     {% include "/article/partials/article_medium_size_block.html.twig" with {
                         "article" : article,
                         "hasLiked" : hasLiked,
@@ -127,19 +118,8 @@
         <div id="likes" class = "coconuts-hide" data-type="user-profile">
             {% if user.publishedLikes is not empty %}
                 {% for like in user.publishedLikes %}
-                    {% set hasBookmark = false %}
-                    {% if app.user is not null %}
-                        {% if app.user.hasBookmarkedArticle(like.likedArticle) == true %}
-                            {% set hasBookmark = true %}
-                        {% endif %}
-                    {% endif %}
-                    {% set hasLiked = false %}
-                    {% if app.user is not null %}
-                        {% if app.user.hasLikedArticle(like.likedArticle) == true %}
-                            {% set hasLiked = true %}
-                        {% endif %}
-                    {% endif %}
-
+                    {% set hasBookmark = status_generator.getHasBookmarkStatus(like.likedArticle, app.user) %}
+                    {% set hasLiked = status_generator.getHasLikedArticleStatus(like.likedArticle, app.user) %}
                     {% include "/article/partials/article_medium_size_block.html.twig" with {
                         "article" : like.likedArticle,
                         "hasLiked" : hasLiked,
@@ -154,7 +134,7 @@
             {% endif %}
         </div>
 
-        <div id="channels" class = "coconuts-hide" data-type="user-profile" >
+        <div id="channels" class="coconuts-hide" data-type="user-profile" >
             {% if user.channelSubscriptionRequests is not empty %}
                 {% for cs in user.channelSubscriptions %}
                     <div> {{ cs.channel.title }}</div>

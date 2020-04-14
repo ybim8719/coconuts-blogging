@@ -5,10 +5,12 @@
 {% block body %}
     <div class="coconuts-story-container">
         {% if channel is not null %}
+            {% set joinChannelStatus = status_generator.getChannelSubscriptionBool(channel, app.user) %}
+            {% set isSubscriber = status_generator.getChannelSubscriptionBool(channel, app.user) %}
             <div>
                 <h3>{{ channel.title }}</h3>
-                {{render_subscriber_of_channel_badge_by_params(app.user, channel)}}
-                {{render_join_channel_badge_by_params(app.user, channel)}}
+                {{ render_subscriber_of_channel_badge(isSubscriber) }}
+                {{ render_join_channel_badge(joinChannelStatus) }}
                 <div class="chapeau">{{ channel.description }}</div>
                 <div class="secondary-info">
                     {{ channel.getNbOfArticles }} articles publiés
@@ -27,16 +29,8 @@
             <div id="articles" data-type="channel-profile">
                 {% if articles is not null %}
                     {% for article in articles %}
-                        {% set hasBookmark = false %}
-                        {% set hasLiked = false %}
-                        {% if app.user is not null %}
-                            {% if app.user.hasBookmarkedArticle(article) == true %}
-                                {% set hasBookmark = true %}
-                            {% endif %}
-                            {% if app.user.hasLikedArticle(article) == true %}
-                                {% set hasLiked = true %}
-                            {% endif %}
-                        {% endif %}
+                        {% set hasBookmark = status_generator.getHasBookmarkStatus(article, app.user) %}
+                        {% set hasLiked = status_generator.getHasLikedArticleStatus(article, app.user) %}
                         {% include '/article/partials/article_medium_size_block.html.twig' with {'article': article, 'hasLiked': hasLiked, 'hasBookmark': hasBookmark} %}
                     {% endfor %}
                 {% else %}
@@ -101,5 +95,6 @@
         {% else %}
             No info on this channel
         {% endif %}
+        <input id="visitorId" name="visitorId" type="hidden" value="{{ app.user is null ? "" : app.user.id }}">
     </div>
 {% endblock %}

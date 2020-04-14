@@ -30,6 +30,7 @@ Encore
     .addEntry('manageArticleComment', './assets/js/manageArticleComment.js')
     .addEntry('manageTabs', './assets/js/manageTabs.js')
     .addEntry('manageExpandCollapse', './assets/js/manageExpandCollapse.js')
+    .addEntry('manageJoinChannelRequest', './assets/js/manageJoinChannelRequest.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()
