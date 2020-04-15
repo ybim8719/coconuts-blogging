@@ -360,6 +360,15 @@ XXXXXXXXXX
     border: solid 2px #d8d8d8;
 }
 
+.label-refuse {
+    background-color : #7eea12;
+    border: solid 2px #d8d8d8;
+}
+
+.label-accept {
+    background-color : #a46a1f;
+    border: solid 2px #d8d8d8;
+}
 
 .label-micro {
     border-radius: 12px 12px 12px 12px;

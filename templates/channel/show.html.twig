@@ -5,12 +5,12 @@
 {% block body %}
     <div class="coconuts-story-container">
         {% if channel is not null %}
-            {% set joinChannelStatus = status_generator.getChannelSubscriptionBool(channel, app.user) %}
+            {% set joinChannelStatus = status_generator.getChannelSubscriptionStatusCode(channel, app.user) %}
             {% set isSubscriber = status_generator.getChannelSubscriptionBool(channel, app.user) %}
             <div>
-                <h3>{{ channel.title }}</h3>
+                <h3 class="is-title">{{ channel.title }}</h3>
                 {{ render_subscriber_of_channel_badge(isSubscriber) }}
-                {{ render_join_channel_badge(joinChannelStatus) }}
+                {{ render_join_channel_badge(joinChannelStatus, channel.id) }}
                 <div class="chapeau">{{ channel.description }}</div>
                 <div class="secondary-info">
                     {{ channel.getNbOfArticles }} articles publiés
@@ -67,29 +67,28 @@
                     {% endif %}
                 </div>
                 <div id="subscription-requests" class="coconuts-hide" data-type="channel-profile">
-                    {% if requests is not empty %}
-                        <p>Demandes en attente</p>
-                        {% if requests.pending is not empty %}
-                            {% for request in requests.pending %}
-                                {% include '/channelSubscriptionRequest/partials/request_small_line_list.html.twig' with {'user': request.applicant} %}
-                            {% endfor %}
+                    <div class="border-stylay ">
+                        <p class="is-title">Demandes en attente</p>
+                        {% if requests is not empty %}
+                            {% if requests.pending is not empty %}
+                                {% for request in requests.pending %}
+                                    {% include '/channelSubscriptionRequest/partials/request_small_line_list.html.twig' with {'user': request.applicant,  'request' : request, 'status' : 'pending'} %}
+                                {% endfor %}
+                            {% endif %}
                         {% else %}
                             <p> Pas de demandes en attente</p>
                         {% endif %}
-
-                        <p>Demandes refusées</p>
+                    </div>
+                    <div class="border-stylay ">
+                        <p class="is-title">Demandes refusées</p>
                         {% if requests.refused is not empty %}
                             {% for request in requests.refused %}
-                                {% include '/channelSubscriptionRequest/partials/request_small_line_list.html.twig' with {'user': request.applicant} %}
+                                {% include '/channelSubscriptionRequest/partials/request_small_line_list.html.twig' with {'user': request.applicant, 'request' : request, 'status' : 'refused'} %}
                             {% endfor %}
                         {% else %}
-                            <p> Aucune demande acceptée n'a été retrouvée </p>
+                            <p>Pas de demande refusée retrouvée.</p>
                         {% endif %}
-                    {% else %}
-                        <div class="border-stylay ">
-                            Pas de demande refusée retrouvée.
-                        </div>
-                    {% endif %}
+                    </div>
                 </div>
             {% endif %}
         {% else %}

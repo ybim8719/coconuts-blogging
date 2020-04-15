@@ -1,8 +1,11 @@
 <div class="story-article border-stylay ">
     <div class="story-article-header is-row">
-        <img src="{{ asset('images/icons/iconfinder_expand2_308964.png') }}"
-             class="trigger-collapse-articles small-icon"
-             data-id ="{{ user.id }}">
+        {% if articlesOfWriter is defined %}
+            <img src="{{ asset('images/icons/iconfinder_expand2_308964.png') }}"
+                 class="trigger-collapse-articles small-icon"
+                 data-id ="{{ user.id }}"
+            >
+        {% endif %}
         <img src ="{{ vich_uploader_asset(user) }}"
              alt="{{ user.username }}"
              class ="coconuts-round-picture rikiki-img"

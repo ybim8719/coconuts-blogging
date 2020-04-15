@@ -46,32 +46,16 @@ class ChannelSubscriptionRequestRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    // /**
-    //  * @return ChannelSubscriptionRequest[] Returns an array of ChannelSubscriptionRequest objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findByChannelAndUser(Channel $channel, User $user)
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
+        return $this->createQueryBuilder('csr')
+            ->andWhere('csr.channel = :channel')
+            ->andWhere('csr.applicant = :user')
+            ->setParameter('user', $user)
+            ->setParameter('channel', $channel)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?ChannelSubscriptionRequest
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
+
 }

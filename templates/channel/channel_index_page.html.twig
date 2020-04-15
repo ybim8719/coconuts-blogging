@@ -89,7 +89,7 @@
                             </div>
                             <div class="channel-header-right">
                                 <div>
-                                    {{ render_join_channel_badge(joinChannelStatus)}}
+                                    {{ render_join_channel_badge(joinChannelStatus, randomChannelWithArticles.channel.id) }}
                                 </div>
                             </div>
                         </div>
@@ -134,8 +134,7 @@
                     </div>
                 {% endfor %}
             </div>
+            <input id="visitorId" name="visitorId" type="hidden" value="{{ app.user is null ? "" : app.user.id }}">
         {% endif %}
-
-
     </div>
 {% endblock %}

@@ -78,12 +78,17 @@ class RenderBadgeTwigExtension extends AbstractExtension
             new TwigFunction('render_join_channel_badge', [$this, 'renderJoinChannelBadge'], [
                 'needs_environment' => true,
                 'is_safe' => ['html']
+            ]),
+            new TwigFunction('render_normal_size_badge_by_name', [$this, 'renderNormalSizeBadgeByName'], [
+                'needs_environment' => true,
+                'is_safe' => ['html']
             ])
+
         ];
     }
 
 
-    public function renderJoinChannelBadge(Environment $environment, int $statusCode)
+    public function renderJoinChannelBadge(Environment $environment, int $statusCode, $id = null)
     {
         switch ($statusCode) {
             case self::JOIN_CHANNEL_CODE:
@@ -106,10 +111,10 @@ class RenderBadgeTwigExtension extends AbstractExtension
                 return "";
         }
 
-        return $this->renderBadge($environment, $text, $class, self::FAT_SIZE);
+        return $this->renderBadge($environment, $text, $class, self::FAT_SIZE, $id);
     }
 
-    public function renderSubscriberOfChannelBadge(Environment $environment, bool $isSubcriber)
+    public function renderSubscriberOfChannelBadge(Environment $environment, bool $isSubcriber, $id = null)
     {
         $text = self::VISITOR_STATUS;
         $class = self::VISITOR_LABEL;
@@ -119,34 +124,40 @@ class RenderBadgeTwigExtension extends AbstractExtension
             $class = self::SUBSCRIBED_LABEL;
         }
 
-        return $this->renderBadge($environment, $text, $class, self::MICRO_SIZE);
+        return $this->renderBadge($environment, $text, $class, self::MICRO_SIZE, $id);
     }
 
 
-    public function renderChannelAdminBadge(Environment $environment, bool $isAdmin)
+    public function renderChannelAdminBadge(Environment $environment, bool $isAdmin, $id = null)
     {
         if ($isAdmin) {
-            return $this->renderBadge($environment, self::ADMIN_STATUS, self::ADMIN_LABEL, self::MICRO_SIZE);
+            return $this->renderBadge($environment, self::ADMIN_STATUS, self::ADMIN_LABEL, self::MICRO_SIZE, $id);
         }
 
         return "";
     }
 
-    public function renderAuthorBadge(Environment $environment, bool $isAuthor)
+    public function renderAuthorBadge(Environment $environment, bool $isAuthor, $id = null)
     {
         if ($isAuthor) {
-            return $this->renderBadge($environment, self::WRITER_STATUS, self::WRITER_LABEL, self::MICRO_SIZE);
+            return $this->renderBadge($environment, self::WRITER_STATUS, self::WRITER_LABEL, self::MICRO_SIZE, $id);
         }
         return "";
     }
 
+    public function renderNormalSizeBadgeByName(Environment $environment, $text, $id = null)
+    {
+        $class = "label-" . $text;
+        return $this->renderBadge($environment, $text, $class, self::MICRO_SIZE, $id);
+    }
 
-    private function renderBadge(Environment $environment, $text, $class, $size)
+    private function renderBadge(Environment $environment, $text, $class, $size, $id = null)
     {
         return $environment->render('twig/render_badge.html.twig', [
             'text' => $text,
             'class' => $class,
-            'size' => $size
+            'size' => $size,
+            'id' => $id
         ]);
     }
 }

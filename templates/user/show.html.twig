@@ -156,7 +156,7 @@
         <div id="writers" class = "coconuts-hide" data-type="user-profile" >
             {% if followedWriters is not empty %}
                 {% for writer in followedWriters %}
-                    {% include '/channelSubscriptionRequest/partials/request_small_line_list.html.twig' with {'user' : writer} %}
+                    {% include '/user/partial/user_wih_articles_short_table_item.html.twig' with {'user' : writer, 'createdAt': writer.createdAt} %}
                 {% endfor %}
             {% else %}
                 <div>Aucun follow</div>

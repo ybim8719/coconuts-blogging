@@ -55,6 +55,13 @@ class ChannelSubscriptionRequestController extends AbstractController
             $this->returnInvalidJsonResponse('Can\'t find User with given visitorId ');
         }
 
+        if (!empty($this->channelSubscriptionRequestRepository->findByChannelAndUser($channel, $user ))) {
+            $response = [
+                "code" => 500,
+                'message' => "Impossible de faire la demande, il y en a déjà une en base.",
+            ];
+        }
+
         $channelSubscriptionRequest = new ChannelSubscriptionRequest();
         $channelSubscriptionRequest->setApplicant($user)->setChannel($channel)->setStatus(ChannelSubscriptionRequest::CHANNEL_SUBSCRIPTION_PENDING);
         $this->em->persist($channelSubscriptionRequest);
@@ -66,7 +73,9 @@ class ChannelSubscriptionRequestController extends AbstractController
              * @var $admin User
              */
             $title = 'Vous avez reçu une demande d\'inscription pour le channel '. $channel->getTitle();
-            $message = (new \Swift_Message($title))
+
+            $message = (new \Swift_Message($title));
+            $message
                 ->setFrom('coconutsblogging@gmail.com')
                 ->setTo($admin->getEmail())
                 ->setBody(
@@ -76,17 +85,17 @@ class ChannelSubscriptionRequestController extends AbstractController
                         'username' => $admin->getUsername(),
                         'applicantUsername' => $user->getUsername(),
                         'applicantId' => $user->getId(),
+                        'embedImage' =>$message->embed(\Swift_Image::fromPath('http://127.0.0.1:8000/images/1189284034_small.jpg'))
                         ]
-                    )
-                )
-            ;
+                    ), 'text/html'
+                );
             $this->mailer->send($message);
         }
 
         $response = [
             "code" => 200,
             'message' => "La demande a été envoyée aux administrateurs",
-            "requestId" => $channelSubscriptionRequest->getId(),
+            "channelId" => $channel->getId(),
         ];
 
         return new JsonResponse($response);
