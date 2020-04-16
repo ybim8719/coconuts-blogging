@@ -74,9 +74,9 @@
                                 {% for request in requests.pending %}
                                     {% include '/channelSubscriptionRequest/partials/request_small_line_list.html.twig' with {'user': request.applicant,  'request' : request, 'status' : 'pending'} %}
                                 {% endfor %}
+                            {% else %}
+                                <p> Pas de demandes en attente</p>
                             {% endif %}
-                        {% else %}
-                            <p> Pas de demandes en attente</p>
                         {% endif %}
                     </div>
                     <div class="border-stylay ">

@@ -32,5 +32,18 @@ class ChannelSubscriptionRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findByUserChannelAndStatus(User $user, Channel $channel, bool $isAdmin)
+    {
+        return $this->createQueryBuilder('cs')
+            ->andWhere('cs.channel = :channel')
+            ->andWhere('cs.user = :user')
+            ->andWhere('cs.isAdmin = :isAdmin')
+            ->setParameter('user', $user)
+            ->setParameter('channel', $channel)
+            ->setParameter('isAdmin', $isAdmin)
+            ->getQuery()
+            ->getResult();
+    }
+
 
 }

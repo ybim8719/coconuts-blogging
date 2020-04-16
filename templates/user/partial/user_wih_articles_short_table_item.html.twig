@@ -22,6 +22,14 @@
             {% if nbOfArticles is defined %}
                 <p>Nb d'articles : {{ nbOfArticles }}</p>
             {% endif %}
+           {% if isAdmin is defined %}
+               {% if isAdmin == false %}
+                   <p>
+                       <i class="fas fa-trash-alt unsubscribe-user" data-id="{{ user.id }}"></i>
+                   </p>
+                {% endif %}
+           {% endif %}
+
         </div>
     </div>
     {% if articlesOfWriter is defined %}

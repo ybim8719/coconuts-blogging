@@ -245,7 +245,6 @@ XXXXXXXXXX
     background-repeat: no-repeat;
 }
 
-
 .fa-heart.fa-2x {
     color: deeppink;
 }
@@ -367,6 +366,16 @@ XXXXXXXXXX
 
 .label-accept {
     background-color : #a46a1f;
+    border: solid 2px #d8d8d8;
+}
+
+.label-accepted {
+    background-color : #dc3545;
+    border: solid 2px #d8d8d8;
+}
+
+.label-accept-anyway {
+    background-color : darkcyan;
     border: solid 2px #d8d8d8;
 }
 

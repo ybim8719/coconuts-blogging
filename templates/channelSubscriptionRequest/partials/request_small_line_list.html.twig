@@ -1,4 +1,4 @@
-<div class="story-article border-stylay ">
+<div class="story-article border-stylay subscription-request ">
     <div class="story-article-header is-row">
         <a href="{{ path('user_show', {'id': user.id})}}">
             <img src ="{{ vich_uploader_asset(user) }}"
@@ -15,10 +15,13 @@
             <p>Nb d'articles : {{ user.nbOfArticles }}</p>
         </div>
         <div>
-            {{ render_normal_size_badge_by_name ('accept', request.id) }}
             {% if status == "pending" %}
-                {{ render_normal_size_badge_by_name ('refuse', request.id) }}
+                {{ render_normal_size_badge_by_name ('Accepter',"accept", request.id) }}
+                {{ render_normal_size_badge_by_name ('Refuser', "refuse", request.id) }}
+            {% else %}
+                {{ render_normal_size_badge_by_name ("OK c'est bon","accept-anyway", request.id) }}
             {% endif %}
+
         </div>
     </div>
 </div>

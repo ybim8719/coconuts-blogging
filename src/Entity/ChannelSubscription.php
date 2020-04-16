@@ -24,7 +24,7 @@ class ChannelSubscription
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $UpdatedAt;
+    private $updatedAt;
 
     /**
      * @ORM\Column(type="boolean")
@@ -41,31 +41,37 @@ class ChannelSubscription
      */
     private $channel;
 
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime('now');
+        $this->updatedAt = new \DateTime('now');
+    }
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt()
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    public function setCreatedAt(\DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    public function getUpdatedAt()
     {
-        return $this->UpdatedAt;
+        return $this->updatedAt;
     }
 
-    public function setUpdatedAt(?\DateTimeInterface $UpdatedAt): self
+    public function setUpdatedAt(\DateTime $UpdatedAt): self
     {
-        $this->UpdatedAt = $UpdatedAt;
+        $this->updatedAt = $UpdatedAt;
 
         return $this;
     }

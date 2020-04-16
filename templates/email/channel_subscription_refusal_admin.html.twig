@@ -1,0 +1,15 @@
+<h1>Bonjour {{ recipientName }}</h1>
+
+<p>
+    La demande d'inscription pour le channel {{ channelTitle }} dont vous êtes administateur
+    pour l'utilisateur {{ applicantName }} a été refusée par {{ adminUsername }}  en date du
+    {{ "now"|date("m/d/Y") }}.
+</p>
+<p>
+    Pour consulter le profil du demandeur, vous pouvez cliquer
+    <a href="http://127.0.0.1:8000{{ path('user_show', {'id' : applicantId}) }}">
+        ici
+    </a>
+</p>
+
+<img src="{{ embedImage }}" alt="nicky"/>

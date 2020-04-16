@@ -101,7 +101,6 @@ class BookmarkController extends AbstractController
             $this->returnInvalidJsonResponse('Can\'t remove bookmark from article since it couldn t be found in DB');
         }
 
-        dump($bookmarkToBeRemoved);
         $this->em->remove($bookmarkToBeRemoved[0]);
         $this->em->flush();
 

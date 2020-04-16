@@ -145,9 +145,9 @@ class RenderBadgeTwigExtension extends AbstractExtension
         return "";
     }
 
-    public function renderNormalSizeBadgeByName(Environment $environment, $text, $id = null)
+    public function renderNormalSizeBadgeByName(Environment $environment, $text, $classSuffix, $id = null)
     {
-        $class = "label-" . $text;
+        $class = "label-" . $classSuffix;
         return $this->renderBadge($environment, $text, $class, self::MICRO_SIZE, $id);
     }
 
