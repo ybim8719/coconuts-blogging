@@ -2,7 +2,8 @@
   "build/app.css": "/build/app.css",
   "build/app.js": "/build/app.js",
   "build/manageArticleComment.js": "/build/manageArticleComment.js",
-  "build/manageArticleComment~manageExpandCollapse~manageJoinChannelRequest~manageJoinChannelResponse~manageT~ca96a805.js": "/build/manageArticleComment~manageExpandCollapse~manageJoinChannelRequest~manageJoinChannelResponse~manageT~ca96a805.js",
+  "build/manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~manageJ~fa029cbd.js": "/build/manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~manageJ~fa029cbd.js",
+  "build/manageChannelSubscription.js": "/build/manageChannelSubscription.js",
   "build/manageExpandCollapse.js": "/build/manageExpandCollapse.js",
   "build/manageJoinChannelRequest.js": "/build/manageJoinChannelRequest.js",
   "build/manageJoinChannelResponse.js": "/build/manageJoinChannelResponse.js",
@@ -13,9 +14,9 @@
   "build/toggleWriterFollow.js": "/build/toggleWriterFollow.js",
   "build/vendors~app.css": "/build/vendors~app.css",
   "build/vendors~app.js": "/build/vendors~app.js",
+  "build/vendors~app~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelReq~0c61dbcd.js": "/build/vendors~app~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelReq~0c61dbcd.js",
+  "build/vendors~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~913969f7.js": "/build/vendors~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~913969f7.js",
+  "build/manageArticleComment~manageExpandCollapse~manageJoinChannelRequest~manageJoinChannelResponse~manageT~ca96a805.js": "/build/manageArticleComment~manageExpandCollapse~manageJoinChannelRequest~manageJoinChannelResponse~manageT~ca96a805.js",
   "build/vendors~app~manageArticleComment~manageExpandCollapse~manageJoinChannelRequest~manageJoinChannelResp~5458eb26.js": "/build/vendors~app~manageArticleComment~manageExpandCollapse~manageJoinChannelRequest~manageJoinChannelResp~5458eb26.js",
-  "build/vendors~manageArticleComment~manageExpandCollapse~manageJoinChannelRequest~manageJoinChannelResponse~a488265d.js": "/build/vendors~manageArticleComment~manageExpandCollapse~manageJoinChannelRequest~manageJoinChannelResponse~a488265d.js",
-  "build/manageArticleComment~manageExpandCollapse~manageJoinChannelRequest~manageTabs~toggleArticleBookmark~~638521e2.js": "/build/manageArticleComment~manageExpandCollapse~manageJoinChannelRequest~manageTabs~toggleArticleBookmark~~638521e2.js",
-  "build/vendors~app~manageArticleComment~manageExpandCollapse~manageJoinChannelRequest~manageTabs~toggleArti~5918ea3b.js": "/build/vendors~app~manageArticleComment~manageExpandCollapse~manageJoinChannelRequest~manageTabs~toggleArti~5918ea3b.js",
-  "build/vendors~manageArticleComment~manageExpandCollapse~manageJoinChannelRequest~manageTabs~toggleArticleB~e68393d8.js": "/build/vendors~manageArticleComment~manageExpandCollapse~manageJoinChannelRequest~manageTabs~toggleArticleB~e68393d8.js"
+  "build/vendors~manageArticleComment~manageExpandCollapse~manageJoinChannelRequest~manageJoinChannelResponse~a488265d.js": "/build/vendors~manageArticleComment~manageExpandCollapse~manageJoinChannelRequest~manageJoinChannelResponse~a488265d.js"
 }

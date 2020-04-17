@@ -32,6 +32,7 @@ Encore
     .addEntry('manageExpandCollapse', './assets/js/manageExpandCollapse.js')
     .addEntry('manageJoinChannelRequest', './assets/js/manageJoinChannelRequest.js')
     .addEntry('manageJoinChannelResponse', './assets/js/manageJoinChannelResponse.js')
+    .addEntry('manageChannelSubscription', './assets/js/manageChannelSubscription.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()

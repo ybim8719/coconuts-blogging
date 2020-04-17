@@ -95,5 +95,6 @@
             No info on this channel
         {% endif %}
         <input id="visitorId" name="visitorId" type="hidden" value="{{ app.user is null ? "" : app.user.id }}">
+        <input id="channelId" name="channelId" type="hidden" value="{{  channel.id }}">
     </div>
 {% endblock %}

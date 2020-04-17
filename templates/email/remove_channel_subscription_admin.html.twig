@@ -1,0 +1,14 @@
+<h1>Bonjour {{ recipientName }} </h1>
+
+<p>
+    L'inscription au channel {{ channelTitle }} de l'utilisateur  {{ userName }} a été supprimée par {{ adminUsername }}  en date du
+    {{ "now"|date("m/d/Y") }}.
+</p>
+<p>
+    Pour consulter le profil de l'utilisateur, vous pouvez cliquer
+    <a href="http://127.0.0.1:8000{{ path('user_show', {'id' : 5}) }}">
+        ici
+    </a>
+</p>
+
+<img src="{{ embedImage }}" alt="nicky"/>
