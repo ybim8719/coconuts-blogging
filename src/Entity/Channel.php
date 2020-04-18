@@ -53,12 +53,18 @@ class Channel
      */
     private $channelSubscriptionRequests;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\NotificationEvent", mappedBy="channel")
+     */
+    private $notificationEvents;
+
 
     public function __construct()
     {
         $this->channelSubscriptions = new ArrayCollection();
         $this->articles = new ArrayCollection();
         $this->channelSubscriptionRequests = new ArrayCollection();
+        $this->notificationEvents = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -229,5 +235,36 @@ class Channel
         }
 
         return $tab;
+    }
+
+    /**
+     * @return Collection|NotificationEvent[]
+     */
+    public function getNotificationEvents(): Collection
+    {
+        return $this->notificationEvents;
+    }
+
+    public function addNotificationEvent(NotificationEvent $notificationEvent): self
+    {
+        if (!$this->notificationEvents->contains($notificationEvent)) {
+            $this->notificationEvents[] = $notificationEvent;
+            $notificationEvent->setChannel($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotificationEvent(NotificationEvent $notificationEvent): self
+    {
+        if ($this->notificationEvents->contains($notificationEvent)) {
+            $this->notificationEvents->removeElement($notificationEvent);
+            // set the owning side to null (unless already changed)
+            if ($notificationEvent->getChannel() === $this) {
+                $notificationEvent->setChannel(null);
+            }
+        }
+
+        return $this;
     }
 }

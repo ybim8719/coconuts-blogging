@@ -106,6 +106,11 @@ class Article
      * @ORM\ManyToOne(targetEntity="App\Entity\Channel", inversedBy="articles")
      */
     private $channel;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\NotificationEvent", mappedBy="article")
+     */
+    private $notificationEvents;
     
     public function __construct()
     {
@@ -115,6 +120,7 @@ class Article
         $this->likes = new ArrayCollection();
         $this->articleVisits = new ArrayCollection();
         $this->bookMarks = new ArrayCollection();
+        $this->notificationEvents = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -387,6 +393,37 @@ class Article
     public function setChannel(?Channel $channel): self
     {
         $this->channel = $channel;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|NotificationEvent[]
+     */
+    public function getNotificationEvents(): Collection
+    {
+        return $this->notificationEvents;
+    }
+
+    public function addNotificationEvent(NotificationEvent $notificationEvent): self
+    {
+        if (!$this->notificationEvents->contains($notificationEvent)) {
+            $this->notificationEvents[] = $notificationEvent;
+            $notificationEvent->setArticle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotificationEvent(NotificationEvent $notificationEvent): self
+    {
+        if ($this->notificationEvents->contains($notificationEvent)) {
+            $this->notificationEvents->removeElement($notificationEvent);
+            // set the owning side to null (unless already changed)
+            if ($notificationEvent->getArticle() === $this) {
+                $notificationEvent->setArticle(null);
+            }
+        }
 
         return $this;
     }

@@ -47,11 +47,17 @@ class ArticleComment
      */
     private $createdAt;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\NotificationEvent", mappedBy="comment")
+     */
+    private $notificationEvents;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
         $this->likes = new ArrayCollection();
         $this->bookMarks = new ArrayCollection();
+        $this->notificationEvents = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -139,5 +145,36 @@ class ArticleComment
     public function getNbOfLikes()
     {
         return count($this->likes);
+    }
+
+    /**
+     * @return Collection|NotificationEvent[]
+     */
+    public function getNotificationEvents(): Collection
+    {
+        return $this->notificationEvents;
+    }
+
+    public function addNotificationEvent(NotificationEvent $notificationEvent): self
+    {
+        if (!$this->notificationEvents->contains($notificationEvent)) {
+            $this->notificationEvents[] = $notificationEvent;
+            $notificationEvent->setComment($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotificationEvent(NotificationEvent $notificationEvent): self
+    {
+        if ($this->notificationEvents->contains($notificationEvent)) {
+            $this->notificationEvents->removeElement($notificationEvent);
+            // set the owning side to null (unless already changed)
+            if ($notificationEvent->getComment() === $this) {
+                $notificationEvent->setComment(null);
+            }
+        }
+
+        return $this;
     }
 }

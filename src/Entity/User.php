@@ -133,6 +133,16 @@ class User implements UserInterface
      */
     private $channelSubscriptionRequests;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\NotificationEvent", mappedBy="triggerUser")
+     */
+    private $notificationEvents;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Notification", mappedBy="recipient")
+     */
+    private $notifications;
+
 
     public function __construct()
     {
@@ -146,6 +156,8 @@ class User implements UserInterface
         $this->bookMarks = new ArrayCollection();
         $this->channelSubscriptions = new ArrayCollection();
         $this->channelSubscriptionRequests = new ArrayCollection();
+        $this->notificationEvents = new ArrayCollection();
+        $this->notifications = new ArrayCollection();
     }
 
 
@@ -587,6 +599,68 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($channelSubscriptionRequest->getApplicant() === $this) {
                 $channelSubscriptionRequest->setApplicant(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|NotificationEvent[]
+     */
+    public function getNotificationEvents(): Collection
+    {
+        return $this->notificationEvents;
+    }
+
+    public function addNotificationEvent(NotificationEvent $notificationEvent): self
+    {
+        if (!$this->notificationEvents->contains($notificationEvent)) {
+            $this->notificationEvents[] = $notificationEvent;
+            $notificationEvent->setTriggerUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotificationEvent(NotificationEvent $notificationEvent): self
+    {
+        if ($this->notificationEvents->contains($notificationEvent)) {
+            $this->notificationEvents->removeElement($notificationEvent);
+            // set the owning side to null (unless already changed)
+            if ($notificationEvent->getTriggerUser() === $this) {
+                $notificationEvent->setTriggerUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Notification[]
+     */
+    public function getNotifications(): Collection
+    {
+        return $this->notifications;
+    }
+
+    public function addNotification(Notification $notification): self
+    {
+        if (!$this->notifications->contains($notification)) {
+            $this->notifications[] = $notification;
+            $notification->setRecipient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotification(Notification $notification): self
+    {
+        if ($this->notifications->contains($notification)) {
+            $this->notifications->removeElement($notification);
+            // set the owning side to null (unless already changed)
+            if ($notification->getRecipient() === $this) {
+                $notification->setRecipient(null);
             }
         }
 

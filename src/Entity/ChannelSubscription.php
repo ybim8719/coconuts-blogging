@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -41,10 +43,16 @@ class ChannelSubscription
      */
     private $channel;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\NotificationEvent", mappedBy="channelSubscription")
+     */
+    private $notificationEvents;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime('now');
         $this->updatedAt = new \DateTime('now');
+        $this->notificationEvents = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -108,6 +116,37 @@ class ChannelSubscription
     public function setChannel(?Channel $channel): self
     {
         $this->channel = $channel;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|NotificationEvent[]
+     */
+    public function getNotificationEvents(): Collection
+    {
+        return $this->notificationEvents;
+    }
+
+    public function addNotificationEvent(NotificationEvent $notificationEvent): self
+    {
+        if (!$this->notificationEvents->contains($notificationEvent)) {
+            $this->notificationEvents[] = $notificationEvent;
+            $notificationEvent->setChannelSubscription($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotificationEvent(NotificationEvent $notificationEvent): self
+    {
+        if ($this->notificationEvents->contains($notificationEvent)) {
+            $this->notificationEvents->removeElement($notificationEvent);
+            // set the owning side to null (unless already changed)
+            if ($notificationEvent->getChannelSubscription() === $this) {
+                $notificationEvent->setChannelSubscription(null);
+            }
+        }
 
         return $this;
     }
