@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Notification;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -19,32 +20,43 @@ class NotificationRepository extends ServiceEntityRepository
         parent::__construct($registry, Notification::class);
     }
 
-    // /**
-    //  * @return Notification[] Returns an array of Notification objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findNotificationsByUserAndWasRedStatus(User $user, bool $wasRed)
     {
         return $this->createQueryBuilder('n')
-            ->andWhere('n.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('n.id', 'ASC')
-            ->setMaxResults(10)
+            ->andWhere('n.wasRead = :wasRed')
+            ->andWhere('n.recipient = :user')
+            ->setParameter('wasRed', $wasRed)
+            ->setParameter('user', $user)
+            ->orderBy('n.createdAt', 'DESC')
+            ->setMaxResults(40)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findByUser(User $recipient)
+    {
+        return $this->createQueryBuilder('n')
+            ->andWhere('n.recipient = :recipient')
+            ->setParameter('recipient', $recipient)
+            ->orderBy('n.createdAt', 'DESC')
+            ->setMaxResults(40)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+
+
+    public function findNotificationsByWasRedStatus(bool $wasRed)
+    {
+        return $this->createQueryBuilder('n')
+            ->andWhere('n.wasRead = :wasRed')
+            ->setParameter('wasRed', $wasRed)
+            ->orderBy('n.createdAt', 'DESC')
+            ->setMaxResults(40)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Notification
-    {
-        return $this->createQueryBuilder('n')
-            ->andWhere('n.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

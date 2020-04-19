@@ -6,10 +6,12 @@ use App\Entity\Article;
 use App\Entity\ArticleComment;
 use App\Entity\ArticleVisit;
 use App\Entity\BookMark;
+use App\Entity\EventSpecification;
 use App\Entity\Follow;
 use App\Entity\User;
 use App\Entity\UserLike;
 use App\Event\AddArticleVisitEvent;
+use App\Event\CreateEventAndNotificationsEvent;
 use App\Form\ArticleType;
 use App\Repository\ArticleRepository;
 use App\Service\Logger\CoconutsLogger;
@@ -42,6 +44,7 @@ class ArticleController extends AbstractController
     private $bookmarkRepository;
     private $followRepository;
     private $articleCommentsRepository;
+    private $eventSpecificationRepository;
 
     private $userLikeRepository;
 
@@ -50,6 +53,7 @@ class ArticleController extends AbstractController
     public function __construct(EntityManagerInterface $em, CoconutsLogger $logger)
     {
         $this->userRepository = $em->getRepository(User::class);
+        $this->eventSpecificationRepository = $em->getRepository(EventSpecification::class);
         $this->articleVisitRepository = $em->getRepository(ArticleVisit::class);
         $this->userLikeRepository = $em->getRepository(UserLike::class);
         $this->bookmarkRepository = $em->getRepository(BookMark::class);
@@ -72,10 +76,9 @@ class ArticleController extends AbstractController
     /**
      * @Route("/create", name="article_create", methods={"GET","POST"})
      */
-    public function create(Request $request): Response
+    public function create(Request $request, EventDispatcherInterface $eventDispatcher): Response
     {
         if ($this->getUser() == null) {
-            //@todo mettre un logger
             return $this->redirectToRoute('app_login');
         }
 
@@ -91,6 +94,10 @@ class ArticleController extends AbstractController
             $article->setUser($writer);
             $this->em->persist($article);
             $this->em->flush();
+
+            $eventSpecification = $this->eventSpecificationRepository->findOneBy(['statusCode' => EventSpecification::PUBLISH_ARTICLE_CODE]);
+            $event = new CreateEventAndNotificationsEvent($writer, $eventSpecification, $article);
+            $eventDispatcher->dispatch($event, CreateEventAndNotificationsEvent::REGISTER_NOTIFICATION_EVENT_FOR_SUBSCRIBER);
             $this->addFlash('success', 'Votre article est maintenant publié!');
             return $this->redirectToRoute('article_show', ["id" => $article->getId()]);
         }
@@ -109,6 +116,8 @@ class ArticleController extends AbstractController
         $userHasLiked = false;
         $hasBookmark = false;
         $isFollowing = false;
+
+
 
         if ($request->getClientIp() != null) {
             if (empty($this->articleVisitRepository->findByArticleAndIp($article, $request->getClientIp()))) {

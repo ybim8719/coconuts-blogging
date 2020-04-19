@@ -48,10 +48,10 @@
                                 <a href="{{ path('user_show', {'id' : app.user.id}) }}">
                                     <p>Mon profil</p>
                                 </a>
-                                <a href="{{ path('app_login') }}">
+                                <a href="{{ path('article_create') }}">
                                     <p>Ecrire</p>
                                 </a>
-                                <a href="#">
+                                <a href="{{ path('notification_displayNotificationsOfUser', { 'idUser' : app.user.id }) }}">
                                     <p>Notifications</p>
                                 </a>
                                 <a href="{{ path('app_logout') }}">

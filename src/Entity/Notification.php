@@ -94,4 +94,9 @@ class Notification
 
         return $this;
     }
+
+    public function getContent()
+    {
+        return $this->getNotificationEvent()->getContent();
+    }
 }

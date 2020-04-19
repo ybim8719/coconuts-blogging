@@ -19,23 +19,6 @@ class EventSpecificationRepository extends ServiceEntityRepository
         parent::__construct($registry, EventSpecification::class);
     }
 
-    // /**
-    //  * @return EventSpecification[] Returns an array of EventSpecification objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('e.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
     /*
     public function findOneBySomeField($value): ?EventSpecification
     {
