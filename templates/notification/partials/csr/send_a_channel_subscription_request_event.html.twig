@@ -1,0 +1,5 @@
+<span>
+    {% include "/notification/partials:displayUserNameWithLink.html.twig" with {"user" : event.triggerUser} %}
+    a fait une demande d'inscription pour rejoindre  le channel suivant :
+    {% include "/notification/partials:displayChannelTitleWithLink.html.twig" with {"channel" :event.channelSubscriptionRequest.channel} %}
+</span>

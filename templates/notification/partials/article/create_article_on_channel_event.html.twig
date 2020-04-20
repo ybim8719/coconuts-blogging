@@ -1,0 +1,7 @@
+<span>
+     {% include "/notification/partials:displayUserNameWithLink.html.twig" with {"user" : event.triggerUser} %}
+    a publié un nouvel article :
+    {% include "/notification/partials:displayArticleTitleWithLink.html.twig" with {"article" : event.article} %}
+    sur le channel :
+    {% include "/notification/partials:displayChannelTitleWithLink.html.twig" with {"channel" : event.article.channel} %}
+</span>

@@ -1,0 +1,7 @@
+<span>
+    {% include "/notification/partials:displayUserNameWithLink.html.twig" with {"user" : event.triggerUser} %}
+    a supprimé l'abonnement au channel
+    {% include "/notification/partials:displayChannelTitleWithLink.html.twig" with {"channel" : event.channelSubscription.channel} %}
+    de
+    {% include "/notification/partials:displayUserNameWithLink.html.twig" with {"user" :  event.channelSubscription.user} %}
+</span>

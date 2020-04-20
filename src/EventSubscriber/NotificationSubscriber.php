@@ -39,7 +39,6 @@ class NotificationSubscriber implements EventSubscriberInterface
         // switch all possibles cases of specificationEvent that trigger the sending of notifications
         switch($eventSpecification->getStatusCode()) {
             case  EventSpecification::PUBLISH_ARTICLE_CODE :
-                dump('elllo');
                 $notificationEvent->setArticle($event->getArticle());
                 $notificationEvent->setContent($event->getTriggerUser()->getUsername()." vient de publier un article : ".$event->getArticle()->getTitle());
                 $this->createNotificationForPublishArticleEvent($notificationEvent);
