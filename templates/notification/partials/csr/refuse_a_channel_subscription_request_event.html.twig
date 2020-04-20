@@ -1,5 +1,5 @@
 <span>
-    {% include "/notification/partials:displayUserNameWithLink.html.twig" with {"user" : event.triggerUser} %}
+    {% include "/notification/partials/displayUserNameWithLink.html.twig" with {"user" : event.triggerUser} %}
     a refusé votre demande d'inscription pour rejoindre  le channel suivant :
-    {% include "/notification/partials:displayChannelTitleWithLink.html.twig" with {"channel" :event.channelSubscriptionRequest.channel} %}
+    {% include /notification/partials/displayChannelTitleWithLink.html.twig" with {"channel" :event.channelSubscriptionRequest.channel} %}
 </span>

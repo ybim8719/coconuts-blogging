@@ -549,7 +549,6 @@ class User implements UserInterface
         return false;
     }
 
-
     public function hasBookmarkedArticleComment(ArticleComment $articleComment)
     {
         if (count($this->getBookMarks()) > 0) {
@@ -559,7 +558,6 @@ class User implements UserInterface
                 }
             }
         }
-
         return false;
     }
 
@@ -663,7 +661,17 @@ class User implements UserInterface
                 $notification->setRecipient(null);
             }
         }
-
         return $this;
     }
+
+    public function hasUnreadNotifications()
+    {
+        foreach($this->getNotifications() as $notification) {
+            if ($notification->getWasRead()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
