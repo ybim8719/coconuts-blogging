@@ -5,33 +5,32 @@
 {% block body %}
     <h3>Nouvelles notifications</h3>
     {% if notifications.wasNotRed is not empty %}
-        <table>
-            <tbody>
-                {% for notification in notifications.wasNotRed %}
-                    <tr>
-                        <td>{{ notification.getCreatedAt|date('Y-m-d') }}</td>
-                        <td>{{ render_notification(notification) }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <ul>
+             {% for notification in notifications.wasNotRed %}
+                 <li class="unread-notification" data-id="{{  notification.id }}">
+                     <span class="is-secondary">{{ notification.getCreatedAt|date('Y-m-d') }} : </span>
+                     <span class="is-bold">{{ render_notification(notification) }}</span>
+                 </li>
+             {% endfor %}
+        </ul>
     {% else %}
         <p>Rien de neuf ! </p>
     {% endif %}
     <hr>
     <h3>Vieilles notifications</h3>
     {% if notifications.wasRed is not empty %}
-        <table>
-            <tbody>
+        <ul>
             {% for notification in notifications.wasRed %}
-                <tr>
-                    <td>{{ notification.getCreatedAt|date('Y-m-d') }}</td>
-                    <td>{{ notification.getContent }}</td>
-                </tr>
+                <li class="unread-notification" data-id="{{  notification.id }}">
+                    <span class="is-secondary">{{ notification.getCreatedAt|date('Y-m-d') }} : </span>
+                    <span class="is-bold">{{ render_notification(notification) }}</span>
+                </li>
             {% endfor %}
-            </tbody>
-        </table>
+        </ul>
     {% else %}
         <p>Rien de vieux ! </p>
     {% endif %}
+    <input id="userId" name="userId" type="hidden" value="{{ userId }}">
+    <input id="visitorId" name="visitorId" type="hidden" value="{{ app.user is null ? "" : app.user.id }}">
+
 {% endblock %}

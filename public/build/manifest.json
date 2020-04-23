@@ -2,11 +2,12 @@
   "build/app.css": "/build/app.css",
   "build/app.js": "/build/app.js",
   "build/manageArticleComment.js": "/build/manageArticleComment.js",
-  "build/manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~manageJ~fa029cbd.js": "/build/manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~manageJ~fa029cbd.js",
+  "build/manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~manageJ~47b5ff09.js": "/build/manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~manageJ~47b5ff09.js",
   "build/manageChannelSubscription.js": "/build/manageChannelSubscription.js",
   "build/manageExpandCollapse.js": "/build/manageExpandCollapse.js",
   "build/manageJoinChannelRequest.js": "/build/manageJoinChannelRequest.js",
   "build/manageJoinChannelResponse.js": "/build/manageJoinChannelResponse.js",
+  "build/manageNotificationPage.js": "/build/manageNotificationPage.js",
   "build/manageTabs.js": "/build/manageTabs.js",
   "build/runtime.js": "/build/runtime.js",
   "build/toggleArticleBookmark.js": "/build/toggleArticleBookmark.js",
@@ -14,6 +15,6 @@
   "build/toggleWriterFollow.js": "/build/toggleWriterFollow.js",
   "build/vendors~app.css": "/build/vendors~app.css",
   "build/vendors~app.js": "/build/vendors~app.js",
-  "build/vendors~app~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelReq~0c61dbcd.js": "/build/vendors~app~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelReq~0c61dbcd.js",
-  "build/vendors~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~913969f7.js": "/build/vendors~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~913969f7.js"
+  "build/vendors~app~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelReq~50916d4e.js": "/build/vendors~app~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelReq~50916d4e.js",
+  "build/vendors~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~9cfa8c54.js": "/build/vendors~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~9cfa8c54.js"
 }

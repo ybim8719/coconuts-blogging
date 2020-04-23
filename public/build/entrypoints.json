@@ -1,45 +1,9 @@
 {
   "entrypoints": {
-    "manageArticleComment": {
-      "js": [
-        "/build/runtime.js",
-        "/build/vendors~app~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelReq~0c61dbcd.js",
-        "/build/vendors~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~913969f7.js",
-        "/build/manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~manageJ~fa029cbd.js",
-        "/build/manageArticleComment.js"
-      ]
-    },
-    "toggleArticleLike": {
-      "js": [
-        "/build/runtime.js",
-        "/build/vendors~app~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelReq~0c61dbcd.js",
-        "/build/vendors~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~913969f7.js",
-        "/build/manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~manageJ~fa029cbd.js",
-        "/build/toggleArticleLike.js"
-      ]
-    },
-    "toggleArticleBookmark": {
-      "js": [
-        "/build/runtime.js",
-        "/build/vendors~app~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelReq~0c61dbcd.js",
-        "/build/vendors~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~913969f7.js",
-        "/build/manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~manageJ~fa029cbd.js",
-        "/build/toggleArticleBookmark.js"
-      ]
-    },
-    "toggleWriterFollow": {
-      "js": [
-        "/build/runtime.js",
-        "/build/vendors~app~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelReq~0c61dbcd.js",
-        "/build/vendors~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~913969f7.js",
-        "/build/manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~manageJ~fa029cbd.js",
-        "/build/toggleWriterFollow.js"
-      ]
-    },
     "app": {
       "js": [
         "/build/runtime.js",
-        "/build/vendors~app~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelReq~0c61dbcd.js",
+        "/build/vendors~app~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelReq~50916d4e.js",
         "/build/vendors~app.js",
         "/build/app.js"
       ],
@@ -48,49 +12,94 @@
         "/build/app.css"
       ]
     },
+    "toggleArticleLike": {
+      "js": [
+        "/build/runtime.js",
+        "/build/vendors~app~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelReq~50916d4e.js",
+        "/build/vendors~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~9cfa8c54.js",
+        "/build/manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~manageJ~47b5ff09.js",
+        "/build/toggleArticleLike.js"
+      ]
+    },
+    "toggleArticleBookmark": {
+      "js": [
+        "/build/runtime.js",
+        "/build/vendors~app~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelReq~50916d4e.js",
+        "/build/vendors~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~9cfa8c54.js",
+        "/build/manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~manageJ~47b5ff09.js",
+        "/build/toggleArticleBookmark.js"
+      ]
+    },
+    "toggleWriterFollow": {
+      "js": [
+        "/build/runtime.js",
+        "/build/vendors~app~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelReq~50916d4e.js",
+        "/build/vendors~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~9cfa8c54.js",
+        "/build/manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~manageJ~47b5ff09.js",
+        "/build/toggleWriterFollow.js"
+      ]
+    },
+    "manageArticleComment": {
+      "js": [
+        "/build/runtime.js",
+        "/build/vendors~app~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelReq~50916d4e.js",
+        "/build/vendors~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~9cfa8c54.js",
+        "/build/manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~manageJ~47b5ff09.js",
+        "/build/manageArticleComment.js"
+      ]
+    },
     "manageTabs": {
       "js": [
         "/build/runtime.js",
-        "/build/vendors~app~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelReq~0c61dbcd.js",
-        "/build/vendors~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~913969f7.js",
-        "/build/manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~manageJ~fa029cbd.js",
+        "/build/vendors~app~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelReq~50916d4e.js",
+        "/build/vendors~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~9cfa8c54.js",
+        "/build/manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~manageJ~47b5ff09.js",
         "/build/manageTabs.js"
       ]
     },
     "manageExpandCollapse": {
       "js": [
         "/build/runtime.js",
-        "/build/vendors~app~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelReq~0c61dbcd.js",
-        "/build/vendors~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~913969f7.js",
-        "/build/manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~manageJ~fa029cbd.js",
+        "/build/vendors~app~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelReq~50916d4e.js",
+        "/build/vendors~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~9cfa8c54.js",
+        "/build/manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~manageJ~47b5ff09.js",
         "/build/manageExpandCollapse.js"
       ]
     },
     "manageJoinChannelRequest": {
       "js": [
         "/build/runtime.js",
-        "/build/vendors~app~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelReq~0c61dbcd.js",
-        "/build/vendors~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~913969f7.js",
-        "/build/manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~manageJ~fa029cbd.js",
+        "/build/vendors~app~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelReq~50916d4e.js",
+        "/build/vendors~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~9cfa8c54.js",
+        "/build/manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~manageJ~47b5ff09.js",
         "/build/manageJoinChannelRequest.js"
       ]
     },
     "manageJoinChannelResponse": {
       "js": [
         "/build/runtime.js",
-        "/build/vendors~app~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelReq~0c61dbcd.js",
-        "/build/vendors~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~913969f7.js",
-        "/build/manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~manageJ~fa029cbd.js",
+        "/build/vendors~app~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelReq~50916d4e.js",
+        "/build/vendors~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~9cfa8c54.js",
+        "/build/manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~manageJ~47b5ff09.js",
         "/build/manageJoinChannelResponse.js"
       ]
     },
     "manageChannelSubscription": {
       "js": [
         "/build/runtime.js",
-        "/build/vendors~app~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelReq~0c61dbcd.js",
-        "/build/vendors~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~913969f7.js",
-        "/build/manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~manageJ~fa029cbd.js",
+        "/build/vendors~app~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelReq~50916d4e.js",
+        "/build/vendors~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~9cfa8c54.js",
+        "/build/manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~manageJ~47b5ff09.js",
         "/build/manageChannelSubscription.js"
+      ]
+    },
+    "manageNotificationPage": {
+      "js": [
+        "/build/runtime.js",
+        "/build/vendors~app~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelReq~50916d4e.js",
+        "/build/vendors~manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~9cfa8c54.js",
+        "/build/manageArticleComment~manageChannelSubscription~manageExpandCollapse~manageJoinChannelRequest~manageJ~47b5ff09.js",
+        "/build/manageNotificationPage.js"
       ]
     }
   }
