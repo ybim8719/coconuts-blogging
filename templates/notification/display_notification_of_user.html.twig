@@ -34,3 +34,9 @@
     <input id="visitorId" name="visitorId" type="hidden" value="{{ app.user is null ? "" : app.user.id }}">
 
 {% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('manageNotificationPage') }}
+{% endblock %}

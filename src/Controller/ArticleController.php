@@ -6,6 +6,7 @@ use App\Entity\Article;
 use App\Entity\ArticleComment;
 use App\Entity\ArticleVisit;
 use App\Entity\BookMark;
+use App\Entity\Channel;
 use App\Entity\EventSpecification;
 use App\Entity\Follow;
 use App\Entity\User;
@@ -45,6 +46,7 @@ class ArticleController extends AbstractController
     private $followRepository;
     private $articleCommentsRepository;
     private $eventSpecificationRepository;
+    private $channelRepository;
 
     private $userLikeRepository;
 
@@ -58,6 +60,7 @@ class ArticleController extends AbstractController
         $this->userLikeRepository = $em->getRepository(UserLike::class);
         $this->bookmarkRepository = $em->getRepository(BookMark::class);
         $this->followRepository = $em->getRepository(Follow::class);
+        $this->channelRepository = $em->getRepository(Channel::class);
         $this->articleCommentsRepository = $em->getRepository(ArticleComment::class);
         $this->em = $em;
         $this->logger = $logger;
@@ -78,23 +81,24 @@ class ArticleController extends AbstractController
      */
     public function create(Request $request, EventDispatcherInterface $eventDispatcher): Response
     {
-        if ($this->getUser() == null) {
+        $writer = $this->getUser();
+        if ($writer == null) {
             return $this->redirectToRoute('app_login');
+        }
+        if (!$writer instanceof User) {
+            throw new Exception('Article submitted but blocked because user is not logged...');
         }
 
         $article = new Article();
-        $form = $this->createForm(ArticleType::class, $article);
+        $form = $this->createForm(ArticleType::class, $article, [
+            'user' => $writer
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $writer = $this->getUser();
-            if (!$writer instanceof User) {
-                throw new Exception('Article submitted but blocked because user is not logged...');
-            }
             $article->setUser($writer);
             $this->em->persist($article);
             $this->em->flush();
-
             $eventSpecification = $this->eventSpecificationRepository->findOneBy(['statusCode' => EventSpecification::PUBLISH_ARTICLE_CODE]);
             $event = new CreateEventAndNotificationsEvent($writer, $eventSpecification, $article);
             $eventDispatcher->dispatch($event, CreateEventAndNotificationsEvent::REGISTER_NOTIFICATION_EVENT_FOR_SUBSCRIBER);
