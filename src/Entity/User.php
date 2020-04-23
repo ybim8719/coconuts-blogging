@@ -102,12 +102,12 @@ class User implements UserInterface
     private $publishedLikes;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Follow", mappedBy="follower", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Follow", mappedBy="writer", orphanRemoval=true)
      */
     private $incomingFollows;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Follow", mappedBy="writer", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Follow", mappedBy="follower", orphanRemoval=true)
      */
     private $subscribedFollows;
 
@@ -120,8 +120,6 @@ class User implements UserInterface
      * @ORM\OneToMany(targetEntity="App\Entity\BookMark", mappedBy="user")
      */
     private $bookMarks;
-
-
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ChannelSubscription", mappedBy="user")

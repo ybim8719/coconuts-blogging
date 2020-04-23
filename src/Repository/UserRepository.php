@@ -59,7 +59,7 @@ class UserRepository extends ServiceEntityRepository
     public function findWritersFollowedByUser(User $user)
     {
         return $this->createQueryBuilder('u')
-            ->join('u.subscribedFollows', 'i')
+            ->join('u.incomingFollows', 'i')
             ->join('i.follower', "f")
             ->andWhere('f = :user')
             ->setParameter('user', $user)

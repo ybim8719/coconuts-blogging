@@ -127,8 +127,10 @@ class NotificationSubscriber implements EventSubscriberInterface
     private function createNotificationForPublishArticleEvent(NotificationEvent $notificationEvent)
     {
         $followers = [];
+        dump($notificationEvent->getArticle()->getUser());
         // @todo a future repo method would be more efficient
         foreach($notificationEvent->getArticle()->getUser()->getIncomingFollows() as $follow) {
+            dump($follow);
             $followers[] = $follow->getFollower();
         }
 
