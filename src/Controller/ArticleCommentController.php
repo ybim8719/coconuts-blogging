@@ -4,11 +4,14 @@ namespace App\Controller;
 
 use App\Entity\Article;
 use App\Entity\ArticleComment;
+use App\Entity\EventSpecification;
 use App\Entity\User;
+use App\Event\CreateEventAndNotificationsEvent;
 use App\Service\Logger\CoconutsLogger;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,11 +26,13 @@ class ArticleCommentController extends AbstractController
     private $userRepository;
     private $articleCommentRepository;
     private $logger;
+    private $eventSpecificationRepository;
 
     public function __construct(EntityManagerInterface $em, CoconutsLogger $logger)
     {
         $this->userRepository = $em->getRepository(User::class);
         $this->articleCommentRepository = $em->getRepository(ArticleComment::class);
+        $this->eventSpecificationRepository = $em->getRepository(EventSpecification::class);
         $this->logger = $logger;
         $this->em = $em;
     }
@@ -38,7 +43,7 @@ class ArticleCommentController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    public function ajaxAddCommentToArticle(Request $request, Article $article)
+    public function ajaxAddCommentToArticle(Request $request, Article $article, EventDispatcherInterface $eventDispatcher)
     {
         $userId = $request->request->get('visitorId');
         $text = $request->request->get('newCommentText');
@@ -59,6 +64,10 @@ class ArticleCommentController extends AbstractController
         $comment->setAuthor($user);
         $this->em->persist($comment);
         $this->em->flush();
+
+        $eventSpecification = $this->eventSpecificationRepository->findOneBy(['statusCode' => EventSpecification::COMMENT_AN_ARTICLE]);
+        $event = new CreateEventAndNotificationsEvent($user, $eventSpecification, $comment);
+        $eventDispatcher->dispatch($event, CreateEventAndNotificationsEvent::REGISTER_NOTIFICATION_EVENT_FOR_SUBSCRIBER);
 
         $response = [
             "code" => 200,

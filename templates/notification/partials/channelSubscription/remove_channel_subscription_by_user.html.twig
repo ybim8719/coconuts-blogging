@@ -1,7 +1,10 @@
 <span>
-    {% include "/notification/partials/displayUserNameWithLink.html.twig" with {"user" : event.triggerUser} %}
-    a supprimé l'abonnement au channel
-    {% include "/notification/partials/displayChannelTitleWithLink.html.twig" with {"channel" : event.channelSubscription.channel} %}
-    de
-    {% include "/notification/partials/displayUserNameWithLink.html.twig" with {"user" :  event.channelSubscription.user} %}
+    {% if isNotificationRecipientTheEventAuthor  %}
+        vous venez de supprimer votre abonnement au channel :
+        {% include "/notification/partials/displayChannelTitleWithLink.html.twig" with {"channel" : event.channelSubscription.channel} %}
+    {% else %}
+        {% include "/notification/partials/displayUserNameWithLink.html.twig" with {"user" : event.eventAuthor} %}
+        a supprimé son abonnement au channel
+        {% include "/notification/partials/displayChannelTitleWithLink.html.twig" with {"channel" : event.channelSubscription.channel} %}
+        dont vous êtes administrateur.
 </span>

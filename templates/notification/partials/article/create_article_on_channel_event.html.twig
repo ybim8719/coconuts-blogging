@@ -1,7 +1,15 @@
+
 <span>
-     {% include "/notification/partials/displayUserNameWithLink.html.twig" with {"user" : event.triggerUser} %}
-    a publié un nouvel article :
-    {% include "/notification/partials/displayArticleTitleWithLink.html.twig" with {"article" : event.article} %}
-    sur le channel :
-    {% include "/notification/partials/displayChannelTitleWithLink.html.twig" with {"channel" : event.article.channel} %}
+    {% if isNotificationRecipientTheEventAuthor %}
+       Vous venez de publier un nouvel article :
+        {% include "/notification/partials/displayArticleTitleWithLink.html.twig" with {"article" : event.article} %}
+        sur le channel :
+        {% include "/notification/partials/displayChannelTitleWithLink.html.twig" with {"channel" : event.article.channel} %}
+    {% else %}
+        {% include "/notification/partials/displayUserNameWithLink.html.twig" with {"user" : event.eventAuthor} %}
+        a publié un nouvel article :
+        {% include "/notification/partials/displayArticleTitleWithLink.html.twig" with {"article" : event.article} %}
+        sur le channel :
+        {% include "/notification/partials/displayChannelTitleWithLink.html.twig" with {"channel" : event.article.channel} %}
+    {% endif %}
 </span>

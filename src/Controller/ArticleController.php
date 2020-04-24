@@ -99,10 +99,14 @@ class ArticleController extends AbstractController
             $article->setUser($writer);
             $this->em->persist($article);
             $this->em->flush();
-            $eventSpecification = $this->eventSpecificationRepository->findOneBy(['statusCode' => EventSpecification::PUBLISH_ARTICLE_CODE]);
+            if($article->getChannel() == null) {
+                $eventSpecification = $this->eventSpecificationRepository->findOneBy(['statusCode' => EventSpecification::PUBLISH_ARTICLE_CODE]);
+            }
+            else {
+                $eventSpecification = $this->eventSpecificationRepository->findOneBy(['statusCode' => EventSpecification::PUBLISH_ARTICLE_ON_A_CHANNEL_CODE]);
+            }
             $event = new CreateEventAndNotificationsEvent($writer, $eventSpecification, $article);
             $eventDispatcher->dispatch($event, CreateEventAndNotificationsEvent::REGISTER_NOTIFICATION_EVENT_FOR_SUBSCRIBER);
-            $this->addFlash('success', 'Votre article est maintenant publié!');
             return $this->redirectToRoute('article_show', ["id" => $article->getId()]);
         }
 
@@ -120,8 +124,6 @@ class ArticleController extends AbstractController
         $userHasLiked = false;
         $hasBookmark = false;
         $isFollowing = false;
-
-
 
         if ($request->getClientIp() != null) {
             if (empty($this->articleVisitRepository->findByArticleAndIp($article, $request->getClientIp()))) {
@@ -169,7 +171,18 @@ class ArticleController extends AbstractController
      */
     public function edit(Request $request, Article $article): Response
     {
-        $form = $this->createForm(ArticleType::class, $article);
+        $writer = $this->getUser();
+        if ($writer == null) {
+            return $this->redirectToRoute('app_login');
+        }
+        if (!$writer instanceof User) {
+            throw new Exception('Article submitted but blocked because user is not logged...');
+        }
+
+        $form = $this->createForm(ArticleType::class, $article, [
+            'user' => $writer
+        ]);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

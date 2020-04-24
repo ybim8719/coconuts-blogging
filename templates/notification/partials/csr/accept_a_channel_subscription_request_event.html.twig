@@ -1,5 +1,18 @@
 <span>
-    {% include "/notification/partials/displayUserNameWithLink.html.twig" with {"user" : event.triggerUser} %}
-    a accepté votre demande d'inscription pour rejoindre  le channel suivant :
-    {% include "/notification/partials/displayChannelTitleWithLink.html.twig" with {"channel" :event.channelSubscriptionRequest.channel} %}
+    {% if  isNotificationRecipientTheEventAuthor %}
+        vous avez accepté la demande d'inscription de :
+        {% include "/notification/partials/displayUserNameWithLink.html.twig" with {"user" : event.channelSubscriptionRequest.applicant} %}
+        pour rejoindre  le channel
+        {% include "/notification/partials/displayChannelTitleWithLink.html.twig" with {"channel" :event.channelSubscriptionRequest.channel} %}
+    {% elseif hideEventAuthorIdentity %}
+        Votre demande pour rejoindre  le channel
+        {% include "/notification/partials/displayChannelTitleWithLink.html.twig" with {"channel" :event.channelSubscriptionRequest.channel} %}
+        a été acceptée.
+    {% else %}
+        {% include "/notification/partials/displayUserNameWithLink.html.twig" with {"user" : event.eventAuthor} %}
+        a accepté la demande d'inscription de :
+        {% include "/notification/partials/displayUserNameWithLink.html.twig" with {"user" : event.channelSubscriptionRequest.applicant} %}
+        pour rejoindre  le channel dont vous êtes administrateur :
+        {% include "/notification/partials/displayChannelTitleWithLink.html.twig" with {"channel" :event.channelSubscriptionRequest.channel} %}
+    {% endif %}
 </span>

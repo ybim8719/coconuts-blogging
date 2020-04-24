@@ -132,7 +132,7 @@ class User implements UserInterface
     private $channelSubscriptionRequests;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\NotificationEvent", mappedBy="triggerUser")
+     * @ORM\OneToMany(targetEntity="App\Entity\NotificationEvent", mappedBy="eventAuthor")
      */
     private $notificationEvents;
 
@@ -613,7 +613,7 @@ class User implements UserInterface
     {
         if (!$this->notificationEvents->contains($notificationEvent)) {
             $this->notificationEvents[] = $notificationEvent;
-            $notificationEvent->setTriggerUser($this);
+            $notificationEvent->setEventAuthor($this);
         }
 
         return $this;
@@ -624,8 +624,8 @@ class User implements UserInterface
         if ($this->notificationEvents->contains($notificationEvent)) {
             $this->notificationEvents->removeElement($notificationEvent);
             // set the owning side to null (unless already changed)
-            if ($notificationEvent->getTriggerUser() === $this) {
-                $notificationEvent->setTriggerUser(null);
+            if ($notificationEvent->getEventAuthor() === $this) {
+                $notificationEvent->setEventAuthor(null);
             }
         }
 

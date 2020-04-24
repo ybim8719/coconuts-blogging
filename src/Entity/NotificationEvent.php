@@ -32,7 +32,7 @@ class NotificationEvent
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="notificationEvents")
      */
-    private $triggerUser;
+    private $eventAuthor;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Article", inversedBy="notificationEvents")
@@ -109,14 +109,14 @@ class NotificationEvent
         return $this;
     }
 
-    public function getTriggerUser(): ?User
+    public function getEventAuthor(): ?User
     {
-        return $this->triggerUser;
+        return $this->eventSpecification;
     }
 
-    public function setTriggerUser(?User $triggerUser): self
+    public function setEventAuthor(?User $eventAuthor): self
     {
-        $this->triggerUser = $triggerUser;
+        $this->eventAuthor = $eventAuthor;
 
         return $this;
     }

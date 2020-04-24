@@ -2,10 +2,12 @@
 
 namespace App\Twig;
 
+use App\Entity\Channel;
 use App\Entity\ChannelSubscription;
 use App\Entity\ChannelSubscriptionRequest;
 use App\Entity\EventSpecification;
 use App\Entity\Notification;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Twig\Environment;
 use Twig\Extension\AbstractExtension;
@@ -14,18 +16,23 @@ use Twig\TwigFunction;
 
 class RenderNotificationTwigExtension extends AbstractExtension
 {
+    // tested events
     const CREATE_ARTICLE_EVENT_TEMPLATE = "notification/partials/article/create_article_event.html.twig";
-    const CREATE_ARTICLE_ON_CHANNEL_EVENT_TEMPLATE = "notification/article/partials/create_article_on_channel_event.html.twig";
+    const CREATE_ARTICLE_ON_CHANNEL_EVENT_TEMPLATE = "notification/partials/article/create_article_on_channel_event.html.twig";
+
+    //  events being tested
     const LIKE_AN_ARTICLE_EVENT_TEMPLATE = "notification/partials/article/like_an_article_event.html.twig";
-    const LIKE_A_COMMENT_EVENT_TEMPLATE = "notification/partials/comment/like_a_comment_event.html.twig";
     const COMMENT_AN_ARTICLE_EVENT_TEMPLATE = "notification/partials/comment/comment_an_article_event.html.twig";
-    const REMOVE_AN_ARTICLE_COMMENT_EVENT_TEMPLATE = "notification/partials/comment/remove_an_article_comment_event.html.twig";
-    const COMMENT_A_COMMENT_OF_ARTICLE_EVENT_TEMPLATE = "notification/partials/comment/comment_a_comment_article_event.html.twig";
-    const REMOVE_COMMENT_OF_COMMENT_OF_ARTICLE_EVENT_TEMPLATE = "notification/partials/comment/remove_comment_of_comment_article_event.html.twig";
     const SEND_A_CHANNEL_SUBSCRIPTION_REQUEST_EVENT_TEMPLATE = "notification/partials/csr/send_a_channel_subscription_request_event.html.twig";
     const ACCEPT_A_CHANNEL_SUBSCRIPTION_REQUEST_EVENT_TEMPLATE = "notification/partials/csr/accept_a_channel_subscription_request_event.html.twig";
     const REFUSE_A_CHANNEL_SUBSCRIPTION_REQUEST_EVENT_TEMPLATE = "notification/partials/csr/refuse_a_channel_subscription_request_event.html.twig";
     const FOLLOW_A_WRITER_EVENT_TEMPLATE = "notification/partials/follow/follow_a_writer_event.html.twig";
+
+    //  events to be tested
+    const LIKE_A_COMMENT_EVENT_TEMPLATE = "notification/partials/comment/like_a_comment_event.html.twig";
+    const REMOVE_AN_ARTICLE_COMMENT_EVENT_TEMPLATE = "notification/partials/comment/remove_an_article_comment_event.html.twig";
+    const COMMENT_A_COMMENT_OF_ARTICLE_EVENT_TEMPLATE = "notification/partials/comment/comment_a_comment_article_event.html.twig";
+    const REMOVE_COMMENT_OF_COMMENT_OF_ARTICLE_EVENT_TEMPLATE = "notification/partials/comment/remove_comment_of_comment_article_event.html.twig";
     const REMOVE_CHANNEL_SUBSCRIPTION_BY_USER_EVENT_TEMPLATE = "notification/partials/channelSubscription/remove_channel_subscription_by_user.html.twig";
     const REMOVE_CHANNEL_SUBSCRIPTION_BY_ADMIN_EVENT_TEMPLATE = "notification/partials/channelSubscription/remove_channel_subscription_by_admin.html.twig";
 
@@ -57,8 +64,11 @@ class RenderNotificationTwigExtension extends AbstractExtension
         ];
     }
 
-    public function renderNotification(Environment $environment, Notification $notification, bool $displayForChannelAdmin = false)
+    public function renderNotification(Environment $environment, Notification $notification)
     {
+        $isNotificationRecipientTheEventAuthor =false;
+        $hideEventAuthorIdentity =false;
+
         // checks the corresponding event related to notification to display.
         switch ($notification->getNotificationEvent()->getEventSpecification()->getStatusCode()) {
             case EventSpecification::PUBLISH_ARTICLE_CODE :
@@ -90,9 +100,11 @@ class RenderNotificationTwigExtension extends AbstractExtension
                 break;
             case EventSpecification::ACCEPT_A_CHANNEL_SUBSCRIPTION_REQUEST :
                 $template = self::ACCEPT_A_CHANNEL_SUBSCRIPTION_REQUEST_EVENT_TEMPLATE;
+                $hideEventAuthorIdentity =$this->checkIfHideEventAuthorIdentity($notification->getRecipient(),$notification->getNotificationEvent()->getChannelSubscriptionRequest()->getChannel());
                 break;
             case EventSpecification::REFUSE_A_CHANNEL_SUBSCRIPTION_REQUEST :
                 $template = self::REFUSE_A_CHANNEL_SUBSCRIPTION_REQUEST_EVENT_TEMPLATE;
+                $hideEventAuthorIdentity =$this->checkIfHideEventAuthorIdentity($notification->getRecipient(),$notification->getNotificationEvent()->getChannelSubscriptionRequest()->getChannel());
                 break;
             case EventSpecification::FOLLOW_A_WRITER :
                 $template = self::FOLLOW_A_WRITER_EVENT_TEMPLATE;
@@ -102,15 +114,29 @@ class RenderNotificationTwigExtension extends AbstractExtension
                 break;
             case EventSpecification::REMOVE_CHANNEL_SUBSCRIPTION_BY_ADMIN :
                 $template = self::REMOVE_CHANNEL_SUBSCRIPTION_BY_ADMIN_EVENT_TEMPLATE;
+                $hideEventAuthorIdentity =$this->checkIfHideEventAuthorIdentity($notification->getRecipient(),$notification->getNotificationEvent()->getChannelSubscription()->getChannel());
                 break;
             default:
                 return "";
         }
 
-        // two types of templates are possibles for regular members and for admin, this boolean holds this information.
+        if($notification->getNotificationEvent()->getEventAuthor()->getId() == $notification->getRecipient()->getId()) {
+            $isNotificationRecipientTheEventAuthor = true;
+        }
+
+        // in the views, several are displayed according to the recipient role
         return $environment->render($template, [
             'event' => $notification->getNotificationEvent(),
-            'displayForChannelAdmin' => $displayForChannelAdmin
+            'isNotificationRecipientTheEventAuthor' => $isNotificationRecipientTheEventAuthor,
+            'hideEventAuthorIdentity' => $hideEventAuthorIdentity
         ]);
+    }
+
+    private function checkIfHideEventAuthorIdentity(User $user, Channel $channel)
+    {
+        if(empty($this->channelSubscriptionsRepository->findByUserChannelAndStatus($user, $channel, true))) {
+            return true;
+        }
+        return false;
     }
 }

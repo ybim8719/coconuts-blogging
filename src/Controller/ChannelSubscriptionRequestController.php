@@ -7,11 +7,14 @@ namespace App\Controller;
 use App\Entity\Channel;
 use App\Entity\ChannelSubscription;
 use App\Entity\ChannelSubscriptionRequest;
+use App\Entity\EventSpecification;
 use App\Entity\User;
+use App\Event\CreateEventAndNotificationsEvent;
 use App\Service\Logger\CoconutsLogger;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,15 +35,19 @@ class ChannelSubscriptionRequestController extends AbstractController
     private $logger;
     private $mailer;
     private $message;
+    private $eventSpecificationRepository;
+    private $eventDispatcher;
 
-    public function __construct(EntityManagerInterface $em, CoconutsLogger $logger, \Swift_Mailer $mailer)
+    public function __construct(EntityManagerInterface $em, CoconutsLogger $logger, \Swift_Mailer $mailer, EventDispatcherInterface $eventDispatcher)
     {
         $this->userRepository = $em->getRepository(User::class);
         $this->channelRepository = $em->getRepository(Channel::class);
+        $this->eventSpecificationRepository = $em->getRepository(EventSpecification::class);
         $this->channelSubscriptionRequestRepository = $em->getRepository(ChannelSubscriptionRequest::class);
         $this->channelSubscriptionRepository = $em->getRepository(ChannelSubscription::class);
         $this->logger = $logger;
         $this->em = $em;
+        $this->eventDispatcher = $eventDispatcher;
         $this->mailer = $mailer;
         $this->message = new\ Swift_Message();
         $this->message->setFrom('coconutsblogging@gmail.com');
@@ -55,15 +62,7 @@ class ChannelSubscriptionRequestController extends AbstractController
     public function ajaxSaveChannelSubscriptionRequest(Request $request, Channel $channel)
     {
         $userId = $request->request->get('visitorId');
-        if (!is_int(intval($userId))) {
-            $this->logger->warning('request for channel subscription ajax did not receive correct applicant id');
-            $this->returnInvalidJsonResponse('no visitor Id given');
-        }
-
-        $user = $this->userRepository->find($userId);
-        if (!$user instanceof User) {
-            $this->returnInvalidJsonResponse('Can\'t find User with given visitorId ');
-        }
+        $user = $this->checkIfUserExists($userId);
 
         if (!empty($this->channelSubscriptionRequestRepository->findByChannelAndUser($channel, $user ))) {
             $response = [
@@ -77,8 +76,12 @@ class ChannelSubscriptionRequestController extends AbstractController
         $this->em->persist($channelSubscriptionRequest);
         $this->em->flush();
 
-        //@todo Ajouter un event listener pour la création de notification pour chaque destinataire du mail
+        // build of notifications
+        $eventSpecification = $this->eventSpecificationRepository->findOneBy(['statusCode' => EventSpecification::SEND_A_CHANNEL_SUBSCRIPTION_REQUEST]);
+        $event = new CreateEventAndNotificationsEvent($user, $eventSpecification, $channelSubscriptionRequest);
+        $this->eventDispatcher->dispatch($event, CreateEventAndNotificationsEvent::REGISTER_NOTIFICATION_EVENT_FOR_SUBSCRIBER);
 
+        // build of email to be sent
         $mailToSend = $this->message->setSubject('Vous avez reçu une demande d\'inscription pour le channel '. $channel->getTitle());
         foreach ($channel->getAdminUsers() as $admin) {
             $this->sendEmail($mailToSend, $admin, $channel->getTitle(), $user, self::INCOMING_REQUEST_TEMPLATE_PATH);
@@ -104,28 +107,21 @@ class ChannelSubscriptionRequestController extends AbstractController
         $userId = $request->request->get('visitorId');
         $status = $request->request->get('statusLabel');
         $channel = $channelSubscriptionRequest->getChannel();
-
-        if (!is_int(intval($userId))) {
-            $this->logger->warning('no id found for visitor, acceptance is cancelled');
-            $this->returnInvalidJsonResponse('no visitor Id given');
-        }
-
-        $user = $this->userRepository->find($userId);
-        if (!$user instanceof User) {
-            $this->returnInvalidJsonResponse('Can\'t find User with given visitorId ');
-        }
+        $user = $this->checkIfUserExists($userId);
 
         // check if user has the rights
         if ($this->channelSubscriptionRepository->findByUserChannelAndStatus($user, $channel, true)) {
             $this->returnInvalidJsonResponse("Le visitor n'a pas les droits pour accepter une demande sur ce channel.");
         }
 
+        // means that the current status is PENDING
         if ($status == "label-accept") {
             if ($channelSubscriptionRequest->getStatus() != ChannelSubscriptionRequest::CHANNEL_SUBSCRIPTION_PENDING) {
                 $this->returnInvalidJsonResponse("les statuts de la demande et l'id du bouton ne matchent pas.");
             }
         }
 
+        // means that the current status is REFUSED
         if ($status == "label-accept-anyway") {
             if ($channelSubscriptionRequest->getStatus() != ChannelSubscriptionRequest::CHANNEL_SUBSCRIPTION_REFUSED) {
                 $this->returnInvalidJsonResponse("les statuts de la demande et l'id du bouton ne matchent pas.");
@@ -145,8 +141,12 @@ class ChannelSubscriptionRequestController extends AbstractController
         }
         $this->em->flush();
 
-        //@todo Ajouter un event listener pour informer de l'acceptation de la demande pour  le demandeur et les autres admins
+        // send notifications
+        $eventSpecification = $this->eventSpecificationRepository->findOneBy(['statusCode' => EventSpecification::ACCEPT_A_CHANNEL_SUBSCRIPTION_REQUEST]);
+        $event = new CreateEventAndNotificationsEvent($user, $eventSpecification, $channelSubscriptionRequest);
+        $this->eventDispatcher->dispatch($event, CreateEventAndNotificationsEvent::REGISTER_NOTIFICATION_EVENT_FOR_SUBSCRIBER);
 
+        // send emails
         $mailToSend =  $this->message->setSubject(' une demande d\'inscription pour le channel '. $channel->getTitle());
         foreach ($channel->getAdminUsers() as $admin) {
             $this->sendEmail( $mailToSend, $admin, $channel->getTitle(), $applicant, self::OUTCOMING_ACCEPTANCE_RESPONSE_TEMPLATE_PATH_ADMIN, $user->getUsername());
@@ -172,11 +172,7 @@ class ChannelSubscriptionRequestController extends AbstractController
     {
         $userId = $request->request->get('visitorId');
         $channel = $channelSubscriptionRequest->getChannel();
-        $visitor = $this->userRepository->find($userId);
-
-        if (!$visitor instanceof User) {
-            $this->returnInvalidJsonResponse('Can\'t find User with given visitorId ');
-        }
+        $visitor = $this->checkIfUserExists($userId);
 
         // check if user has the rights
         if ($this->channelSubscriptionRepository->findByUserChannelAndStatus($visitor, $channel, true)) {
@@ -188,9 +184,8 @@ class ChannelSubscriptionRequestController extends AbstractController
             $this->returnInvalidJsonResponse("les statuts de la demande et l'id du bouton ne matchent pas.");
         }
 
-        $applicant = $channelSubscriptionRequest->getApplicant();
-
         //on change le statut de la demande à refusée
+        $applicant = $channelSubscriptionRequest->getApplicant();
         $channelSubscriptionRequest->setStatus(ChannelSubscriptionRequest::CHANNEL_SUBSCRIPTION_REFUSED);
 
         //on remove les subscriptions INCOHERENTES du mec en base si jamais elles existent
@@ -201,13 +196,17 @@ class ChannelSubscriptionRequestController extends AbstractController
 
         $this->em->flush();
 
-        //@todo Ajouter un event listener pour informer le refus de la demande pour le demandeur et les autres admins
+        // send notifications
+        $eventSpecification = $this->eventSpecificationRepository->findOneBy(['statusCode' => EventSpecification::REFUSE_A_CHANNEL_SUBSCRIPTION_REQUEST]);
+        $event = new CreateEventAndNotificationsEvent($visitor, $eventSpecification, $channelSubscriptionRequest);
+        $this->eventDispatcher->dispatch($event, CreateEventAndNotificationsEvent::REGISTER_NOTIFICATION_EVENT_FOR_SUBSCRIBER);
 
-        $mailToSend =  $this->message->setSubject(' Demande refusée pour le channel'. $channel->getTitle());
         // send email to the admins of channel
+        $mailToSend =  $this->message->setSubject(' Demande refusée pour le channel'. $channel->getTitle());
         foreach ($channel->getAdminUsers() as $admin) {
             $this->sendEmail( $mailToSend, $admin, $channel->getTitle(), $applicant, self::OUTCOMING_REFUSAL_RESPONSE_TEMPLATE_PATH_ADMIN, $visitor->getUsername());
         }
+
         // send email to the applicant
         $this->sendEmail( $mailToSend, $applicant, $channel->getTitle(), $applicant, self::OUTCOMING_REFUSAL_RESPONSE_TEMPLATE_PATH_APPLICANT);
 
@@ -219,6 +218,23 @@ class ChannelSubscriptionRequestController extends AbstractController
 
         return new JsonResponse($response);
     }
+
+
+    private function checkIfUserExists(string $userId)
+    {
+        if (!is_int(intval($userId))) {
+            $this->logger->warning('request for channel subscription ajax did not receive correct applicant id');
+            $this->returnInvalidJsonResponse('no visitor Id given');
+        }
+
+        $user = $this->userRepository->find($userId);
+        if (!$user instanceof User) {
+            $this->returnInvalidJsonResponse('Can\'t find User with given visitorId ');
+        }
+
+        return $user;
+    }
+
 
     private function sendEmail(\Swift_Message $message, User $recipient, string $channelTitle, User $applicant, string $template, string $adminUsername = null)
     {
@@ -238,6 +254,7 @@ class ChannelSubscriptionRequestController extends AbstractController
             );
         $this->mailer->send($message);
     }
+
 
     private function returnInvalidJsonResponse(string $message)
     {

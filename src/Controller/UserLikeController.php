@@ -4,12 +4,15 @@
 namespace App\Controller;
 
 use App\Entity\Article;
+use App\Entity\EventSpecification;
 use App\Entity\User;
 use App\Entity\UserLike;
+use App\Event\CreateEventAndNotificationsEvent;
 use App\Service\Logger\CoconutsLogger;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,11 +27,13 @@ class UserLikeController extends AbstractController
     private $userRepository;
     private $userLikeRepository;
     private $logger;
+    private $eventSpecificationRepository;
 
     public function __construct(EntityManagerInterface $em, CoconutsLogger $logger)
     {
         $this->userRepository = $em->getRepository(User::class);
         $this->userLikeRepository = $em->getRepository(UserLike::class);
+        $this->eventSpecificationRepository = $em->getRepository(EventSpecification::class);
         $this->logger = $logger;
         $this->em = $em;
     }
@@ -39,7 +44,7 @@ class UserLikeController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    public function ajaxAddLikeToArticle(Request $request, Article $article)
+    public function ajaxAddLikeToArticle(Request $request, Article $article, EventDispatcherInterface $eventDispatcher)
     {
         $userId = $request->request->get('visitorId');
 
@@ -63,6 +68,11 @@ class UserLikeController extends AbstractController
         $like->setLikedArticle($article);
         $this->em->persist($like);
         $this->em->flush();
+
+        $eventSpecification = $this->eventSpecificationRepository->findOneBy(['statusCode' => EventSpecification::LIKE_AN_ARTICLE]);
+        $event = new CreateEventAndNotificationsEvent($user, $eventSpecification, $article);
+        $eventDispatcher->dispatch($event, CreateEventAndNotificationsEvent::REGISTER_NOTIFICATION_EVENT_FOR_SUBSCRIBER);
+
         $response = [
             "code" => 200,
             'message' => "Like ajouté!",

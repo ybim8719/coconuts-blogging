@@ -1,5 +1,5 @@
 <span>
-    {% include "/notification/partials/displayUserNameWithLink.html.twig" with {"user" : event.triggerUser} %}
+    {% include "/notification/partials/displayUserNameWithLink.html.twig" with {"user" : event.eventAuthor} %}
     a supprimé le commentaire : {{ event.comment.title }} publié dans  l'article :
     {% include "/notification/partials/displayArticleTitleWithLink.html.twig" with {"article" : event.comment.article} %}
 </span>

@@ -39,36 +39,6 @@ class EventSpecification
     private $title;
 
     /**
-     * @ORM\Column(type="boolean")
-     */
-    private $requireChannel;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $requireArticle;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $requireComment;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $requireFollow;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $requireChannelSubscription;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $requireChannelSubscriptionRequest;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\NotificationEvent", mappedBy="eventSpecification")
      */
     private $notificationEvents;
@@ -77,6 +47,11 @@ class EventSpecification
      * @ORM\Column(type="integer")
      */
     private $statusCode;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\EntityPathName", inversedBy="eventSpecifications")
+     */
+    private $entityPathName;
 
     public function __construct()
     {
@@ -96,78 +71,6 @@ class EventSpecification
     public function setTitle(string $title): self
     {
         $this->title = $title;
-
-        return $this;
-    }
-
-    public function getRequireChannel(): ?bool
-    {
-        return $this->requireChannel;
-    }
-
-    public function setRequireChannel(bool $requireChannel): self
-    {
-        $this->requireChannel = $requireChannel;
-
-        return $this;
-    }
-
-    public function getRequireArticle(): ?bool
-    {
-        return $this->requireArticle;
-    }
-
-    public function setRequireArticle(bool $requireArticle): self
-    {
-        $this->requireArticle = $requireArticle;
-
-        return $this;
-    }
-
-    public function getRequireComment(): ?bool
-    {
-        return $this->requireComment;
-    }
-
-    public function setRequireComment(bool $requireComment): self
-    {
-        $this->requireComment = $requireComment;
-
-        return $this;
-    }
-
-    public function getRequireFollow(): ?bool
-    {
-        return $this->requireFollow;
-    }
-
-    public function setRequireFollow(bool $requireFollow): self
-    {
-        $this->requireFollow = $requireFollow;
-
-        return $this;
-    }
-
-    public function getRequireChannelSubscription(): ?bool
-    {
-        return $this->requireChannelSubscription;
-    }
-
-    public function setRequireChannelSubscription(bool $requireChannelSubscription): self
-    {
-        $this->requireChannelSubscription = $requireChannelSubscription;
-
-        return $this;
-    }
-
-    public function getRequireChannelSubscriptionRequest(): ?bool
-    {
-        return $this->requireChannelSubscriptionRequest;
-    }
-
-    public function setRequireChannelSubscriptionRequest(bool $requireChannelSubscriptionRequest): self
-    {
-        $this->requireChannelSubscriptionRequest = $requireChannelSubscriptionRequest;
 
         return $this;
     }
@@ -211,6 +114,18 @@ class EventSpecification
     public function setStatusCode(int $statusCode): self
     {
         $this->statusCode = $statusCode;
+
+        return $this;
+    }
+
+    public function getEntityPathName(): ?EntityPathName
+    {
+        return $this->entityPathName;
+    }
+
+    public function setEntityPathName(?EntityPathName $entityPathName): self
+    {
+        $this->entityPathName = $entityPathName;
 
         return $this;
     }

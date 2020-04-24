@@ -4,12 +4,15 @@
 namespace App\Controller;
 
 
+use App\Entity\EventSpecification;
 use App\Entity\Follow;
 use App\Entity\User;
+use App\Event\CreateEventAndNotificationsEvent;
 use App\Service\Logger\CoconutsLogger;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,13 +27,17 @@ class FollowController extends AbstractController
     private $userRepository;
     private $followRepository;
     private $logger;
+    private $eventDispatcher;
+    private $eventSpecificationRepository;
 
-    public function __construct(EntityManagerInterface $em, CoconutsLogger $logger)
+    public function __construct(EntityManagerInterface $em, CoconutsLogger $logger, EventDispatcherInterface $dispatcher)
     {
         $this->userRepository = $em->getRepository(User::class);
         $this->followRepository = $em->getRepository(Follow::class);
+        $this->eventSpecificationRepository = $em->getRepository(EventSpecification::class);
         $this->logger = $logger;
         $this->em = $em;
+        $this->eventDispatcher = $dispatcher;
     }
 
     /**
@@ -62,6 +69,12 @@ class FollowController extends AbstractController
         $follow->setWriter($writer);
         $this->em->persist($follow);
         $this->em->flush();
+
+        // build notifications
+        $eventSpecification = $this->eventSpecificationRepository->findOneBy(['statusCode' => EventSpecification::FOLLOW_A_WRITER]);
+        $event = new CreateEventAndNotificationsEvent($user, $eventSpecification, $follow);
+        $this->eventDispatcher->dispatch($event, CreateEventAndNotificationsEvent::REGISTER_NOTIFICATION_EVENT_FOR_SUBSCRIBER);
+
         $response = [
             "code" => 200,
             'message' => "abonnement ajouté!",

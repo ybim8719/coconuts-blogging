@@ -16,7 +16,7 @@ class CreateEventAndNotificationsEvent extends Event
 {
     const REGISTER_NOTIFICATION_EVENT_FOR_SUBSCRIBER = "REGISTER_NOTIFICATION_EVENT_FOR_SUBSCRIBER";
 
-    private $triggerUser;
+    private $eventAuthor;
     private $eventSpecification;
     private $article;
     private $comment;
@@ -26,9 +26,9 @@ class CreateEventAndNotificationsEvent extends Event
 
     public function __construct(User $user, EventSpecification $eventSpecification, $entityObject)
     {
-        $this->triggerUser = $user;
+        $this->eventAuthor = $user;
         $this->eventSpecification = $eventSpecification;
-        switch ($eventSpecification->getId()) {
+        switch ($eventSpecification->getStatusCode()) {
             case
                 EventSpecification::PUBLISH_ARTICLE_CODE ||
                 EventSpecification::PUBLISH_ARTICLE_ON_A_CHANNEL_CODE ||
@@ -71,9 +71,9 @@ class CreateEventAndNotificationsEvent extends Event
         }
     }
 
-    public function getTriggerUser()
+    public function getEventAuthor()
     {
-        return $this->triggerUser;
+        return $this->eventAuthor;
     }
 
     public function getEventSpecification()

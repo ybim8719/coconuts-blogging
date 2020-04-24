@@ -1,6 +1,10 @@
 <span>
-    {% include "/notification/partials/displayUserNameWithLink.html.twig" with {"user" : event.triggerUser} %}
-    a publié le commentaire suivant :{{ event.comment.title }} dans  l'article :
-    {% include "/notification/partials/displayArticleTitleWithLink.html.twig" with {"article" : event.comment.article} %}
+     {% if  isNotificationRecipientTheEventAuthor %}
+         Vous avez publié le commentaire suivant :{{ event.comment.title }} dans  l'article :
+         {% include "/notification/partials/displayArticleTitleWithLink.html.twig" with {"article" : event.comment.article} %}
+     {% else %}
+         {% include "/notification/partials/displayUserNameWithLink.html.twig" with {"user" : event.eventAuthor} %}
+         a publié le commentaire suivant :{{ event.comment.title }} dans  l'article :
+         {% include "/notification/partials/displayArticleTitleWithLink.html.twig" with {"article" : event.comment.article} %}
+     {% endif %}
 </span>
-
