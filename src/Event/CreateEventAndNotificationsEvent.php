@@ -9,6 +9,7 @@ use App\Entity\ChannelSubscriptionRequest;
 use App\Entity\EventSpecification;
 use App\Entity\Follow;
 use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\EventDispatcher\Event;
 
 

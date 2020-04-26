@@ -1,20 +1,20 @@
 <span>
     {% if hideEventAuthor %}
         Votre inscription à l'admin
-        {% include "/notification/partials/displayChannelTitleWithLink.html.twig" with {"channel" : event.channelSubscription.channel} %}
+        {% include "/notification/partials/displayChannelTitleWithLink.html.twig" with {"channel" : channelSubscription.channel} %}
         de  l'abonné :
-        {% include "/notification/partials/displayUserNameWithLink.html.twig" with {"user" :  event.channelSubscription.user} %}
+        {% include "/notification/partials/displayUserNameWithLink.html.twig" with {"user" :  channelSubscription.user} %}
     {% else if  isNotificationRecipientTheEventAuthor%}
         Votre venez de supprimer l'inscription de  l'abonné
-        {% include "/notification/partials/displayUserNameWithLink.html.twig" with {"user" :  event.channelSubscription.user} %}
+        {% include "/notification/partials/displayUserNameWithLink.html.twig" with {"user" :  channelSubscription.user} %}
         au channel :
-        {% include "/notification/partials/displayChannelTitleWithLink.html.twig" with {"channel" : event.channelSubscription.channel} %}
+        {% include "/notification/partials/displayChannelTitleWithLink.html.twig" with {"channel" : channelSubscription.channel} %}
     {% else %}
-        {% include "/notification/partials/displayUserNameWithLink.html.twig" with {"user" : event.eventAuthor} %}
+        {% include "/notification/partials/displayUserNameWithLink.html.twig" with {"user" : eventAuthor} %}
         a résilié l'abonnement de l'abonné
-        {% include "/notification/partials/displayUserNameWithLink.html.twig" with {"user" :  event.channelSubscription.user} %}
+        {% include "/notification/partials/displayUserNameWithLink.html.twig" with {"user" :  channelSubscription.user} %}
         au channel
-        {% include "/notification/partials/displayChannelTitleWithLink.html.twig" with {"channel" : event.channelSubscription.channel} %}
+        {% include "/notification/partials/displayChannelTitleWithLink.html.twig" with {"channel" : channelSubscription.channel} %}
         dont vous êtes admin.
     {% endif %}
 </span>

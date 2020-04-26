@@ -87,7 +87,7 @@ class ArticleCommentController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    public function ajaxRemoveCommentFromArticle(Request $request, ArticleComment $articleComment)
+    public function ajaxRemoveCommentFromArticle(Request $request, ArticleComment $articleComment, EventDispatcherInterface $eventDispatcher)
     {
         $userId = $request->request->get('visitorId');
         $articleId = $request->request->get('articleId');
@@ -118,6 +118,10 @@ class ArticleCommentController extends AbstractController
 
         $this->em->remove($commentToRemove);
         $this->em->flush();
+
+        $eventSpecification = $this->eventSpecificationRepository->findOneBy(['statusCode' => EventSpecification::REMOVE_AN_ARTICLE_COMMENT]);
+        $event = new CreateEventAndNotificationsEvent($user, $eventSpecification, $commentToRemove);
+        $eventDispatcher->dispatch($event, CreateEventAndNotificationsEvent::REGISTER_NOTIFICATION_EVENT_FOR_SUBSCRIBER);
 
         $response = [
             "code" => 200,

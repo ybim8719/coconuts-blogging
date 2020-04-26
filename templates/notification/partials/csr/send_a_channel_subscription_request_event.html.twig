@@ -2,11 +2,11 @@
 
      {% if  isNotificationRecipientTheEventAuthor %}
          votre demande d'inscription pour rejoindre  le channel suivant :
-         {% include "/notification/partials/displayChannelTitleWithLink.html.twig" with {"channel" :event.channelSubscriptionRequest.channel} %}
+         {% include "/notification/partials/displayChannelTitleWithLink.html.twig" with {"channel" : channelSubscriptionRequest.channel} %}
          a été envoyée
      {% else %}
-         {% include "/notification/partials/displayUserNameWithLink.html.twig" with {"user" : event.eventAuthor} %}
+         {% include "/notification/partials/displayUserNameWithLink.html.twig" with {"user" : eventAuthor} %}
          a fait une demande d'inscription pour rejoindre  le channel suivant :
-         {% include "/notification/partials/displayChannelTitleWithLink.html.twig" with {"channel" :event.channelSubscriptionRequest.channel} %}
+         {% include "/notification/partials/displayChannelTitleWithLink.html.twig" with {"channel" :channelSubscriptionRequest.channel} %}
      {% endif %}
 </span>

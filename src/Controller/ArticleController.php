@@ -121,6 +121,7 @@ class ArticleController extends AbstractController
      */
     public function show(Request $request, Article $article, EventDispatcherInterface $eventDispatcher): Response
     {
+
         $userHasLiked = false;
         $hasBookmark = false;
         $isFollowing = false;

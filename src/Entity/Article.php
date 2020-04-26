@@ -39,7 +39,7 @@ class Article
     private $description;
 
     /** 
-    * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="articles")
+    * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="articles", fetch="EAGER")
     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
     */
     private $user;

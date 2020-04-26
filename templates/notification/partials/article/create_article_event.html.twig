@@ -2,10 +2,10 @@
 
     {% if isNotificationRecipientTheEventAuthor %}
         Vous venez de publier un nouvel article :
-        {% include "/notification/partials/displayArticleTitleWithLink.html.twig" with {"article" : event.article} %}
+        {% include "/notification/partials/displayArticleTitleWithLink.html.twig" with {"article" : article} %}
     {% else %}
-        {% include "/notification/partials/displayUserNameWithLink.html.twig" with {"user" : event.eventAuthor} %}
+        {% include "/notification/partials/displayUserNameWithLink.html.twig" with {"user" : eventAuthor} %}
         a publié un nouvel article :
-        {% include "/notification/partials/displayArticleTitleWithLink.html.twig" with {"article" : event.article} %}
+        {% include "/notification/partials/displayArticleTitleWithLink.html.twig" with {"article" : article} %}
     {% endif %}
 </span>

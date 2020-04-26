@@ -4,11 +4,14 @@
 namespace App\Controller;
 use App\Entity\Channel;
 use App\Entity\ChannelSubscription;
+use App\Entity\EventSpecification;
 use App\Entity\User;
+use App\Event\CreateEventAndNotificationsEvent;
 use App\Service\Logger\CoconutsLogger;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,6 +25,7 @@ class ChannelSubscriptionController extends AbstractController
     private $em;
     private $userRepository;
     private $channelSubscriptionRepository;
+    private $eventSpecificationRepository;
     private $logger;
     private $mailer;
     private $message;
@@ -30,6 +34,7 @@ class ChannelSubscriptionController extends AbstractController
     {
         $this->userRepository = $em->getRepository(User::class);
         $this->channelSubscriptionRepository = $em->getRepository(ChannelSubscription::class);
+        $this->eventSpecificationRepository = $em->getRepository(EventSpecification::class);
         $this->logger = $logger;
         $this->em = $em;
         $this->mailer = $mailer;
@@ -43,41 +48,54 @@ class ChannelSubscriptionController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    public function ajaxRemoveChannelSubscription(Request $request, Channel $channel)
+    public function ajaxRemoveChannelSubscription(Request $request, Channel $channel, EventDispatcher $eventDispatcher)
     {
         $visitorId = $request->request->get('visitorId');
         $userId = $request->request->get('userId');
         $user = $this->userRepository->find($userId);
         $visitor= $this->userRepository->find($visitorId);
+        $visitorIsAdmin = false;
 
         if (!$user instanceof User || !$visitor instanceof User) {
             $this->returnInvalidJsonResponse('Can\'t find User with given id ');
         }
 
-        // vérifie que le mec a les droits admin
-        $channelSubscription =$this->channelSubscriptionRepository->findByChannelAndUser($channel, $visitor );
-        if (empty($channelSubscription) ||  $channelSubscription[0]->getIsAdmin() == false) {
-            $this->logger->error("Suppression c'un channel subscription impossible, car le visiteur id=".$visitor->getId()." de ce channel id =.".$channel->getId(). "n'est pas admin");
-            $this->returnInvalidJsonResponse("Suppression impossible. le visitor n'est pas admin");
+        $channelSubscriptions =$this->channelSubscriptionRepository->findByChannelAndUser($channel, $visitor);
 
+        if (empty($channelSubscriptions)) {
+            $this->logger->error("Suppression c'un channel subscription impossible car l'inscirption n'a pas été retrouvée");
+            $this->returnInvalidJsonResponse("Suppression c'un channel subscription impossible car l'inscirption n'a pas été retrouvée");
         }
 
-        $channelSubscriptions =$this->channelSubscriptionRepository->findByChannelAndUser($channel, $user );
-        if (!empty($channelSubscription)) {
-            $this->logger->error("Suppression c'un channel subscription impossible, car pas d'inscription retrouvée en base pour cette personne avec id =".$user->getId()." et ce channel id =.".$channel->getId());
-            $this->returnInvalidJsonResponse("Pas d'inscription retrouvée en base pour cette personne et ce channel. Suppression impossible");
+        // vérifie que le mec a les droits admin
+        if ($channelSubscriptions[0]->getIsAdmin() == false) {
+            if ($userId->getId() != $visitor->getId()) {
+                $this->logger->error("Suppression c'un channel subscription impossible, car le visiteur id=".$visitor->getId()." de ce channel id =.".$channel->getId(). "n'est pas admin");
+                $this->returnInvalidJsonResponse("Suppression impossible. le visitor n'est pas admin");
+            }
+        }
+        else {
+            $visitorIsAdmin = true;
         }
 
         foreach($channelSubscriptions as $subscription ) {
             $this->em->remove($subscription);
         }
-
         $this->em->flush();
 
-        //@todo Ajouter un event listener pour la création de notification
+        if ($visitorIsAdmin) {
+            $eventSpecification = $this->eventSpecificationRepository->findOneBy(['statusCode' => EventSpecification::REMOVE_CHANNEL_SUBSCRIPTION_BY_ADMIN]);
+        } else {
+            $eventSpecification = $this->eventSpecificationRepository->findOneBy(['statusCode' => EventSpecification::REMOVE_CHANNEL_SUBSCRIPTION_BY_USER]);
+        }
+
+        $event = new CreateEventAndNotificationsEvent($user, $eventSpecification, $channelSubscriptions[0]);
+        $eventDispatcher->dispatch($event, CreateEventAndNotificationsEvent::REGISTER_NOTIFICATION_EVENT_FOR_SUBSCRIBER);
 
         $mailToSend = $this->message->setSubject('Votre inscription au channel  '. $channel->getTitle(). " a été supprimée");
-        //$this->sendEmail($mailToSend, $user, $channel->getTitle(), self::REMOVE_SUBSCRIPTION_TEMPLATE_PATH_USER);
+        $this->sendEmail($mailToSend, $user, $channel->getTitle(), self::REMOVE_SUBSCRIPTION_TEMPLATE_PATH_USER);
+
+        $mailToSend = $this->message->setSubject('L\'inscription au channel  '. $channel->getTitle(). " de ".$user->getUsername()." a été supprimée");
 
         foreach ($channel->getAdminUsers() as $admin) {
             $this->sendEmail($mailToSend, $admin, $channel->getTitle(),self::REMOVE_SUBSCRIPTION_TEMPLATE_PATH_ADMIN, $visitor->getUsername(), $user->getUsername());

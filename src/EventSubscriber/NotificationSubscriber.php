@@ -31,6 +31,7 @@ class NotificationSubscriber implements EventSubscriberInterface
 
     public function createEventAndNotifications(CreateEventAndNotificationsEvent $event)
     {
+        $this->em->getFilters()->disable('softdeleteable'); // we also retrive softDeleted entities for example for cases of comment removal
         $notificationEvent = new NotificationEvent();
         $eventSpecification = $event->getEventSpecification();
         $notificationEvent->setEventAuthor($event->getEventAuthor())->setEventSpecification($eventSpecification);

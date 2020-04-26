@@ -28,7 +28,7 @@ class RenderNotificationTwigExtension extends AbstractExtension
     const REFUSE_A_CHANNEL_SUBSCRIPTION_REQUEST_EVENT_TEMPLATE = "notification/partials/csr/refuse_a_channel_subscription_request_event.html.twig";
     const FOLLOW_A_WRITER_EVENT_TEMPLATE = "notification/partials/follow/follow_a_writer_event.html.twig";
 
-    //  events to be tested
+    //  events to be applied and tested
     const LIKE_A_COMMENT_EVENT_TEMPLATE = "notification/partials/comment/like_a_comment_event.html.twig";
     const REMOVE_AN_ARTICLE_COMMENT_EVENT_TEMPLATE = "notification/partials/comment/remove_an_article_comment_event.html.twig";
     const COMMENT_A_COMMENT_OF_ARTICLE_EVENT_TEMPLATE = "notification/partials/comment/comment_a_comment_article_event.html.twig";
@@ -66,55 +66,75 @@ class RenderNotificationTwigExtension extends AbstractExtension
 
     public function renderNotification(Environment $environment, Notification $notification)
     {
+        $this->em->getFilters()->disable('softdeleteable');
         $isNotificationRecipientTheEventAuthor =false;
         $hideEventAuthorIdentity =false;
+        $sendArticle = false;
+        $sendComment = false;
+        $sendFollow = false;
+        $sendChannelSubscriptionRequest = false;
+        $sendChannelSubscription = false;
 
         // checks the corresponding event related to notification to display.
         switch ($notification->getNotificationEvent()->getEventSpecification()->getStatusCode()) {
             case EventSpecification::PUBLISH_ARTICLE_CODE :
                 $template = self::CREATE_ARTICLE_EVENT_TEMPLATE;
+                $sendArticle = true;
                 break;
             case EventSpecification::PUBLISH_ARTICLE_ON_A_CHANNEL_CODE :
                 $template = self::CREATE_ARTICLE_ON_CHANNEL_EVENT_TEMPLATE;
+                $sendArticle = true;
                 break;
             case EventSpecification::LIKE_AN_ARTICLE :
                 $template = self::LIKE_AN_ARTICLE_EVENT_TEMPLATE;
+                $sendArticle = true;
                 break;
             case EventSpecification::LIKE_A_COMMENT :
                 $template = self::LIKE_A_COMMENT_EVENT_TEMPLATE;
+                $sendComment = true;
                 break;
             case EventSpecification::COMMENT_AN_ARTICLE :
                 $template = self::COMMENT_AN_ARTICLE_EVENT_TEMPLATE;
+                $sendComment = true;
                 break;
             case EventSpecification::REMOVE_AN_ARTICLE_COMMENT :
                 $template = self::REMOVE_AN_ARTICLE_COMMENT_EVENT_TEMPLATE;
+                $sendComment = true;
                 break;
             case EventSpecification::COMMENT_A_COMMENT_OF_ARTICLE :
                 $template = self::COMMENT_A_COMMENT_OF_ARTICLE_EVENT_TEMPLATE;
+                $sendComment = true;
                 break;
             case EventSpecification::REMOVE_A_COMMENT_OF_COMMENT_OF_ARTICLE :
                 $template = self::REMOVE_COMMENT_OF_COMMENT_OF_ARTICLE_EVENT_TEMPLATE;
+                $sendComment = true;
                 break;
             case EventSpecification::SEND_A_CHANNEL_SUBSCRIPTION_REQUEST :
                 $template = self::SEND_A_CHANNEL_SUBSCRIPTION_REQUEST_EVENT_TEMPLATE;
+                $sendChannelSubscriptionRequest = true;
                 break;
             case EventSpecification::ACCEPT_A_CHANNEL_SUBSCRIPTION_REQUEST :
                 $template = self::ACCEPT_A_CHANNEL_SUBSCRIPTION_REQUEST_EVENT_TEMPLATE;
                 $hideEventAuthorIdentity =$this->checkIfHideEventAuthorIdentity($notification->getRecipient(),$notification->getNotificationEvent()->getChannelSubscriptionRequest()->getChannel());
+                $sendChannelSubscriptionRequest = true;
                 break;
             case EventSpecification::REFUSE_A_CHANNEL_SUBSCRIPTION_REQUEST :
                 $template = self::REFUSE_A_CHANNEL_SUBSCRIPTION_REQUEST_EVENT_TEMPLATE;
                 $hideEventAuthorIdentity =$this->checkIfHideEventAuthorIdentity($notification->getRecipient(),$notification->getNotificationEvent()->getChannelSubscriptionRequest()->getChannel());
+                $sendChannelSubscriptionRequest = true;
                 break;
             case EventSpecification::FOLLOW_A_WRITER :
                 $template = self::FOLLOW_A_WRITER_EVENT_TEMPLATE;
+                $sendFollow = true;
                 break;
             case EventSpecification::REMOVE_CHANNEL_SUBSCRIPTION_BY_USER :
                 $template = self::REMOVE_CHANNEL_SUBSCRIPTION_BY_USER_EVENT_TEMPLATE;
+                $sendChannelSubscription = true;
                 break;
             case EventSpecification::REMOVE_CHANNEL_SUBSCRIPTION_BY_ADMIN :
                 $template = self::REMOVE_CHANNEL_SUBSCRIPTION_BY_ADMIN_EVENT_TEMPLATE;
                 $hideEventAuthorIdentity =$this->checkIfHideEventAuthorIdentity($notification->getRecipient(),$notification->getNotificationEvent()->getChannelSubscription()->getChannel());
+                $sendChannelSubscription = true;
                 break;
             default:
                 return "";
@@ -126,9 +146,14 @@ class RenderNotificationTwigExtension extends AbstractExtension
 
         // in the views, several are displayed according to the recipient role
         return $environment->render($template, [
-            'event' => $notification->getNotificationEvent(),
+            'eventAuthor' => $notification->getNotificationEvent()->getEventAuthor(),
             'isNotificationRecipientTheEventAuthor' => $isNotificationRecipientTheEventAuthor,
-            'hideEventAuthorIdentity' => $hideEventAuthorIdentity
+            'hideEventAuthorIdentity' => $hideEventAuthorIdentity,
+            'article' => $sendArticle ?  $notification->getNotificationEvent()->getArticle() : "",
+            'comment' => $sendComment ?  $notification->getNotificationEvent()->getComment() : "",
+            'follow' => $sendFollow ?  $notification->getNotificationEvent()->getFollow() : "",
+            'channelSubscription' => $sendChannelSubscription ?  $notification->getNotificationEvent()->getChannelSubscription() : "",
+            'channelSubscriptionRequest' => $sendChannelSubscriptionRequest ?  $notification->getNotificationEvent()->getChannelSubscriptionRequest() : "",
         ]);
     }
 
