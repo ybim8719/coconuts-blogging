@@ -39,22 +39,29 @@
         </div>
         <div class="row">
             <div class="col-1">
+                {% if article.user is not null %}
                 <img src="{{ vich_uploader_asset(article.user) }}"
                      alt="{{ article.user.username }}"
                      class="coconuts-round-picture rikiki-img"
                 />
+                {% endif %}
             </div>
             <div class="col-6">
                 <div>
-                    <a href = "{{ path('user_show', {'id': article.user.id}) }}">
-                        Par {{ article.user.username }}
-                    </a>
-                    <a href="javascript:void(0)"
-                       class= "coconuts-follow-button coconuts-toggle-follow
-                       {{ isFollowing == false ? 'follow' : 'unfollow' }}"
-                    >
-                        {{ isFollowing == false ? "S\'abonner" : 'Se désabonner'  }}
-                    </a>
+                    {% if article.user is not null %}
+                        <a href = "{{ path('user_show', {'id': article.user.id}) }}">
+                            Par {{ article.user.username }}
+                        </a>
+                        <a href="javascript:void(0)"
+                           class= "coconuts-follow-button coconuts-toggle-follow
+                           {{ isFollowing == false ? 'follow' : 'unfollow' }}"
+                        >
+                            {{ isFollowing == false ? "S\'abonner" : 'Se désabonner'  }}
+                        </a>
+                    {% else %}
+                        <p>Utilisateur supprimé</p>
+                    {% endif %}
+
                 </div>
                 <div>
                     {{ article.createdAt|date('M-d') }}
@@ -75,7 +82,7 @@
 
         <div>
             Vous avez aimé cet article ? Faites-le savoir à son auteur (qui vous aimera d'autant plus fort!)
-            <i class="{{ userHasLiked ? "fas" : "far" }} fa-heart fa-3x toggle-like-article"
+            <i class="{{ userHasLiked ? "fas" : "far" }} fa-heart fa-3x {{ article.user is not null ? "toggle-like-article" : ""}}"
                data-article-id = "{{ article.id }}"
                data-has-liked = "{{ userHasLiked == false ? "false" : "true" }}">
             </i>
@@ -84,15 +91,18 @@
             </span>
         </div>
 
-        <!-- BLOC AUTEUR -->
-        {{ render(controller(
-            'App\\Controller\\WriterController::displayPartialWriterResumeBlock',
-            { 'idWriter': article.user.id }
-        )) }}
 
+
+        {% if article.user is not null %}
+            {{ render(controller(
+                'App\\Controller\\WriterController::displayPartialWriterResumeBlock',
+                { 'idWriter': article.user.id }
+            )) }}
+        {% endif %}
+        <!-- BLOC AUTEUR -->
         <input id="visitorId" name="visitorId" type="hidden" value="{{ app.user is null ? "" : app.user.id }}">
         <input id="articleId" name="articleId" type="hidden" value="{{ article.id }}">
-        <input id="writerId" name="writerId" type="hidden" value="{{ article.user.id}}">
+        <input id="writerId" name="writerId" type="hidden" value="{{ article.user is not null ? article.user.id : ""}}">
         <input id="isFollowing" name="isFollowing" type="hidden" value="{{ isFollowing == false ? 0 : 1}}">
 
         <div id="comment-list">
@@ -114,8 +124,9 @@
                     <i class="fas fa-trash-alt delete-comment-action"></i>
                 </li>
                 {% if comments is not empty %}
+
                     {% for comment in comments %}
-                        <li class= "comment {{ comment.author.id == article.user.id ? "author-comment" : "user-comment"}}"
+                        <li class= "comment {{ article.user is not null ? (comment.author.id == article.user.id ? "author-comment" : "user-comment") : "user-comment" }}"
                             data-id = "{{ comment.id }}">
                             <div class="comment-info">
                                 <a class="comment-username" href="{{ path('user_show', {id : comment.author.id}) }}">
@@ -166,7 +177,7 @@
             </ul>
         </div>
 
-        {% if app.user is not null %}
+        {% if app.user is not null and article.user is not null %}
             {% if app.user.id == article.user.id %}
                 <a href="{{ path('article_edit', {'id': article.id}) }}">Modifier votre article</a>
             {% endif %}

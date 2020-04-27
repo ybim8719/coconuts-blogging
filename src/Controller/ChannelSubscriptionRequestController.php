@@ -78,7 +78,10 @@ class ChannelSubscriptionRequestController extends AbstractController
 
         // build of notifications
         $eventSpecification = $this->eventSpecificationRepository->findOneBy(['statusCode' => EventSpecification::SEND_A_CHANNEL_SUBSCRIPTION_REQUEST]);
+        dump($eventSpecification);
+        dump($eventSpecification->getStatusCode());
         $event = new CreateEventAndNotificationsEvent($user, $eventSpecification, $channelSubscriptionRequest);
+        dump($eventSpecification);
         $this->eventDispatcher->dispatch($event, CreateEventAndNotificationsEvent::REGISTER_NOTIFICATION_EVENT_FOR_SUBSCRIBER);
 
         // build of email to be sent

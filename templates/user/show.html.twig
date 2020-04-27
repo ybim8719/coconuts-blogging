@@ -93,7 +93,7 @@
                                     <p class="is-title">{{comment.article.title}}</p>
                                 </a>
                                 <a href="{{ path('article_show', {'id': comment.article.id})}}">
-                                    <p class="is-secondary">{{comment.article.user.username}}</p>
+                                    <p class="is-secondary"> {{ comment.article.user is not null ?  comment.article.user.username : "utilisateur supprimé" }} </p>
                                 </a>
 
                             </div>

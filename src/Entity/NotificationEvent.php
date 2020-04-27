@@ -111,7 +111,7 @@ class NotificationEvent
 
     public function getEventAuthor(): ?User
     {
-        return $this->eventSpecification;
+        return $this->eventAuthor;
     }
 
     public function setEventAuthor(?User $eventAuthor): self

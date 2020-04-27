@@ -4,10 +4,15 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use DateTime;
+use Gedmo\Mapping\Annotation as Gedmo;
+
 
 /**
  * Store the likes added by users
  * @ORM\Entity(repositoryClass="App\Repository\UserLikeRepository")
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
+
+ *
  */
 class UserLike
 {
@@ -48,6 +53,11 @@ class UserLike
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
+
+    /**
+     * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
+     */
+    private $deletedAt;
 
     public function __construct()
     {
@@ -117,6 +127,16 @@ class UserLike
         $this->likedArticleComment = $comment;
 
         return $this;
+    }
+
+    public function getDeletedAt()
+    {
+        return $this->deletedAt;
+    }
+
+    public function setDeletedAt($deletedAt)
+    {
+        $this->deletedAt = $deletedAt;
     }
 
 

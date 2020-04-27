@@ -121,7 +121,6 @@ class ArticleController extends AbstractController
      */
     public function show(Request $request, Article $article, EventDispatcherInterface $eventDispatcher): Response
     {
-
         $userHasLiked = false;
         $hasBookmark = false;
         $isFollowing = false;
@@ -150,10 +149,14 @@ class ArticleController extends AbstractController
                 }
             }
 
-            $follows = $this->followRepository->findByUserAndWriter($this->getUser(), $article->getUser());
-            if (count($follows) > 0) {
-                $isFollowing = true;
+            // we check if the writer is still registered.
+            if ($article->getUser() !== null) {
+                $follows = $this->followRepository->findByUserAndWriter($this->getUser(), $article->getUser());
+                if (count($follows) > 0) {
+                    $isFollowing = true;
+                }
             }
+
         }
 
         $comments = $this->articleCommentsRepository->findByArticle($article);

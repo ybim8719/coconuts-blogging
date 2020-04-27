@@ -19,22 +19,22 @@ class RenderNotificationTwigExtension extends AbstractExtension
     // tested events
     const CREATE_ARTICLE_EVENT_TEMPLATE = "notification/partials/article/create_article_event.html.twig";
     const CREATE_ARTICLE_ON_CHANNEL_EVENT_TEMPLATE = "notification/partials/article/create_article_on_channel_event.html.twig";
+    const LIKE_AN_ARTICLE_EVENT_TEMPLATE = "notification/partials/article/like_an_article_event.html.twig";
 
     //  events being tested
-    const LIKE_AN_ARTICLE_EVENT_TEMPLATE = "notification/partials/article/like_an_article_event.html.twig";
     const COMMENT_AN_ARTICLE_EVENT_TEMPLATE = "notification/partials/comment/comment_an_article_event.html.twig";
     const SEND_A_CHANNEL_SUBSCRIPTION_REQUEST_EVENT_TEMPLATE = "notification/partials/csr/send_a_channel_subscription_request_event.html.twig";
     const ACCEPT_A_CHANNEL_SUBSCRIPTION_REQUEST_EVENT_TEMPLATE = "notification/partials/csr/accept_a_channel_subscription_request_event.html.twig";
     const REFUSE_A_CHANNEL_SUBSCRIPTION_REQUEST_EVENT_TEMPLATE = "notification/partials/csr/refuse_a_channel_subscription_request_event.html.twig";
     const FOLLOW_A_WRITER_EVENT_TEMPLATE = "notification/partials/follow/follow_a_writer_event.html.twig";
+    const REMOVE_CHANNEL_SUBSCRIPTION_BY_USER_EVENT_TEMPLATE = "notification/partials/channelSubscription/remove_channel_subscription_by_user.html.twig";
+    const REMOVE_CHANNEL_SUBSCRIPTION_BY_ADMIN_EVENT_TEMPLATE = "notification/partials/channelSubscription/remove_channel_subscription_by_admin.html.twig";
+    const COMMENT_A_COMMENT_OF_ARTICLE_EVENT_TEMPLATE = "notification/partials/comment/comment_a_comment_article_event.html.twig";
 
     //  events to be applied and tested
     const LIKE_A_COMMENT_EVENT_TEMPLATE = "notification/partials/comment/like_a_comment_event.html.twig";
     const REMOVE_AN_ARTICLE_COMMENT_EVENT_TEMPLATE = "notification/partials/comment/remove_an_article_comment_event.html.twig";
-    const COMMENT_A_COMMENT_OF_ARTICLE_EVENT_TEMPLATE = "notification/partials/comment/comment_a_comment_article_event.html.twig";
     const REMOVE_COMMENT_OF_COMMENT_OF_ARTICLE_EVENT_TEMPLATE = "notification/partials/comment/remove_comment_of_comment_article_event.html.twig";
-    const REMOVE_CHANNEL_SUBSCRIPTION_BY_USER_EVENT_TEMPLATE = "notification/partials/channelSubscription/remove_channel_subscription_by_user.html.twig";
-    const REMOVE_CHANNEL_SUBSCRIPTION_BY_ADMIN_EVENT_TEMPLATE = "notification/partials/channelSubscription/remove_channel_subscription_by_admin.html.twig";
 
     /**
      * @var EntityManagerInterface
@@ -66,7 +66,10 @@ class RenderNotificationTwigExtension extends AbstractExtension
 
     public function renderNotification(Environment $environment, Notification $notification)
     {
+        // enable it first since in certains cases
+        $this->em->getFilters()->enable('softdeleteable');
         $this->em->getFilters()->disable('softdeleteable');
+
         $isNotificationRecipientTheEventAuthor =false;
         $hideEventAuthorIdentity =false;
         $sendArticle = false;

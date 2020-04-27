@@ -5,9 +5,11 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ChannelSubscriptionRepository")
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
  */
 class ChannelSubscription
 {
@@ -42,6 +44,11 @@ class ChannelSubscription
      * @ORM\ManyToOne(targetEntity="App\Entity\Channel", inversedBy="channelSubscriptions")
      */
     private $channel;
+
+    /**
+     * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
+     */
+    private $deletedAt;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\NotificationEvent", mappedBy="channelSubscription")
@@ -149,5 +156,15 @@ class ChannelSubscription
         }
 
         return $this;
+    }
+
+    public function getDeletedAt()
+    {
+        return $this->deletedAt;
+    }
+
+    public function setDeletedAt($deletedAt)
+    {
+        $this->deletedAt = $deletedAt;
     }
 }

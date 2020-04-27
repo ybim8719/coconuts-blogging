@@ -85,6 +85,7 @@ class NotificationSubscriber implements EventSubscriberInterface
                 break;
             case EventSpecification::REMOVE_CHANNEL_SUBSCRIPTION_BY_ADMIN :
                 $notificationEvent->setChannelSubscription($event->getChannelSubscription());
+
                 $notificationEvent->setContent($event->getEventAuthor()->getUsername()." vient de désabonner " . $event->getChannelSubscription()->getUser()->getUsername() . " du channel : ". $event->getChannelSubscription()->getChannel()->getTitle());
                 $this->createNotificationForChannelSubscriptionRemovalByAdminEvent($notificationEvent);
                 break;
@@ -95,6 +96,8 @@ class NotificationSubscriber implements EventSubscriberInterface
                 break;
             case EventSpecification::SEND_A_CHANNEL_SUBSCRIPTION_REQUEST :
                 $notificationEvent->setChannelSubscriptionRequest($event->getChannelSubscriptionRequest());
+                dump($event);
+                dump($event->getChannelSubscriptionRequest());
                 $notificationEvent->setContent($event->getEventAuthor()->getUsername()." vient de vous envoyer une demande pour rejoindre " . $event->getChannelSubscriptionRequest()->getChannel()->getTitle());
                 $this->createNotificationForSendOfChannelSubscriptionRequestEvent($notificationEvent);
                 break;

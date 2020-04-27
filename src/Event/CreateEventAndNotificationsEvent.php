@@ -29,42 +29,38 @@ class CreateEventAndNotificationsEvent extends Event
     {
         $this->eventAuthor = $user;
         $this->eventSpecification = $eventSpecification;
+
         switch ($eventSpecification->getStatusCode()) {
-            case
-                EventSpecification::PUBLISH_ARTICLE_CODE ||
-                EventSpecification::PUBLISH_ARTICLE_ON_A_CHANNEL_CODE ||
-                EventSpecification::LIKE_AN_ARTICLE :
+            case EventSpecification::PUBLISH_ARTICLE_CODE  :
+            case EventSpecification::PUBLISH_ARTICLE_ON_A_CHANNEL_CODE :
+            case EventSpecification::LIKE_AN_ARTICLE :
                 if ($entityObject instanceof Article) {
                     $this->article = $entityObject;
                 }
                 break;
-            case
-                EventSpecification::COMMENT_AN_ARTICLE ||
-                EventSpecification::REMOVE_AN_ARTICLE_COMMENT ||
-                EventSpecification::LIKE_A_COMMENT ||
-                EventSpecification::REMOVE_A_COMMENT_OF_COMMENT_OF_ARTICLE ||
-                EventSpecification::COMMENT_A_COMMENT_OF_ARTICLE :
+            case EventSpecification::COMMENT_AN_ARTICLE :
+            case EventSpecification::REMOVE_AN_ARTICLE_COMMENT :
+            case EventSpecification::LIKE_A_COMMENT :
+            case EventSpecification::REMOVE_A_COMMENT_OF_COMMENT_OF_ARTICLE :
+            case EventSpecification::COMMENT_A_COMMENT_OF_ARTICLE :
                 if ($entityObject instanceof ArticleComment) {
                     $this->comment = $entityObject;
                 }
                 break;
-            case
-                EventSpecification::REMOVE_CHANNEL_SUBSCRIPTION_BY_USER ||
-                EventSpecification::REMOVE_CHANNEL_SUBSCRIPTION_BY_ADMIN :
+            case EventSpecification::REMOVE_CHANNEL_SUBSCRIPTION_BY_USER :
+            case  EventSpecification::REMOVE_CHANNEL_SUBSCRIPTION_BY_ADMIN :
                 if ($entityObject instanceof ChannelSubscription) {
                     $this->channelSubscription = $entityObject;
                 }
                 break;
-            case
-                EventSpecification::FOLLOW_A_WRITER :
+            case EventSpecification::FOLLOW_A_WRITER :
                 if ($entityObject instanceof Follow) {
                     $this->follow = $entityObject;
                 }
                 break;
-            case
-                EventSpecification::SEND_A_CHANNEL_SUBSCRIPTION_REQUEST ||
-                EventSpecification::ACCEPT_A_CHANNEL_SUBSCRIPTION_REQUEST ||
-                EventSpecification::REFUSE_A_CHANNEL_SUBSCRIPTION_REQUEST :
+            case EventSpecification::SEND_A_CHANNEL_SUBSCRIPTION_REQUEST :
+            case EventSpecification::ACCEPT_A_CHANNEL_SUBSCRIPTION_REQUEST :
+            case EventSpecification::REFUSE_A_CHANNEL_SUBSCRIPTION_REQUEST :
                 if ($entityObject instanceof ChannelSubscriptionRequest) {
                     $this->channelSubscriptionRequest = $entityObject;
                 }
