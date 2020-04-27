@@ -1,10 +1,10 @@
 <span>
      {% if  isNotificationRecipientTheEventAuthor %}
-         Vous avez publié le commentaire suivant :{{ comment.title }} dans  l'article :
+         Vous avez publié le commentaire suivant :{{ comment.content }} dans  l'article :
          {% include "/notification/partials/displayArticleTitleWithLink.html.twig" with {"article" : comment.article} %}
      {% else %}
          {% include "/notification/partials/displayUserNameWithLink.html.twig" with {"user" : eventAuthor} %}
-         a publié le commentaire suivant :{{ comment.title }} dans  l'article :
+         a publié le commentaire suivant :{{ comment.content }} dans  l'article :
          {% include "/notification/partials/displayArticleTitleWithLink.html.twig" with {"article" : comment.article} %}
      {% endif %}
 </span>

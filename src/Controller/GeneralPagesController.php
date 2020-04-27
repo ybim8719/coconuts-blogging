@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class GeneralPagesController extends AbstractController
 {
     const NB_OF_SUBSCRIBED_AUTHORS_DISPLAYED = 3;
-    const NB_OF_BOOKMARKS = 5;
+    const NB_OF_BOOKMARKS = 4;
     const NB_OF_ARTICLES_BY_AUTHOR = 1;
     const NB_OF_ARTICLES_BY_CHANNEL = 3;
     const NB_OF_CHANNEL_FOR_LOGGED = 3;
@@ -49,7 +49,7 @@ class GeneralPagesController extends AbstractController
     {
         $user = $this->getUser();
         if ($user instanceof User) {
-            $customData = $this->getCustomDisplayInfoForLoggedUser($user);
+            $customData = $this->getCustomContentToDisplayForLoggedUser($user);
             return $this->render('general/public_home_page_for_logged.html.twig', [
                 'bookmarkedArticles' => $customData['arrayOfBookmarkedArticles'],
                 'arrayOfWritersWithArticle' => $customData['arrayOfWritersWithArticle'],
@@ -58,12 +58,21 @@ class GeneralPagesController extends AbstractController
         }
 
         // unlogged visitor
+        $customData = $this->getCustomContentToDisplayForAnonymousUser($user);
+
         return $this->render('general/public_home_page_for_anonymous.html.twig', [
             'trendingArticles' => [],
         ]);
     }
 
-    private function getCustomDisplayInfoForLoggedUser(User $user)
+
+    private function getCustomContentToDisplayForAnonymousUser()
+    {
+
+    }
+
+
+    private function getCustomContentToDisplayForLoggedUser(User $user)
     {
         $bookMarkedArticles = [];
         $arrayOfWritersWithArticle = [];

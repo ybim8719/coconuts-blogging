@@ -75,13 +75,9 @@ class ChannelSubscriptionRequestController extends AbstractController
         $channelSubscriptionRequest->setApplicant($user)->setChannel($channel)->setStatus(ChannelSubscriptionRequest::CHANNEL_SUBSCRIPTION_PENDING);
         $this->em->persist($channelSubscriptionRequest);
         $this->em->flush();
-
         // build of notifications
         $eventSpecification = $this->eventSpecificationRepository->findOneBy(['statusCode' => EventSpecification::SEND_A_CHANNEL_SUBSCRIPTION_REQUEST]);
-        dump($eventSpecification);
-        dump($eventSpecification->getStatusCode());
         $event = new CreateEventAndNotificationsEvent($user, $eventSpecification, $channelSubscriptionRequest);
-        dump($eventSpecification);
         $this->eventDispatcher->dispatch($event, CreateEventAndNotificationsEvent::REGISTER_NOTIFICATION_EVENT_FOR_SUBSCRIBER);
 
         // build of email to be sent
@@ -157,7 +153,7 @@ class ChannelSubscriptionRequestController extends AbstractController
 
         $response = [
             "code" => 200,
-            'message' => "Votre demande a été envoyée aux administateurs de la chaîne, vous recevrez une réponse sous peu.",
+            'message' => "La demande a été acceptée, " .$channelSubscriptionRequest->getApplicant()->getUsername(). " est membre du channel",
             "requestId" => $channelSubscriptionRequest->getId(),
             "statusLabel" => $status
         ];

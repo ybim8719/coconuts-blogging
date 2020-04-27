@@ -23,7 +23,7 @@
             {% for notification in notifications.wasRed %}
                 <li class="unread-notification" data-id="{{  notification.id }}">
                     <span class="is-secondary">{{ notification.getCreatedAt|date('Y-m-d') }} : </span>
-                    <span class="is-bold">{{ render_notification(notification) }}</span>
+                    {{ render_notification(notification) }}
                 </li>
             {% endfor %}
         </ul>

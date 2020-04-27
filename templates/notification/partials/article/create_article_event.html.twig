@@ -1,7 +1,7 @@
 <span>
 
     {% if isNotificationRecipientTheEventAuthor %}
-        Vous venez de publier un nouvel article :
+        Vous venez de publier un nouvel article
         {% include "/notification/partials/displayArticleTitleWithLink.html.twig" with {"article" : article} %}
     {% else %}
         {% include "/notification/partials/displayUserNameWithLink.html.twig" with {"user" : eventAuthor} %}

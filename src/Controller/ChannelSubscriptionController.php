@@ -11,7 +11,7 @@ use App\Service\Logger\CoconutsLogger;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,7 +48,7 @@ class ChannelSubscriptionController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    public function ajaxRemoveChannelSubscription(Request $request, Channel $channel, EventDispatcher $eventDispatcher)
+    public function ajaxRemoveChannelSubscription(Request $request, Channel $channel, EventDispatcherInterface $eventDispatcher)
     {
         $visitorId = $request->request->get('visitorId');
         $userId = $request->request->get('userId');
@@ -103,7 +103,7 @@ class ChannelSubscriptionController extends AbstractController
 
         $response = [
             "code" => 200,
-            'message' => "La demande a été envoyée aux administrateurs",
+            'message' => "L'abonnement de  ".$user->getUsername()." a été supprimé",
             "idUser" => $user->getId(),
         ];
         return new JsonResponse($response);

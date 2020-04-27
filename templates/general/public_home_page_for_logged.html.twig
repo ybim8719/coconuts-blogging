@@ -5,62 +5,69 @@
 {% block body %}
     <div class = "coconuts-article-container">
         <h1 class="coconuts-main-title">Ecrire sur tout... <br> Et surtout sur n'importe quoi !</h1>
-        <div class="logged-homepage-block">
-            <div class="logged-homepage-first-block">
-                <div class="logged-homepage-left-block">
-                    <p class="homepage-bookmark-title">
-                        Les articles qu'il me reste à lire :
-                    </p>
-                    <div class="homepage-bookmark-body">
-                        {% if bookmarkedArticles is not empty %}
-                            {% set mainArticle = bookmarkedArticles|first %}
-                                <div class="homepage-channel-article-main">
-                                    <a href="{{ path('article_show', {'id': mainArticle.id})}}">
-                                        <img class="channel-article-main-pic" src ="{{ vich_uploader_asset(mainArticle) }}" alt="{{ mainArticle.title }}">
+        <hr>
+        <div>
+            <h2 class="is-bold">Articles marque-page</h2>
+            <div class="bookmarked-articles-homepage">
+                <div class="channel-body-block">
+                    {% if bookmarkedArticles is not empty %}
+                        {% set mainArticle = bookmarkedArticles|first %}
+                        <div class="channel-article-main">
+                            <a href="{{ path('article_show', {'id': mainArticle.id})}}">
+                                <img class="channel-article-main-pic" src ="{{ vich_uploader_asset(mainArticle) }}" alt="{{ mainArticle.title }}">
+                            </a>
+                            <div class="channel-article-main-body" >
+                                <a href="{{ path('article_show', {'id': mainArticle.id})}}" >
+                                    <h5 class="">{{mainArticle.title}}</h5>
+                                </a>
+                                <p class="">{{mainArticle.description|striptags|slice(0, 200)}}</p>
+                            </div>
+                        </div>
+                        <div class="channel-article-secondary">
+                            {% for bookMarkedArticle in bookmarkedArticles|slice(1) %}
+                                <div class="channel-article-secondary-item">
+                                    <a href="{{ path('article_show', {'id': bookMarkedArticle.id})}}">
+                                        <img class="channel-article-secondary-pic" src ="{{ vich_uploader_asset(bookMarkedArticle) }}" alt="{{ bookMarkedArticle.title }}">
                                     </a>
-                                    <div class="homepage-channel-article-main-body" >
-                                        <a href="{{ path('article_show', {'id': mainArticle.id})}}" >
-                                            <h5 class="">{{mainArticle.title}}</h5>
+                                    <div class="channel-article-secondary-body" >
+                                        <a href="{{ path('article_show', {'id': bookMarkedArticle.id})}}">
+                                            <h5 class="">{{bookMarkedArticle.title}}</h5>
                                         </a>
-                                        <p class="">{{mainArticle.description|striptags|slice(0, 200)}}</p>
                                     </div>
                                 </div>
-                                <div class="homepage-channel-article-secondary">
-                                    {% for bookMarkedArticle in bookmarkedArticles|slice(1) %}
-                                        <div class="homepage-channel-article-secondary-item">
-                                            <img src="{{ vich_uploader_asset(bookMarkedArticle) }}" alt ="{{ bookMarkedArticle.title }}"/>
-                                            <p>{{ bookMarkedArticle.title }}</p>
-                                            <p>{{ bookMarkedArticle.chapeau }}</p>
-                                            <a href="{{ path("article_show", {'id' : bookMarkedArticle.id})}}" type="button">
-                                                Lire
-                                            </a>
-                                        </div>
-                                    {% endfor %}
-                                </div>
-                        {% endif %}
-                    </div>
-                </div>
-                <div class="logged-homepage-right-block">
-                        {% if arrayOfWritersWithArticle is not empty %}
-                            {% for writerWithArticle in arrayOfWritersWithArticle %}
-                                <div class="followed-writer-block">
-                                    <img src="{{ vich_uploader_asset(writerWithArticle.writer) }}" class=" coconuts-round-picture rikiki-img" alt ="{{ writerWithArticle.writer.username }}"/>
-                                    <p>{{ writerWithArticle.writer.username }}</p>
-                                    <p>
-                                        {% if writerWithArticle.article|first is not empty %}
-                                            {% set article = writerWithArticle.article|first %}
-                                            {{ article.title }}
-                                        {% endif %}
-                                    </p>
-                                </div>
                             {% endfor %}
-                        {% endif %}
-                    </div>
+                        </div>
+                    {% else %}
+                        <div>Aucun article</div>
+                    {% endif %}
                 </div>
             </div>
         </div>
+        <hr>
+
+        <div>
+            <h2 class="is-bold">Auteurs favoris</h2>
+            <div class="">
+                {% if arrayOfWritersWithArticle is not empty %}
+                    {% for writerWithArticle in arrayOfWritersWithArticle %}
+                        <div class="followed-writer-block">
+                            <img src="{{ vich_uploader_asset(writerWithArticle.writer) }}" class=" coconuts-round-picture rikiki-img" alt ="{{ writerWithArticle.writer.username }}"/>
+                            <p>{{ writerWithArticle.writer.username }}</p>
+                            <p>
+                                {% if writerWithArticle.article|first is not empty %}
+                                    {% set article = writerWithArticle.article|first %}
+                                    {{ article.title }}
+                                {% endif %}
+                            </p>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+        <hr>
+
         <div class="coconuts-trending-articles-part">
-            Articles Tendances
+            <h2 class="is-bold">       Articles Tendances</h2>
         </div>
     </div>
 {% endblock %}

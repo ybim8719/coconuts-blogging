@@ -1,9 +1,9 @@
 <span>
          {% if  isNotificationRecipientTheEventAuthor %}
              Vous venez de vous abonner au flux d'activité de :
-             {% include "/notification/partials/displayUserNameWithLink.html.twig" with {"user" : event.follow.writer} %}
+             {% include "/notification/partials/displayUserNameWithLink.html.twig" with {"user" : follow.writer} %}
          {% else %}
-             {% include "/notification/partials/displayUserNameWithLink.html.twig" with {"user" : event.eventAuthor} %}
+             {% include "/notification/partials/displayUserNameWithLink.html.twig" with {"user" : eventAuthor} %}
              s'est abonné à votre flux d'activité !
          {% endif %}
 </span>

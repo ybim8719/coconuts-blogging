@@ -5,10 +5,7 @@
 {% block body %}
     <div class = "coconuts-article-container">
         <div>
-            <img class = "coconuts-main-article-picture"
-                 src="{{ vich_uploader_asset(article) }}"
-                 alt="{{ article.title }}"
-            />
+            <img class = "coconuts-main-article-picture" src="{{ vich_uploader_asset(article) }}" alt="{{ article.title }}"/>
         </div>
         <br>
         <h1>
@@ -61,7 +58,6 @@
                     {% else %}
                         <p>Utilisateur supprimé</p>
                     {% endif %}
-
                 </div>
                 <div>
                     {{ article.createdAt|date('M-d') }}
@@ -76,7 +72,6 @@
                 {% endif %}
             </div>
         </div>
-
         <div>{{ article.description }} </div>
         <br>
 
@@ -90,9 +85,6 @@
                 {{article.nbOfLikes}}
             </span>
         </div>
-
-
-
         {% if article.user is not null %}
             {{ render(controller(
                 'App\\Controller\\WriterController::displayPartialWriterResumeBlock',
@@ -124,9 +116,9 @@
                     <i class="fas fa-trash-alt delete-comment-action"></i>
                 </li>
                 {% if comments is not empty %}
-
                     {% for comment in comments %}
-                        <li class= "comment {{ article.user is not null ? (comment.author.id == article.user.id ? "author-comment" : "user-comment") : "user-comment" }}"
+                        {% if comment.author is not null %}
+                            <li class= "comment {{ article.user is not null ? (comment.author.id == article.user.id ? "author-comment" : "user-comment") : "user-comment" }}"
                             data-id = "{{ comment.id }}">
                             <div class="comment-info">
                                 <a class="comment-username" href="{{ path('user_show', {id : comment.author.id}) }}">
@@ -147,6 +139,7 @@
                                 {% endif %}
                             {% endif %}
                         </li>
+                        {% endif %}
                     {% endfor %}
                 {% else %}
                     <li id="no-commentary">Pas de commentaires à ce jour : </li>

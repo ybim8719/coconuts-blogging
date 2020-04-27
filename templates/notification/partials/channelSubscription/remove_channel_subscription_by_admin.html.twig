@@ -1,10 +1,10 @@
 <span>
-    {% if hideEventAuthor %}
+    {% if hideEventAuthorIdentity %}
         Votre inscription à l'admin
         {% include "/notification/partials/displayChannelTitleWithLink.html.twig" with {"channel" : channelSubscription.channel} %}
         de  l'abonné :
         {% include "/notification/partials/displayUserNameWithLink.html.twig" with {"user" :  channelSubscription.user} %}
-    {% else if  isNotificationRecipientTheEventAuthor%}
+    {% elseif  isNotificationRecipientTheEventAuthor%}
         Votre venez de supprimer l'inscription de  l'abonné
         {% include "/notification/partials/displayUserNameWithLink.html.twig" with {"user" :  channelSubscription.user} %}
         au channel :
