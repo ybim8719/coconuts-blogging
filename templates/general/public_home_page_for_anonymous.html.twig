@@ -1,27 +1,36 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} Bienvenue {% endblock %}
+{% block title %} Bienvenue {% if app.user is not null %} {{app.user.username}} {% endif %}{% endblock %}
 
 {% block body %}
     <div class = "coconuts-article-container">
-        <h1 class="coconuts-main-title">Ecrire sur tout, surtout sur n'importe quoi !</h1>
-        <div class="coconuts-trending-articles-block">
-            <p class="trending-articles-title">
-                Articles Top Rated
-            </p>
-            <div class="trending-articles-body">
-                {% if trendingArticles is not empty %}
-                    {% for trendingArticle in trendingArticles %}
-                        <img src="{{ vich_uploader_asset(trendingArticle) }}" alt ="{{ trendingArticle.title }}"/>
-                        <p>{{ trendingArticle.title }}</p>
-                        <p>{{ trendingArticle.content }}</p>
-                        <a href="{{ path(show_article, {'idArticle' : trendingArticle.id})}}" type="button">
-                            Lire
-                        </a>
+        {% if arrayOfTrendingArticles is not empty %}
+            <div class="coconuts-trending-articles-part">
+                <h2 class="is-bold">
+                    Publiés dans nos Tendances
+                </h2>
+                <div class="trending-articles-body">
+                    {% for article in arrayOfTrendingArticles %}
+                        <div class="medium-width">
+                            <a href="{{ path('article_show', {'id': article.id})}}">
+                                <img class="thumbail-article-picture" src ="{{ vich_uploader_asset(article) }}" alt="{{ article.title }}">
+                            </a>
+                            <a href="{{ path('article_show', {'id': article.id})}}" >
+                                <h5 class="">{{article.title}}</h5>
+                            </a>
+                            <p class="is-secondary">
+                                Ecrit par
+                                {% if (article.user is not empty or article.user is not null) %}
+                                    <a href="{{ path('user_show', {'id' : article.user.id}) }}">
+                                        {{ article.user is not empty ? article.user.username : "utilisateur supprimé"  }}
+                                    </a>
+                                {% endif %}
+                            </p>
+                            <p class="overflow-visible">{{article.description|striptags|slice(0, 200)}}</p>
+                        </div>
                     {% endfor %}
-                {% endif %}
+                </div>
             </div>
-        </div>
-        <br>
+        {% endif %}
     </div>
 {% endblock %}

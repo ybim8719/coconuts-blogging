@@ -34,7 +34,6 @@ Encore
     .addEntry('manageJoinChannelResponse', './assets/js/manageJoinChannelResponse.js')
     .addEntry('manageChannelSubscription', './assets/js/manageChannelSubscription.js')
     .addEntry('manageNotificationPage', './assets/js/manageNotificationPage.js')
-
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()
 

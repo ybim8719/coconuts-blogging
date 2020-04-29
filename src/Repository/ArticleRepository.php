@@ -73,11 +73,12 @@ class ArticleRepository extends ServiceEntityRepository
         return $qb;
     }
 
-    public function findFiveRandomArticles()
+
+    public function findRandomArticlesByNbOfResults(int $nbResults)
     {
         return $this->createQueryBuilder('a')
             ->orderBy('RAND()')
-            ->setMaxResults(5)
+            ->setMaxResults($nbResults)
             ->getQuery()
             ->getResult()
             ;

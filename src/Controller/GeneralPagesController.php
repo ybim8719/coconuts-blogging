@@ -23,6 +23,7 @@ class GeneralPagesController extends AbstractController
     const NB_OF_ARTICLES_BY_CHANNEL = 3;
     const NB_OF_CHANNEL_FOR_LOGGED = 3;
     const NB_OF_MOST_LIKED_ARTICLES_TO_DISPLAY = 5;
+    const NB_OF_RANDOM_ARTICLES = 20;
 
     private $em;
     private $userRepository;
@@ -53,22 +54,26 @@ class GeneralPagesController extends AbstractController
             return $this->render('general/public_home_page_for_logged.html.twig', [
                 'bookmarkedArticles' => $customData['arrayOfBookmarkedArticles'],
                 'arrayOfWritersWithArticle' => $customData['arrayOfWritersWithArticle'],
-                'arrayOfChannelsWithArticles' => $customData['arrayOfChannelsWithArticles']
+                'arrayOfTrendingArticles' => $customData['arrayOfTrendingArticles']
             ]);
         }
 
         // unlogged visitor
-        $customData = $this->getCustomContentToDisplayForAnonymousUser($user);
+        $customData = $this->getCustomContentToDisplayForAnonymousUser();
 
         return $this->render('general/public_home_page_for_anonymous.html.twig', [
-            'trendingArticles' => [],
+            'arrayOfTrendingArticles' => $customData['arrayOfTrendingArticles'],
         ]);
     }
 
 
     private function getCustomContentToDisplayForAnonymousUser()
     {
+        $arrayOfTrendingArticles = $this->articleRepository->findRandomArticlesByNbOfResults(20);
 
+        return [
+            'arrayOfTrendingArticles' => $arrayOfTrendingArticles,
+        ];
     }
 
 
@@ -105,7 +110,7 @@ class GeneralPagesController extends AbstractController
             }
         }
 
-        // get Channels + articles
+        // get Channels of user + related articles
         $subscribedChannels = $this->channelRepository->findRandomChannelsBySubscriberAndNumberOfResults($user, self::NB_OF_CHANNEL_FOR_LOGGED);
         if (!empty($subscribedChannels)) {
             foreach ($subscribedChannels as $channel) {
@@ -116,13 +121,16 @@ class GeneralPagesController extends AbstractController
                     ];
                 }
             }
-
         }
+
+        // trending Articles random
+        $arrayOfTrendingArticles = $this->articleRepository->findRandomArticlesByNbOfResults(20);
 
         return [
             'arrayOfChannelsWithArticles' => $arrayOfChannelsWithArticles,
             'arrayOfWritersWithArticle' => $arrayOfWritersWithArticle,
             'arrayOfBookmarkedArticles' => $arrayOfBookmarkedArticles,
+            'arrayOfTrendingArticles' => $arrayOfTrendingArticles,
         ];
     }
 }
