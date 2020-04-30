@@ -1,0 +1,35 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %} Mes articles{% endblock %}
+
+{% block body %}
+    <div class="coconuts-story-container">
+        <div >
+            <button class="tab-button coconuts-active" id="published" data-type="dashboard-articles">Publiés ({{ publishedArticles|length }})</button>
+            <button class="tab-button coconuts-inactive" id="draft" data-type="dashboard-articles">Brouillons ({{ draftArticles|length }})</button>
+        </div>
+        <div id="published" data-type="dashboard-articles">
+            {% if publishedArticles is not null %}
+                {% for article in publishedArticles %}
+                    {% include '/article/partials/article_medium_size_block.html.twig' with {'article': article, 'hasLiked': false, 'hasBookmark': false} %}
+                {% endfor %}
+            {% else %}
+                <div class="border-stylay ">
+                    Aucun article publié.
+                </div>
+            {% endif %}
+        </div>
+        <div id="draft" class="coconuts-hide" data-type="dashboard-articles">
+            {% if draftArticles is not null %}
+                {% for article in draftArticles %}
+                    {% include '/article/partials/article_medium_size_block.html.twig' with {'article': article, 'hasLiked': false, 'hasBookmark': false} %}
+                {% endfor %}
+            {% else %}
+                <div class="border-stylay ">
+                    Aucun article brouillon
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
