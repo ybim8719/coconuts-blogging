@@ -1,3 +1,4 @@
+
 {% extends 'base.html.twig' %}
 
 {% block title %}Article{% endblock %}
@@ -37,10 +38,10 @@
         <div class="row">
             <div class="col-1">
                 {% if article.user is not null %}
-                <img src="{{ vich_uploader_asset(article.user) }}"
-                     alt="{{ article.user.username }}"
-                     class="coconuts-round-picture rikiki-img"
-                />
+                    <img src="{{ vich_uploader_asset(article.user) }}"
+                         alt="{{ article.user.username }}"
+                         class="coconuts-round-picture rikiki-img"
+                    />
                 {% endif %}
             </div>
             <div class="col-6">
@@ -72,6 +73,9 @@
                 {% endif %}
             </div>
         </div>
+        {% if article.isPublished == false %}
+            <span class="draft-badge">BROUILLON</span>
+        {% endif %}
         <div>{{ article.description }} </div>
         <br>
 
@@ -119,26 +123,26 @@
                     {% for comment in comments %}
                         {% if comment.author is not null %}
                             <li class= "comment {{ article.user is not null ? (comment.author.id == article.user.id ? "author-comment" : "user-comment") : "user-comment" }}"
-                            data-id = "{{ comment.id }}">
-                            <div class="comment-info">
-                                <a class="comment-username" href="{{ path('user_show', {id : comment.author.id}) }}">
-                                    {{ comment.author.username }}
+                                data-id = "{{ comment.id }}">
+                                <div class="comment-info">
+                                    <a class="comment-username" href="{{ path('user_show', {id : comment.author.id}) }}">
+                                        {{ comment.author.username }}
+                                    </a>
+                                    <span class="comment-date">{{ date_calculator.convertToAdaptedDuration(comment.createdAt)}}</span>
+                                </div>
+                                <a class="comment-avatar" href="{{ path('user_show', {id : comment.author.id}) }}">
+                                    <img class="coconuts-round-picture rikiki-img"
+                                         src="{{ vich_uploader_asset(comment.author) }}"
+                                         width="35" alt="Profile Avatar" title="{{ comment.author.username }}"
+                                    />
                                 </a>
-                                <span class="comment-date">{{ date_calculator.convertToAdaptedDuration(comment.createdAt)}}</span>
-                            </div>
-                            <a class="comment-avatar" href="{{ path('user_show', {id : comment.author.id}) }}">
-                                <img class="coconuts-round-picture rikiki-img"
-                                     src="{{ vich_uploader_asset(comment.author) }}"
-                                     width="35" alt="Profile Avatar" title="{{ comment.author.username }}"
-                                />
-                            </a>
-                            <p class="comment-body">{{ comment.content }}</p>
-                            {% if app.user is not null %}
-                                {% if app.user.isAdmin or app.user.id == comment.author.id %}
-                                    <i class="fas fa-trash-alt delete-comment-action" data-id=" {{ comment.id }}"></i>
+                                <p class="comment-body">{{ comment.content }}</p>
+                                {% if app.user is not null %}
+                                    {% if app.user.isAdmin or app.user.id == comment.author.id %}
+                                        <i class="fas fa-trash-alt delete-comment-action" data-id=" {{ comment.id }}"></i>
+                                    {% endif %}
                                 {% endif %}
-                            {% endif %}
-                        </li>
+                            </li>
                         {% endif %}
                     {% endfor %}
                 {% else %}
@@ -150,8 +154,8 @@
                             <div>
                                 <label for = "send-comment-input"></label>
                                 <textarea name ="send-comment-input"
-                                       id="send-comment-input"
-                                       class="textarea-stylay"
+                                          id="send-comment-input"
+                                          class="textarea-stylay"
                                 >Entrez un commentaire
                                 </textarea>
                                 <div>
@@ -177,5 +181,3 @@
         {% endif %}
     </div>
 {% endblock %}
-
-

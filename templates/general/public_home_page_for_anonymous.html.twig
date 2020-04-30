@@ -1,3 +1,4 @@
+
 {% extends 'base.html.twig' %}
 
 {% block title %} Bienvenue {% if app.user is not null %} {{app.user.username}} {% endif %}{% endblock %}
@@ -16,7 +17,7 @@
                                 <img class="thumbail-article-picture" src ="{{ vich_uploader_asset(article) }}" alt="{{ article.title }}">
                             </a>
                             <a href="{{ path('article_show', {'id': article.id})}}" >
-                                <h5 class="">{{article.title}}</h5>
+                                <h5 class="is-bold mt-10">{{article.title}}</h5>
                             </a>
                             <p class="is-secondary">
                                 Ecrit par

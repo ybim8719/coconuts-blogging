@@ -1,3 +1,4 @@
+
 {% extends 'base.html.twig' %}
 
 {% block title %} {{ user.username }} {% endblock %}
@@ -7,14 +8,13 @@
         <div class ="block-user-profile border-stylay ">
             <div class="is-row">
                 <div>
-                    <p>{{ render_author_badge(user.hasWritten) }}</p>
                     <p class="is-title">
-                        {{ user.username }}
+                        {{ user.username }} {{ render_author_badge(user.hasWritten) }}
                         <a href="javascript:void(0)"
-                               class= "coconuts-follow-button coconuts-toggle-follow
+                           class= "coconuts-follow-button coconuts-toggle-follow
                                 {{ isFollowing == false ? 'follow' : 'unfollow' }}"
-                            >
-                                {{ isFollowing == false ? "S\'abonner" : 'Se désabonner'  }}
+                        >
+                            {{ isFollowing == false ? "S\'abonner" : 'Se désabonner'  }}
                         </a>
                     </p>
                     <p>{{ user.profileDescription }}</p>
@@ -63,51 +63,51 @@
 
         <div id="commentaires"  class="coconuts-hide" data-type="user-profile">
             {% if publishedComments is not empty %}
-                    {% for comment in publishedComments %}
-                        {% set hasBookmark = false %}
-                        {#
-                            Cette partie est réservée aux futurs marques-page de commentaires.
-                            Pour peu que l'on crée cette jointure dès lors, il faudra ajouter un js
-                            dédié différent du marques-page article
-                            {% if app.user is not null %}
-                                {% if app.user.hasBookmarkedArticle(comment) == true %}
-                                    {% set hasBookmark = true %}
-                                {% endif %}
+                {% for comment in publishedComments %}
+                    {% set hasBookmark = false %}
+                    {#
+                        Cette partie est réservée aux futurs marques-page de commentaires.
+                        Pour peu que l'on crée cette jointure dès lors, il faudra ajouter un js
+                        dédié différent du marques-page article
+                        {% if app.user is not null %}
+                            {% if app.user.hasBookmarkedArticle(comment) == true %}
+                                {% set hasBookmark = true %}
                             {% endif %}
-                        #}
-                        <div class="border-stylay ">
-                            <div class="story-article-header is-row">
-                                <img src ="{{ vich_uploader_asset(comment.author) }}"
-                                     alt="{{ comment.author.username }}"
-                                     class ="coconuts-round-picture rikiki-img"
-                                >
-                                <div>
-                                    <a href="{{ path('user_show', {'id': comment.author.id})}}">
-                                        <p class="is-title">{{comment.author.username}}</p>
-                                    </a>
-                                    <p class="is-secondary">{{comment.createdAt|date("d-m-Y")}} - XX minutes read</p>
-                                </div>
-                            </div>
-                            <div class="story-comment-body border-stylay ">
-                                <a href="{{ path('article_show', {'id': comment.article.id})}}">
-                                    <p class="is-title">{{comment.article.title}}</p>
+                        {% endif %}
+                    #}
+                    <div class="border-stylay ">
+                        <div class="story-article-header is-row">
+                            <img src ="{{ vich_uploader_asset(comment.author) }}"
+                                 alt="{{ comment.author.username }}"
+                                 class ="coconuts-round-picture rikiki-img"
+                            >
+                            <div>
+                                <a href="{{ path('user_show', {'id': comment.author.id})}}">
+                                    <p class="is-title">{{comment.author.username}}</p>
                                 </a>
-                                <a href="{{ path('article_show', {'id': comment.article.id})}}">
-                                    <p class="is-secondary"> {{ comment.article.user is not null ?  comment.article.user.username : "utilisateur supprimé" }} </p>
-                                </a>
-
-                            </div>
-                            <div class="story-article-footer">
-                                <p class="">{{comment.content}}</p>
-                                <div class="story-article-footer">
-                                    <i class="far fa-heart toggle-like-article fa-2x"></i>
-                                    <span class="dynamic-likes-counter-of-comment" data-comment-id = "{{ comment.id }}">
-                                        {{comment.nbOfLikes}}
-                                    </span>
-                                </div>
+                                <p class="is-secondary">{{comment.createdAt|date("d-m-Y")}} - XX minutes read</p>
                             </div>
                         </div>
-                    {% endfor %}
+                        <div class="story-comment-body border-stylay ">
+                            <a href="{{ path('article_show', {'id': comment.article.id})}}">
+                                <p class="is-title">{{comment.article.title}}</p>
+                            </a>
+                            <a href="{{ path('article_show', {'id': comment.article.id})}}">
+                                <p class="is-secondary"> {{ comment.article.user is not null ?  comment.article.user.username : "utilisateur supprimé" }} </p>
+                            </a>
+
+                        </div>
+                        <div class="story-article-footer">
+                            <p class="">{{comment.content}}</p>
+                            <div class="story-article-footer">
+                                <i class="far fa-heart toggle-like-article fa-2x"></i>
+                                <span class="dynamic-likes-counter-of-comment" data-comment-id = "{{ comment.id }}">
+                                        {{comment.nbOfLikes}}
+                                    </span>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
             {% else %}
                 <div class="border-stylay ">
                     Aucun commentaire pour ce membre.
@@ -137,13 +137,13 @@
         <div id="channels" class="coconuts-hide" data-type="user-profile" >
             {% if channels is not empty %}
                 {% for channel in channels %}
-                    <div class="border-stylay ">
+                    <div class="small-border-stylay ">
                         <a href="{{ path('channel_show', {'idChannel' : channel.id}) }}">
-                            <h3>{{ channel.title }}</h3>
+                            <h4>{{ channel.title }}</h4>
                         </a>
                         <div class="chapeau">{{ channel.description }}</div>
                         <div class="secondary-info">
-                            {{ channel.getNbOfArticles }} articles publiés
+                            {{ channel.getNbOfArticles }} articles
                             {{ channel.getNbOfChannelSubscriptions }} abonnés
                         </div>
                     </div>

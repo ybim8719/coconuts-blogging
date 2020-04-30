@@ -26,12 +26,13 @@ class ArticleRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('a')
             ->join('a.channel', 'c')
             ->andWhere('c = :channel')
+            ->andWhere('a.isPublished = true')
             ->setParameter('channel', $channel)
             ->orderBy('RAND()')
             ->setMaxResults($nbResults)
             ->getQuery()
             ->getResult()
-        ;
+            ;
     }
 
     public function findByChannelAndWriter(Channel $channel,User $writer)
@@ -39,6 +40,7 @@ class ArticleRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('a')
             ->join('a.channel', 'c')
             ->andWhere('c = :channel')
+            ->andWhere('a.isPublished = true')
             ->andWhere('a.user = :user')
             ->setParameter('user', $writer)
             ->setParameter('channel', $channel)
@@ -53,6 +55,7 @@ class ArticleRepository extends ServiceEntityRepository
             ->select('count(a.id)')
             ->join('a.channel', 'c')
             ->andWhere('c = :channel')
+            ->andWhere('a.isPublished = true')
             ->andWhere('a.user = :user')
             ->setParameter('user', $writer)
             ->setParameter('channel', $channel)
@@ -64,6 +67,7 @@ class ArticleRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('a')
             ->andWhere('a.user = :user')
+            ->andWhere('a.isPublished = true')
             ->setParameter('user', $user)
             ->orderBy('RAND()')
             ->setMaxResults($nbResult)
@@ -78,6 +82,7 @@ class ArticleRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('a')
             ->orderBy('RAND()')
+            ->andWhere('a.isPublished = true')
             ->setMaxResults($nbResults)
             ->getQuery()
             ->getResult()
@@ -88,6 +93,7 @@ class ArticleRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('a')
             ->andWhere('a.channel = :channel')
+            ->andWhere('a.isPublished = true')
             ->setParameter('channel', $channel)
             ->orderBy('a.createdAt', 'DESC')
             ->getQuery()
@@ -101,6 +107,7 @@ class ArticleRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('a')
             ->innerJoin('a.likes', 'l')
+            ->andWhere('a.isPublished = true')
             ->orderBy("COUNT(l.id)", "DESC")
             ->setMaxResults($nbResults)
             ->getQuery()
@@ -112,7 +119,21 @@ class ArticleRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('a')
             ->andWhere('a.user = :user')
+            ->andWhere('a.isPublished = true')
             ->setParameter('user', $user)
+            ->orderBy('a.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+
+    public function fndByUserAndStatus(User $user, bool $isPublished)
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.user = :user')
+            ->andWhere('a.isPublished = :isPublished')
+            ->setParameter('user', $user)
+            ->setParameter('isPublished', $isPublished)
             ->orderBy('a.createdAt', 'DESC')
             ->getQuery()
             ->getResult();
@@ -124,6 +145,7 @@ class ArticleRepository extends ServiceEntityRepository
             ->leftJoin('a.likes', 'l')
             ->leftJoin('l.user', 'u')
             ->andWhere('u = :user')
+            ->andWhere('a.isPublished = true')
             ->setParameter('user', $user)
             ->orderBy('a.createdAt', 'DESC')
             ->getQuery()

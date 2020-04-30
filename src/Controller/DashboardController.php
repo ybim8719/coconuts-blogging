@@ -1,28 +1,15 @@
 <?php
 
-
 namespace App\Controller;
 
 use App\Entity\Article;
 use App\Entity\ArticleComment;
-use App\Entity\ArticleVisit;
-use App\Entity\BookMark;
-use App\Entity\Channel;
-use App\Entity\EventSpecification;
-use App\Entity\Follow;
 use App\Entity\User;
-use App\Entity\UserLike;
-use App\Event\AddArticleVisitEvent;
-use App\Event\CreateEventAndNotificationsEvent;
-use App\Form\ArticleType;
-use App\Repository\ArticleRepository;
 use App\Service\Logger\CoconutsLogger;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -80,6 +67,4 @@ class DashboardController extends AbstractController
             'draftArticles' => $draftArticles
         ]);
     }
-
-
 }

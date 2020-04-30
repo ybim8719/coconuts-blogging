@@ -1,41 +1,41 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Coconuts Blogging{% endblock %}</title>
-        {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
-{#            <link rel="stylesheet" href="/build/app.css">#}
-            <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
-            <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-        {% endblock %}
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Coconuts Blogging{% endblock %}</title>
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+        {#            <link rel="stylesheet" href="/build/app.css">#}
+        <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    {% endblock %}
 
-    </head>
-    <body>
-        {% block header %} 
-            <nav class="navbar navbar-expand-lg navbar-light bg-light mb-10">
-                <a class="navbar-brand" href="{{ path('public_home_page') }}">COCONUTS</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+</head>
+<body>
+{% block header %}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-10">
+        <a class="navbar-brand" href="{{ path('public_home_page') }}">COCONUTS</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mr-auto">
-                        {% if app.user is null %}
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ path('app_login') }}">S'identifier</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ path('register_as_new_member') }}">Devenir Membre</a>
-                            </li>
-                        {% endif %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('channel_channelIndexPage') }}">Channels</a>
-                        </li>
-                    </ul>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                {% if app.user is null %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_login') }}">S'identifier</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('register_as_new_member') }}">Devenir Membre</a>
+                    </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('channel_channelIndexPage') }}">Channels</a>
+                </li>
+            </ul>
 
-                    {% if app.user is not null %}
-                        <span>
+            {% if app.user is not null %}
+            <span>
                             <a href="{{ path('notification_displayNotificationsOfUser', { 'idUser' : app.user.id }) }}">
                                 <i class="{{ notification_counter.hasNewNotifications(app.user) ? "fas" :  "far"}} fa-bell fa-2x">
                                       <span class="notification-counter {{ notification_counter.hasNewNotifications(app.user) ? "" :  "coconuts-hide"}}">
@@ -43,7 +43,7 @@
                                 </i>
                             </a>
                         </span>
-                        <div class="dropdown">
+            <div class="dropdown">
                             <span>
                                 <span class="is-title">{{app.user.username}}</span>
                                 <img src="{{ vich_uploader_asset(app.user) }}"
@@ -51,56 +51,60 @@
                                      class="coconuts-round-picture rikiki-img"
                                 />
                             </span>
-                            {% endif %}
-                            <div class="dropdown-content">
-                                {% if app.user is not null %}
-                                    <a href="{{ path('user_show', {'id' : app.user.id}) }}">
-                                        <p>Mon profil</p>
-                                    </a>
-                                    <a href="{{ path('article_create') }}">
-                                        <p>Ecrire</p>
-                                    </a>
-                                    <a href="{{ path('app_logout') }}">
-                                        <p>Se déconnecter</p>
-                                    </a>
-                                    {% if app.user.isAdmin %}
-                                        <a href="{{ path('user_index') }}">
-                                            <p>Membres</p>
-                                        </a>
-                                    {% endif %}
-                                {% endif %}
-                            </div>
-                        </div>
-                        <form class="form-inline my-2 my-lg-0">
-                            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                        </form>
-                    </div>
-            </nav>
-            <div class ="mb-20"></div>
-        {% endblock %}
+                {% endif %}
+                <div class="dropdown-content">
+                    {% if app.user is not null %}
+                        <a href="{{ path('user_show', {'id' : app.user.id}) }}">
+                            <p>Mon profil</p>
+                        </a>
+                        <a href="{{ path('dashboard_displayArticlesDashboardForWriter', {'id' : app.user.id}) }}">
+                            <p>Mes articles</p>
+                        </a>
+                        <a href="{{ path('article_create') }}">
+                            <p>Ecrire</p>
+                        </a>
+                        <a href="{{ path('app_logout') }}">
+                            <p>Se déconnecter</p>
+                        </a>
+                        {% if app.user.isAdmin %}
+                            <a href="{{ path('user_index') }}">
+                                <p>Membres</p>
+                            </a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+        </div>
+    </nav>
+    <div class ="mb-20"></div>
+{% endblock %}
 
-        {% block body %}{% endblock %}
-    </body>
+{% block body %}{% endblock %}
+</body>
 
-    <footer>
-        <div>Tu as déjà tout lu ? Abonne-toi !</div>
-    </footer>
+<footer>
+    <div>Tu as déjà tout lu ? Abonne-toi !</div>
+</footer>
 
-    {% block javascripts %}
-        {{ encore_entry_script_tags('app') }}
-        {{ encore_entry_script_tags('toggleWriterFollow') }}
-        {{ encore_entry_script_tags('manageArticleComment') }}
-        {{ encore_entry_script_tags('toggleArticleLike') }}
-        {{ encore_entry_script_tags('toggleArticleBookmark') }}
-        {{ encore_entry_script_tags('manageTabs') }}
-        {{ encore_entry_script_tags('manageExpandCollapse') }}
-        {{ encore_entry_script_tags('manageJoinChannelRequest') }}
-        {{ encore_entry_script_tags('manageJoinChannelResponse') }}
-        {{ encore_entry_script_tags('manageChannelSubscription') }}
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+    {{ encore_entry_script_tags('toggleWriterFollow') }}
+    {{ encore_entry_script_tags('manageArticleComment') }}
+    {{ encore_entry_script_tags('toggleArticleLike') }}
+    {{ encore_entry_script_tags('toggleArticleBookmark') }}
+    {{ encore_entry_script_tags('manageTabs') }}
+    {{ encore_entry_script_tags('manageExpandCollapse') }}
+    {{ encore_entry_script_tags('manageJoinChannelRequest') }}
+    {{ encore_entry_script_tags('manageJoinChannelResponse') }}
+    {{ encore_entry_script_tags('manageChannelSubscription') }}
 
-        <script src="https://kit.fontawesome.com/ef10a582ff.js" crossorigin="anonymous"></script>
-    {% endblock %}
+    <script src="https://kit.fontawesome.com/ef10a582ff.js" crossorigin="anonymous"></script>
+{% endblock %}
 
 </html>
+
 

@@ -8,15 +8,16 @@
             <a href="{{ path('user_show', {'id': article.user.id})}}">
                 <p class="is-title">{{article.user.username}}</p>
             </a>
-            <p class="is-secondary">{{article.updatedAt|date("d-m-Y")}} - XX minutes read</p>
-            {% if article.channel is not null %}
-                <div class="is-secondary">
-                    Paru dans :
-                    <a href="{{ path('channel_show', {'idChannel' : article.channel.id}) }}">
-                        {{ article.channel.title }}
-                    </a>
-                </div>
-            {% endif %}
+            <p class="is-secondary">{{article.updatedAt|date("d-m-Y")}} - XX minutes read -
+                {% if article.channel is not null %}
+                    <span>
+                        Paru dans :
+                        <a href="{{ path('channel_show', {'idChannel' : article.channel.id}) }}">
+                            {{ article.channel.title }}
+                        </a>
+                    </span>
+                {% endif %}
+            </p>
         </div>
     </div>
     <div class="story-article-body">

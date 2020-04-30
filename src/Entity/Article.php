@@ -40,17 +40,17 @@ class Article
      */
     private $description;
 
-    /** 
-    * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="articles", fetch="EAGER")
-    * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-    */
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="articles", fetch="EAGER")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     */
     private $user;
 
     /**
      * NOTE: This is not a mapped field of entity metadata, just a simple property.
-     * 
+     *
      * @Vich\UploadableField(mapping="articles_pictures", fileNameProperty="imageName", size="imageSize")
-     * 
+     *
      * @var File|null
      */
     private $imageFile;
@@ -78,13 +78,13 @@ class Article
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ArticleComment", mappedBy="article")
-     * 
+     *
      */
     private $comments;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\UserLike", mappedBy="likedArticle")
-     * 
+     *
      */
     private $likes;
 
@@ -118,6 +118,12 @@ class Article
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
+
+    /**
+     * @ORM\Column(name="is_published", type="boolean", nullable=true)
+     */
+    private $isPublished;
+
 
     public function __construct()
     {
@@ -187,7 +193,7 @@ class Article
             $writer->setIsWriter(true);
         }
         $this->user = $writer;
-       
+
         return $this;
     }
 
@@ -243,7 +249,7 @@ class Article
     {
         return $this->imageName;
     }
-    
+
     public function setImageSize(?int $imageSize): void
     {
         $this->imageSize = $imageSize;
@@ -323,6 +329,16 @@ class Article
         }
 
         return $this;
+    }
+
+    public function getIsPublished()
+    {
+        return $this->isPublished;
+    }
+
+    public function setIsPublished(bool $isPublished)
+    {
+        $this->isPublished = $isPublished;
     }
 
     public function getNbOfLikes()

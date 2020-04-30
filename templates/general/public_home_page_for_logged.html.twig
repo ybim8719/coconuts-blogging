@@ -1,3 +1,4 @@
+
 {% extends 'base.html.twig' %}
 
 {% block title %} Bienvenue {% if app.user is not null %} {{app.user.username}} {% endif %}{% endblock %}
@@ -47,29 +48,29 @@
             <div>
                 <h2 class="is-bold">Auteurs favoris</h2>
                 <div class="is-space-between">
-                        {% for writerWithArticle in arrayOfWritersWithArticle %}
-                            <div class="followed-writer-block">
-                                <div class="is-row">
-                                    <a href ="{{ path("user_show", {'id' : writerWithArticle.writer.id }) }}">
-                                        <img src="{{ vich_uploader_asset(writerWithArticle.writer) }}" class=" coconuts-round-picture rikiki-img" alt ="{{ writerWithArticle.writer.username }}"/>
-                                    </a>
-                                    <a href ="{{ path("user_show", {'id' : writerWithArticle.writer.id }) }}">
-                                        <p>{{ writerWithArticle.writer.username }}</p>
-                                    </a>
-                                </div>
+                    {% for writerWithArticle in arrayOfWritersWithArticle %}
+                        <div class="followed-writer-block">
+                            <div class="is-row">
+                                <a href ="{{ path("user_show", {'id' : writerWithArticle.writer.id }) }}">
+                                    <img src="{{ vich_uploader_asset(writerWithArticle.writer) }}" class=" coconuts-round-picture rikiki-img" alt ="{{ writerWithArticle.writer.username }}"/>
+                                </a>
+                                <a href ="{{ path("user_show", {'id' : writerWithArticle.writer.id }) }}">
+                                    <p>{{ writerWithArticle.writer.username }}</p>
+                                </a>
+                            </div>
+                            <div>
                                 <div>
-                                    <div>
-                                        {% if writerWithArticle.article|first is not empty %}
-                                            {% set article = writerWithArticle.article|first %}
-                                            <a href ="{{ path("article_show", {'id' : article.id }) }}" class="is-title">
-                                              {{ article.title }}
-                                            </a>
-                                            <p class="is-secondary"> publié le {{ article.createdAt|date('Y/m') }}</p>
-                                        {% endif %}
-                                    </div>
+                                    {% if writerWithArticle.article|first is not empty %}
+                                        {% set article = writerWithArticle.article|first %}
+                                        <a href ="{{ path("article_show", {'id' : article.id }) }}" class="is-title">
+                                            {{ article.title }}
+                                        </a>
+                                        <p class="is-secondary"> publié le {{ article.createdAt|date('Y/m') }}</p>
+                                    {% endif %}
                                 </div>
                             </div>
-                        {% endfor %}
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
             <hr>
@@ -82,23 +83,23 @@
                 </h2>
                 <div class="trending-articles-body">
                     {% for article in arrayOfTrendingArticles %}
-                            <div class="medium-width">
-                                <a href="{{ path('article_show', {'id': article.id})}}">
-                                    <img class="thumbail-article-picture" src ="{{ vich_uploader_asset(article) }}" alt="{{ article.title }}">
-                                </a>
-                                <a href="{{ path('article_show', {'id': article.id})}}" >
-                                    <h5 class="">{{article.title}}</h5>
-                                </a>
-                                <p class="is-secondary">
-                                    Ecrit par
-                                    {% if (article.user is not empty or article.user is not null) %}
-                                        <a href="{{ path('user_show', {'id' : article.user.id}) }}">
-                                            {{ article.user is not empty ? article.user.username : "utilisateur supprimé"  }}
-                                        </a>
-                                    {% endif %}
-                                </p>
-                                <p class="overflow-visible">{{article.description|striptags|slice(0, 200)}}</p>
-                            </div>
+                        <div class="medium-width">
+                            <a href="{{ path('article_show', {'id': article.id})}}">
+                                <img class="thumbail-article-picture" src ="{{ vich_uploader_asset(article) }}" alt="{{ article.title }}">
+                            </a>
+                            <a href="{{ path('article_show', {'id': article.id})}}" >
+                                <h5 class="is-bold mt-10">{{article.title}}</h5>
+                            </a>
+                            <p class="is-secondary">
+                                Ecrit par
+                                {% if (article.user is not empty or article.user is not null) %}
+                                    <a href="{{ path('user_show', {'id' : article.user.id}) }}">
+                                        {{ article.user is not empty ? article.user.username : "utilisateur supprimé"  }}
+                                    </a>
+                                {% endif %}
+                            </p>
+                            <p class="overflow-visible">{{article.description|striptags|slice(0, 200)}}</p>
+                        </div>
                     {% endfor %}
                 </div>
             </div>
